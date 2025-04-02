@@ -1,0 +1,126 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background: pink;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 50px; 
+}
+
+/* Logo */
+.logo {
+    width: 210px;
+    height: auto;
+    border-radius: 10%;
+    margin-bottom: 20px;
+}
+
+/* Formulario */
+.form-registro {
+    width: 400px;
+    background: white;
+    padding: 30px;
+    margin-top: 50px; 
+    border-radius: 10px;
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
+    box-shadow: 7px 13px 37px rgba(56, 49, 50, 0.623);
+}
+
+.form-registro h4 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: black;
+}
+
+.controls {
+    width: 100%;
+    background: pink;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    border: 1px solid pink;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+}
+
+.form-registro p {
+    height: 40px;
+    text-align: center;
+    font-size: 18px;
+    color: black;
+}
+
+.form-registro a {
+    text-decoration: none;
+    color: blue;
+}
+
+.form-registro a:hover {
+    text-decoration: underline;
+}
+
+.form-registro .botons {
+    width: 100%;
+    background: rgb(236, 139, 155);
+    border: none;
+    padding: 12px;
+    color: white;
+    margin: 16px 0;
+    font-size: 16px;
+    border-radius: 10px;
+}
+
+/* Responsividad */
+@media screen and (max-width: 768px) {
+    .logo {
+        width: 150px;
+        margin-top: 30px; 
+    }
+
+    .form-registro {
+        width: 90%;
+        max-width: 400px;
+        padding: 20px;
+        margin-top: 30px; 
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .logo {
+        width: 120px;
+        margin-top: 40px; 
+    }
+
+    .form-registro {
+        width: 95%;
+        padding: 15px;
+        margin-top: 20px; 
+    }
+
+    .form-registro h4 {
+        font-size: 18px;
+    }
+
+    .controls {
+        font-size: 16px;
+        padding: 8px;
+    }
+
+    .form-registro p {
+        font-size: 16px;
+    }
+
+    .form-registro .botons {
+        padding: 10px;
+        font-size: 14px;
+    }
+}

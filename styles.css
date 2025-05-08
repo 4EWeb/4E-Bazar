@@ -4,9 +4,15 @@
     box-sizing: border-box;
 }
 
+html {
+    font-size: 100%;
+}
+
 body {
     background-color: pink;
     background-size: cover;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
 }
 
 nav {
@@ -15,14 +21,15 @@ nav {
     background-color: #333;
     font-size: 20px;
     margin-top: 50px;
-    position: relative; /* Menú desplegable esté encima de todo */
-    z-index: 100; /* Add this to ensure menu is above other elements */
+    position: relative;
+    z-index: 100;
 }
 
 .menu-horizontal {
     list-style: none;
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap; /* permite que se ajuste en pantallas pequeñas */
 }
 
 .menu-horizontal > li > a {
@@ -42,7 +49,7 @@ nav {
     list-style: none;
     width: 200px;
     background-color: rgba(0, 0, 0, 0.185);
-    z-index: 101; /* Add this to ensure dropdown is above everything */
+    z-index: 101;
 }
 
 .menu-horizontal li:hover .menu-vertical {
@@ -60,21 +67,61 @@ nav {
     text-decoration: none;
 }
 
+
+.ofertas-box {
+    background-color: rgba(255, 255, 255, 0.555);
+    border: 4px solid #ee9ddaaf;
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 3rem auto;
+    max-width: 95%;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
+
+.ofertas-box:hover {
+    transform: scale(1.01);
+}
+
+
+.ofertas-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    color: #f44336;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background-image: linear-gradient(to right, #ff7e5f, #feb47b);
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    margin-top: 30px;
+}
+
+.ofertas-title:hover {
+    transform: scale(1.1);
+    color: white;
+    background-image: linear-gradient(to right, #feb47b, #ff7e5f);
+}
+
 .galeria-fotos {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 400px;
-    margin: 4rem auto; /* separación con el menú y centrado */
+    margin: 4rem auto;
     gap: 1rem;
     max-width: 90%;
     overflow: hidden;
     position: relative;
-    z-index: 1; /* Lower z-index than the menu */
+    z-index: 1;
+    flex-wrap: wrap;
 }
 
 .galeria-fotos > div {
     flex: 1;
+    min-width: 250px;
     height: 100%;
     background-repeat: no-repeat;
     background-position: center;
@@ -87,13 +134,11 @@ nav {
 }
 
 .galeria-fotos > div:hover {
-    flex: 1.5; /* Con esto se acerca la imagen */
-    filter: brightness(1.05); /* opcional: reduce el brillo si es muy fuerte */
+    flex: 1.5;
+    filter: brightness(1.05);
 }
 
-/* Código para hacer la página RESPONSIVA */
 @media (max-width: 768px) {
-    /* Navbar */
     nav {
         font-size: 16px;
         max-width: 100%;
@@ -115,7 +160,6 @@ nav {
         text-align: center;
     }
 
-    /* Galería */
     .galeria-fotos {
         flex-direction: column;
         height: auto;
@@ -136,24 +180,24 @@ nav {
         height: 250px;
     }
 }
-/* Sección redes sociales */
+
 footer {
     color: white;
     padding: 2rem 1rem;
     text-align: center;
-    position: fixed;
-    bottom: 0; /* Asegura que el footer se quede en la parte inferior */
-    width: 100%; /* Ocupa todo el ancho de la página */
-    left: 0; /* Asegura que esté alineado con el borde izquierdo */
+    position: relative;
+    width: 100%;
+    left: 0;
+    margin-top: 3rem;
 }
 
 .social-panel {
     max-width: 800px;
     margin: auto;
-    background-color: rgba(0, 0, 0, 0.137); /* Blanco con transparencia */
+    background-color: rgba(0, 0, 0, 0.137);
     padding: 15px;
-    border-radius: 10px; /* Esquinas redondeadas */
-    display: inline-block; /* Hace que el recuadro se ajuste al tamaño de las redes sociales */
+    border-radius: 10px;
+    display: inline-block;
 }
 
 .panel-title {
@@ -167,6 +211,7 @@ footer {
     justify-content: center;
     gap: 2rem;
     flex-wrap: wrap;
+    margin-top: 10px;
 }
 
 .social-icon {
@@ -180,6 +225,7 @@ footer {
     color: white;
     text-decoration: none;
     transition: background-color 0.3s, transform 0.3s;
+    margin: 10px;
     position: relative;
 }
 
@@ -224,6 +270,42 @@ footer {
     transform: translateY(0);
 }
 
-.social-panel h2{
+.social-panel h2 {
     color: black;
+}
+
+@media (max-width: 768px) {
+    .social-icons {
+        gap: 1rem;
+    }
+
+    .social-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .social-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .social-icons {
+        gap: 0.5rem;
+    }
+
+    .social-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .social-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .panel-title {
+        font-size: 1.2rem;
+    }
 }

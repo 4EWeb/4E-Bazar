@@ -1,58 +1,59 @@
-
-
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body{
+body {
     background-color: pink;
     background-size: cover;
 }
 
-nav{
+nav {
     max-width: 900px;
     margin: auto;
     background-color: #333;
     font-size: 20px;
     margin-top: 50px;
+    position: relative; /* Menú desplegable esté encima de todo */
+    z-index: 100; /* Add this to ensure menu is above other elements */
 }
 
-.menu-horizontal{
+.menu-horizontal {
     list-style: none;
     display: flex;
     justify-content: space-around;
 }
 
-.menu-horizontal >li >a{
+.menu-horizontal > li > a {
     display: block;
     padding: 15px 20px;
     color: white;
     text-decoration: none;
 }
 
-.menu-horizontal >li:hover{
+.menu-horizontal > li:hover {
     background-color: purple;
 }
 
-.menu-vertical{
+.menu-vertical {
     position: absolute;
     display: none;
     list-style: none;
     width: 200px;
     background-color: rgba(0, 0, 0, 0.185);
+    z-index: 101; /* Add this to ensure dropdown is above everything */
 }
 
-.menu-horizontal li:hover .menu-vertical{
+.menu-horizontal li:hover .menu-vertical {
     display: block;
 }
 
-.menu-vertical li:hover{
+.menu-vertical li:hover {
     background-color: rgba(0, 0, 0, 0.199);
 }
 
-.menu-vertical li a{
+.menu-vertical li a {
     display: block;
     color: white;
     padding: 15px 15px 15px 20px;
@@ -68,8 +69,9 @@ nav{
     gap: 1rem;
     max-width: 90%;
     overflow: hidden;
+    position: relative;
+    z-index: 1; /* Lower z-index than the menu */
 }
-
 
 .galeria-fotos > div {
     flex: 1;

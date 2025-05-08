@@ -136,3 +136,94 @@ nav {
         height: 250px;
     }
 }
+/* Sección redes sociales */
+footer {
+    color: white;
+    padding: 2rem 1rem;
+    text-align: center;
+    position: fixed;
+    bottom: 0; /* Asegura que el footer se quede en la parte inferior */
+    width: 100%; /* Ocupa todo el ancho de la página */
+    left: 0; /* Asegura que esté alineado con el borde izquierdo */
+}
+
+.social-panel {
+    max-width: 800px;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0.137); /* Blanco con transparencia */
+    padding: 15px;
+    border-radius: 10px; /* Esquinas redondeadas */
+    display: inline-block; /* Hace que el recuadro se ajuste al tamaño de las redes sociales */
+}
+
+.panel-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #555;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
+    position: relative;
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+}
+
+.social-icon.instagram:hover {
+    background-color: #e4405f;
+}
+
+.social-icon.facebook:hover {
+    background-color: #3b5998;
+}
+
+.social-icon.whatsapp:hover {
+    background-color: #25d366;
+}
+
+.social-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.tooltip {
+    position: absolute;
+    bottom: -25px;
+    background-color: black;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.social-icon:hover .tooltip {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.social-panel h2{
+    color: black;
+}

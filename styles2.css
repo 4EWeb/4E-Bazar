@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
+    margin: 0; /* Cambia de 20px a 0 para eliminar el espacio arriba */
     background-color: pink;
     text-align: center;
 }
@@ -47,23 +47,34 @@ h1 {
 
 nav {
     background: #e75480;
-    padding: 10px 0;
+    padding: 10px 0; /* Menos gruesa */
     margin-bottom: 30px;
+    margin-top: 0; /* Asegura que no haya margen arriba */
 }
 
 .nav-content {
     display: flex;
     align-items: center;
-    justify-content: center; /* Centra logo y menú */
+    justify-content: center;
     max-width: 1100px;
     margin: 0 auto;
     padding: 0 16px;
 }
 
-.logo-emprendimiento img {
-    height: 48px;
+.logo-emprendimiento {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: auto;
     margin-right: 24px;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.logo-emprendimiento img {
+    height: 70px;
+    width: auto;
+    margin: 0 auto;
     display: block;
 }
 
@@ -75,11 +86,9 @@ nav {
     margin: 0;
     padding: 0;
 }
-
 .menu-horizontal > li {
     position: relative;
 }
-
 .menu-horizontal > li > a {
     color: #fff;
     text-decoration: none;
@@ -88,12 +97,10 @@ nav {
     border-radius: 5px;
     transition: background 0.2s;
 }
-
 .menu-horizontal > li > a:hover {
     background: #fff;
     color: #e75480;
 }
-
 .menu-vertical {
     list-style: none;
     display: none;
@@ -101,7 +108,7 @@ nav {
     left: 0;
     top: 100%;
     background: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
     border-radius: 0 0 8px 8px;
     min-width: 120px;
     width: max-content;
@@ -112,7 +119,6 @@ nav {
     pointer-events: none;
     transition: opacity 0.25s, transform 0.25s;
 }
-
 .menu-horizontal > li:hover .menu-vertical,
 .menu-horizontal > li:focus-within .menu-vertical {
     display: block;
@@ -120,18 +126,19 @@ nav {
     transform: translateY(0);
     pointer-events: auto;
 }
-
+.menu-vertical li {
+    width: 100%;
+}
 .menu-vertical li a {
     color: #e75480;
     padding: 10px 18px;
     display: block;
     text-decoration: none;
     border-radius: 0 0 8px 8px;
-}
-
-.menu-vertical li a:hover {
-    background: #cccccc; /* Gris claro */
-    color: #e75480;
     transition: background 0.2s;
+}
+.menu-vertical li a:hover {
+    background: #cccccc;
+    color: #e75480;
 }
 

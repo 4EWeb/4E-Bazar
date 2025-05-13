@@ -185,10 +185,10 @@ nav {
     background-color: #25d3659c;
 }
 .social-icon.whatsapp svg {
-    fill: #black;
+    fill: black;
 }
 .social-icon.whatsapp:hover svg {
-    fill: #black;
+    fill: black;
 }
 .social-icon svg {
     width: 24px;
@@ -245,6 +245,105 @@ form textarea {
     transition: opacity 0.3s;
 }
 
+/* Social Panel */
+.social-panel {
+    max-width: 800px;
+    margin: 24px auto 0 auto;
+    background-color: rgba(0, 0, 0, 0.08);
+    padding: 15px;
+    border-radius: 10px;
+    display: block;
+    text-align: center;
+}
+
+.panel-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #e75480; /* Letras en negro */
+}
+
+.social-icons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #7e7a7a36;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
+    margin: 10px;
+    position: relative;
+    font-size: 1.3rem;
+    border: none;
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+}
+
+.social-icon.instagram:hover {
+    background-color: #e4405f;
+}
+
+.social-icon.whatsapp:hover {
+    background-color: #25d366;
+}
+
+.social-icon svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+    fill: currentColor;
+}
+
+/* Responsive para iconos */
+@media (max-width: 768px) {
+    .social-icons {
+        gap: 1rem;
+    }
+    .social-icon {
+        width: 50px;
+        height: 50px;
+    }
+    .social-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .social-icons {
+        gap: 0.5rem;
+    }
+    .social-icon {
+        width: 40px;
+        height: 40px;
+    }
+    .social-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+    .panel-title {
+        font-size: 1.2rem;
+    }
+}
+
 /* Responsive */
 @media (max-width: 900px) {
     .container-form {
@@ -273,10 +372,11 @@ form textarea {
     }
     .menu-vertical {
         position: static;
-        width: 100%;
-        text-align: center;
         box-shadow: none;
         border-radius: 0;
+        min-width: 120px;
+        width: max-content;
+        margin: 0 auto;
     }
     .menu-vertical li {
         width: 100%;

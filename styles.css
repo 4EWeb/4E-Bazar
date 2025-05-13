@@ -26,16 +26,25 @@ nav {
 .nav-content {
     display: flex;
     align-items: center;
-    justify-content: center; /* Centra logo y menú */
+    justify-content: center;
     max-width: 1100px;
     margin: 0 auto;
     padding: 0 16px;
 }
 
+.logo-emprendimiento {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    margin-right: 24px;
+    margin-bottom: 0;
+    text-align: center;
+}
 .logo-emprendimiento img {
     height: 70px;
     width: auto;
-    margin-right: 24px;
+    margin: 0 auto;
     display: block;
 }
 
@@ -139,7 +148,6 @@ nav {
 }
 
 /* GALERÍA DE FOTOS DE OFERTAS */
-/* Flex-wrap permite que nunca se oculten items, la galería crece según el contenido */
 .galeria-fotos {
     display: flex;
     justify-content: center;
@@ -149,14 +157,13 @@ nav {
     max-width: 90%;
     position: relative;
     z-index: 1;
-    flex-wrap: wrap; /* Importante para responsividad */
-    /* height y overflow eliminados para evitar ocultar items */
+    flex-wrap: wrap;
 }
 
 .galeria-fotos > div {
     flex: 1 1 250px;
     min-width: 250px;
-    aspect-ratio: 4/3; /* Mantiene proporción y responsividad */
+    aspect-ratio: 4/3;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -165,7 +172,7 @@ nav {
     cursor: pointer;
     filter: brightness(0.8);
     position: relative;
-    height: auto; /* Permite crecer según el ancho */
+    height: auto;
 }
 
 .galeria-fotos > div:hover {
@@ -197,7 +204,7 @@ nav {
     }
 
     .galeria-fotos {
-        flex-direction: column; /* Apila las imágenes */
+        flex-direction: column;
         gap: 1rem;
         margin: 1rem auto;
         max-width: 100%;
@@ -207,7 +214,7 @@ nav {
     .galeria-fotos > div {
         width: 100%;
         min-width: unset;
-        aspect-ratio: 16/9; /* Proporción más panorámica en móvil */
+        aspect-ratio: 16/9;
         margin-bottom: 0.5rem;
         height: auto;
     }
@@ -223,12 +230,28 @@ nav {
         align-items: center;
         justify-content: center;
         gap: 10px;
+        padding: 0 4px;
+    }
+    .logo-emprendimiento {
+        width: 100%;
+        margin: 0 0 10px 0;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        text-align: center;
+    }
+    .logo-emprendimiento img {
+        margin: 0 auto !important;
+        display: block;
     }
     .menu-horizontal {
         flex-direction: column;
         align-items: center;
+        justify-content: center;
         gap: 1rem;
         width: 100%;
+        margin: 0;
+        padding: 0;
     }
     .menu-horizontal > li {
         width: 100%;
@@ -242,19 +265,6 @@ nav {
         min-width: 120px;
         width: max-content;
         margin: 0 auto;
-    }
-    .logo-emprendimiento {
-        width: 100%;
-        text-align: center;
-        margin-bottom: 10px;
-        display: block;
-    }
-    .logo-emprendimiento img {
-        margin-right: 0 !important;
-        margin-left: 0 !important;
-        margin: 0 auto !important;
-        display: inline-block;
-        float: none;
     }
 }
 

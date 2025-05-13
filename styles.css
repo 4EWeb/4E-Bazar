@@ -1,61 +1,399 @@
-
-
-*{
+/* Reset básico para evitar problemas de margen y padding */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body{
+html {
+    font-size: 100%;
+}
+
+body {
     background-color: pink;
     background-size: cover;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden; /* Evita scroll horizontal */
 }
 
-nav{
-    max-width: 900px;
-    margin: auto;
-    background-color: #333;
-    font-size: 20px;
-    margin-top: 50px;
+/* Menú principal */
+nav {
+    background: #e75480;
+    padding: 10px 0;
+    margin-bottom: 30px;
 }
 
-.menu-horizontal{
+.nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centra logo y menú */
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.logo-emprendimiento img {
+    height: 48px;
+    width: auto;
+    margin-right: 24px;
+    display: block;
+}
+
+.menu-horizontal {
     list-style: none;
     display: flex;
-    justify-content: space-around;
+    align-items: center;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
 }
-
-.menu-horizontal >li >a{
-    display: block;
-    padding: 15px 20px;
-    color: white;
+.menu-horizontal > li {
+    position: relative;
+}
+.menu-horizontal > li > a {
+    color: #fff;
     text-decoration: none;
+    font-weight: bold;
+    padding: 10px 18px;
+    border-radius: 5px;
+    transition: background 0.2s;
 }
-
-.menu-horizontal >li:hover{
-    background-color: purple;
+.menu-horizontal > li > a:hover {
+    background: #fff;
+    color: #e75480;
 }
-
-.menu-vertical{
-    position: absolute;
-    display: none;
+.menu-vertical {
     list-style: none;
-    width: 200px;
-    background-color: rgba(0, 0, 0, 0.185);
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    border-radius: 0 0 8px 8px;
+    min-width: 120px;
+    width: max-content;
+    padding: 4px 0;
+    z-index: 10;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition: opacity 0.25s, transform 0.25s;
 }
-
-.menu-horizontal li:hover .menu-vertical{
+.menu-horizontal > li:hover .menu-vertical,
+.menu-horizontal > li:focus-within .menu-vertical {
     display: block;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
 }
-
-.menu-vertical li:hover{
-    background-color: rgba(0, 0, 0, 0.199);
-}
-
-.menu-vertical li a{
+.menu-vertical li a {
+    color: #e75480;
+    padding: 10px 18px;
     display: block;
-    color: white;
-    padding: 15px 15px 15px 20px;
     text-decoration: none;
+    border-radius: 0 0 8px 8px;
+}
+.menu-vertical li a:hover {
+    background: #cccccc; /* Gris claro */
+    color: #e75480;
+    transition: background 0.2s;
 }
 
+/* CAJA DE OFERTAS */
+.ofertas-box {
+    background-color: rgba(255, 255, 255, 0.555);
+    border: 4px solid #ee9ddaaf;
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 3rem auto;
+    max-width: 95%;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
+
+.ofertas-box:hover {
+    transform: scale(1.01);
+}
+
+/* Título de ofertas */
+.ofertas-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    color: #f44336;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background-image: linear-gradient(to right, #ff7e5f, #feb47b);
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    margin-top: 30px;
+}
+
+.ofertas-title:hover {
+    transform: scale(1.1);
+    color: white;
+    background-image: linear-gradient(to right, #feb47b, #ff7e5f);
+}
+
+/* GALERÍA DE FOTOS DE OFERTAS */
+/* Flex-wrap permite que nunca se oculten items, la galería crece según el contenido */
+.galeria-fotos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 4rem auto;
+    gap: 1rem;
+    max-width: 90%;
+    position: relative;
+    z-index: 1;
+    flex-wrap: wrap; /* Importante para responsividad */
+    /* height y overflow eliminados para evitar ocultar items */
+}
+
+.galeria-fotos > div {
+    flex: 1 1 250px;
+    min-width: 250px;
+    aspect-ratio: 4/3; /* Mantiene proporción y responsividad */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 1rem;
+    transition: flex 0.8s ease;
+    cursor: pointer;
+    filter: brightness(0.8);
+    position: relative;
+    height: auto; /* Permite crecer según el ancho */
+}
+
+.galeria-fotos > div:hover {
+    flex: 1.5 1 250px;
+    filter: brightness(1.05);
+}
+
+/* RESPONSIVE: Ajustes para tablets y móviles */
+@media (max-width: 768px) {
+    nav {
+        font-size: 16px;
+        max-width: 100%;
+    }
+
+    .menu-horizontal {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .menu-horizontal > li {
+        width: 100%;
+        text-align: center;
+    }
+
+    .menu-vertical {
+        position: static;
+        width: 100%;
+        text-align: center;
+    }
+
+    .galeria-fotos {
+        flex-direction: column; /* Apila las imágenes */
+        gap: 1rem;
+        margin: 1rem auto;
+        max-width: 100%;
+        padding: 0 0.5rem;
+    }
+
+    .galeria-fotos > div {
+        width: 100%;
+        min-width: unset;
+        aspect-ratio: 16/9; /* Proporción más panorámica en móvil */
+        margin-bottom: 0.5rem;
+        height: auto;
+    }
+
+    .galeria-fotos > div:hover {
+        flex: none;
+    }
+}
+
+@media (max-width: 900px) {
+    .nav-content {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    .menu-horizontal {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        width: 100%;
+    }
+    .menu-horizontal > li {
+        width: 100%;
+        text-align: center;
+    }
+    .menu-vertical {
+        position: static;
+        text-align: center;
+        box-shadow: none;
+        border-radius: 0;
+        min-width: 120px;
+        width: max-content;
+        margin: 0 auto;
+    }
+    .logo-emprendimiento {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+        display: block;
+    }
+    .logo-emprendimiento img {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        margin: 0 auto !important;
+        display: inline-block;
+        float: none;
+    }
+}
+
+/* RESPONSIVE: Ajustes para móviles pequeños */
+@media (max-width: 480px) {
+    .social-icons {
+        gap: 0.5rem;
+    }
+
+    .social-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .social-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .panel-title {
+        font-size: 1.2rem;
+    }
+}
+
+/* FOOTER Y REDES SOCIALES */
+footer {
+    color: white;
+    padding: 2rem 1rem;
+    text-align: center;
+    position: relative;
+    width: 100%;
+    left: 0;
+    margin-top: 3rem;
+}
+
+.social-panel {
+    max-width: 800px;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0.137);
+    padding: 15px;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.panel-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #555;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
+    margin: 10px;
+    position: relative;
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+}
+
+.social-icon.instagram:hover {
+    background-color: #e4405f;
+}
+
+.social-icon.whatsapp:hover {
+    background-color: #25d366;
+}
+
+.social-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Tooltip para iconos de redes */
+.tooltip {
+    position: absolute;
+    bottom: -25px;
+    background-color: black;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.social-icon:hover .tooltip {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.social-panel h2 {
+    color: black;
+}
+
+/* Ajustes responsive para iconos en tablets */
+@media (max-width: 768px) {
+    .social-icons {
+        gap: 1rem;
+    }
+
+    .social-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .social-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* Animación de desvanecimiento para transiciones de página */
+.fade-in {
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.3s;
+}

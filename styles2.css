@@ -34,15 +34,16 @@ h1 {
 
 @media (max-width: 900px) {
     .catalogo {
-        grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, 1fr);
     }
-}
-
-@media (max-width: 600px) {
+  }
+  
+  /* En pantallas pequeñas usa 1 columna */
+  @media (max-width: 600px) {
     .catalogo {
-        grid-template-columns: 1fr;
+      grid-template-columns: 1fr;
     }
-}
+  }
 
 nav {
     background: #e75480;

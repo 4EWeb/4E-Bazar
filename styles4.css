@@ -1,115 +1,409 @@
-*{
+/* Reset básico */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body{
-    background-color: pink;
-    background-size: cover;
+body {
+    font-family: Arial, sans-serif;
+     background-color: pink;
+    min-height: 100vh;
 }
 
-nav{
-    max-width: 900px;
-    margin: auto;
-    background-color: #333;
-    font-size: 20px;
-    margin-top: 50px;
+/* Menú principal */
+nav {
+    background: #e75480;
+    padding: 10px 0;
+    margin-bottom: 30px;
+    /* margin-top: 30px; */ /* Elimina o comenta esta línea */
 }
 
-.menu-horizontal{
+.nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centra logo y menú */
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.logo-emprendimiento img {
+    height: 70px;
+    width: auto;
+    margin-right: 24px;
+    display: block;
+}
+
+.menu-horizontal {
     list-style: none;
     display: flex;
-    justify-content: space-around;
+    align-items: center;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    /* Elimina justify-content aquí */
 }
-
-.menu-horizontal >li >a{
-    display: block;
-    padding: 15px 20px;
-    color: white;
+.menu-horizontal > li {
+    position: relative;
+}
+.menu-horizontal > li > a {
+    color: #fff;
     text-decoration: none;
+    font-weight: bold;
+    padding: 10px 18px;
+    border-radius: 5px;
+    transition: background 0.2s;
 }
-
-.menu-horizontal >li:hover{
-    background-color: purple;
+.menu-horizontal > li > a:hover {
+    background: #fff;
+    color: #e75480;
 }
-
-.menu-vertical{
-    position: absolute;
-    display: none;
+.menu-vertical {
     list-style: none;
-    width: 200px;
-    background-color: rgba(0, 0, 0, 0.185);
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    border-radius: 0 0 8px 8px;
+    min-width: 120px;
+    width: max-content;
+    padding: 4px 0;
+    z-index: 10;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition: opacity 0.25s, transform 0.25s;
 }
 
-.menu-horizontal li:hover .menu-vertical{
+.menu-horizontal > li:hover .menu-vertical,
+.menu-horizontal > li:focus-within .menu-vertical {
     display: block;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
-.menu-vertical li:hover{
-    background-color: rgba(0, 0, 0, 0.199);
+.menu-vertical li {
+    width: 100%;
 }
 
-.menu-vertical li a{
+.menu-vertical li a {
+    color: #e75480;
+    padding: 10px 18px;
     display: block;
-    color: white;
-    padding: 15px 15px 15px 20px;
     text-decoration: none;
+    border-radius: 0 0 8px 8px;
+    transition: background 0.2s;
 }
 
-.container-form{
+.menu-vertical li a:hover {
+    background: #cccccc; /* Gris claro */
+    color: #e75480;
+}
+
+/* Contenedor principal */
+.seccion {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 80vh;
+    padding: 30px 0;
+}
+
+.container-form {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    padding: 32px 24px;
+    max-width: 700px;
     width: 100%;
-    max-width: 1100px;
-    margin: auto;
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    grid-gap: 50px;
-    margin-top: 90px; 
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
 }
 
-.container-form h2{
+.info-form {
+    flex: 1 1 250px;
+    padding: 0 10px 0 0;
+}
+
+.info-form h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #e75480;
+}
+
+.info-form p {
     margin-bottom: 15px;
-    font-size: 35px;
+    color: #444;
 }
 
-.container-form a{
-    font-size: 17px;
-    display: inline-block;
+.datos-contacto p, .datos-contacto a {
+    font-size: 1rem;
+    color: #333;
+    margin: 8px 0;
     text-decoration: none;
-    width: 100%;
-    margin-bottom: 15px;
-    color: black;
-    font-weight: 700;
+    display: flex;
+    align-items: center;
 }
 
-.container-form a i{
-    color:orange;
-    margin-right: 10px;
+.icono-contacto {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    fill: #e75480;
+    flex-shrink: 0;
 }
 
-.container-form form .campo, textarea{
+.redes-contacto {
+    margin-top: 14px;
+    display: flex;
+    gap: 12px;
+}
+
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: #fff;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.3s;
+    font-size: 1.3rem;
+    border: 2px solid #111; /* Línea negra alrededor */
+}
+.social-icon.instagram:hover {
+    background-color: #e744a093;
+}
+.social-icon.whatsapp:hover {
+    background-color: #25d3659c;
+}
+.social-icon.whatsapp svg {
+    fill: black;
+}
+.social-icon.whatsapp:hover svg {
+    fill: black;
+}
+.social-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+form {
+    flex: 1 1 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.campo, textarea {
     width: 100%;
-    padding: 15px 10px;
+    padding: 12px 10px;
     font-size: 15px;
     border: 1px solid #dbdbdb;
-    margin-bottom: 20px;
-    border-radius: 3px;
+    border-radius: 5px;
     outline: 0px;
+    margin-bottom: 8px;
+    background: #f8e9f0;
+    resize: none;
 }
 
-.container-form form textarea{
-    max-width: 530px;
-    min-width: 530px;
-    min-height: 140px;
+form textarea {
+    min-height: 100px;
+    max-width: 100%;
 }
 
-.container-form .btn-enviar{
-    padding: 15px;
+.btn-enviar {
+    padding: 12px;
     font-size: 16px;
     border: none;
     outline: 0px;
-    border-radius: 3px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: all 300ms ease;
+    background: #e75480;
+    color: #fff;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+.btn-enviar:hover {
+    background: #c13584;
+}
 
+/* Fade animation para transiciones */
+.fade-in {
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Social Panel */
+.social-panel {
+    max-width: 800px;
+    margin: 24px auto 0 auto;
+    background-color: rgba(0, 0, 0, 0.08);
+    padding: 15px;
+    border-radius: 10px;
+    display: block;
+    text-align: center;
+}
+
+.panel-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #e75480; /* Letras en negro */
+}
+
+.social-icons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #7e7a7a36;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
+    margin: 10px;
+    position: relative;
+    font-size: 1.3rem;
+    border: none;
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+}
+
+.social-icon.instagram:hover {
+    background-color: #e4405f;
+}
+
+.social-icon.whatsapp:hover {
+    background-color: #25d366;
+}
+
+.social-icon svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+    fill: currentColor;
+}
+
+/* Responsive para iconos */
+@media (max-width: 768px) {
+    .social-icons {
+        gap: 1rem;
+    }
+    .social-icon {
+        width: 50px;
+        height: 50px;
+    }
+    .social-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .social-icons {
+        gap: 0.5rem;
+    }
+    .social-icon {
+        width: 40px;
+        height: 40px;
+    }
+    .social-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+    .panel-title {
+        font-size: 1.2rem;
+    }
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .container-form {
+        flex-direction: column;
+        gap: 20px;
+        padding: 24px 10px;
+    }
+    .info-form, form {
+        padding: 0;
+    }
+    .nav-content {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    .menu-horizontal {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        width: 100%;
+    }
+    .menu-horizontal > li {
+        width: 100%;
+        text-align: center;
+    }
+    .menu-vertical {
+        position: static;
+        box-shadow: none;
+        border-radius: 0;
+        min-width: 120px;
+        width: max-content;
+        margin: 0 auto;
+    }
+    .menu-vertical li {
+        width: 100%;
+    }
+    .logo-emprendimiento {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+        display: block;
+    }
+    .logo-emprendimiento img {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        margin: 0 auto !important;
+        display: inline-block;
+        float: none;
+    }
+}
+@media (max-width: 600px) {
+    .container-form {
+        padding: 12px 2px;
+    }
+    .info-form h1 {
+        font-size: 1.3rem;
+    }
+    .btn-enviar {
+        font-size: 15px;
+        padding: 10px;
+    }
 }

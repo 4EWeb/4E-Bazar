@@ -119,6 +119,7 @@ nav {
     display: flex;
     align-items: center;
     box-shadow: none;
+    position: relative;
 }
 
 .carrito-menu {
@@ -150,6 +151,20 @@ nav {
 .carrito-menu:hover svg {
     color: #e75480;
     fill: #e75480;
+}
+
+/* Contador del carrito */
+.contador-carrito {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #e75480;
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 7px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
 }
 
 /* Responsive ajustes para el carrito */
@@ -476,4 +491,99 @@ footer {
 .fade-out {
     opacity: 0;
     transition: opacity 0.3s;
+}
+
+/* Productos destacados debajo de ofertas */
+.productos-destacados {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.productos-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #e75480;
+    font-weight: bold;
+}
+
+.productos-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.producto-box {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 18px 20px 22px 20px;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.producto-box:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 4px 16px rgba(231,84,128,0.13);
+}
+
+.producto-box img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin-bottom: 12px;
+}
+
+.producto-box h3 {
+    font-size: 1.1rem;
+    margin: 8px 0 4px 0;
+    color: #e75480;
+}
+
+.producto-box p {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.producto-box button {
+    background: #e75480;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.producto-box button:hover {
+    background: #c13c6a;
+}
+
+@media (max-width: 900px) {
+    .productos-container {
+        gap: 1rem;
+    }
+    .producto-box {
+        width: 45vw;
+        min-width: 180px;
+        max-width: 260px;
+    }
+}
+
+@media (max-width: 600px) {
+    .productos-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .producto-box {
+        width: 90vw;
+        max-width: 320px;
+    }
 }

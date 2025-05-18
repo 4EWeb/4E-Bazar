@@ -24,12 +24,31 @@ h1 {
     height: 250px;
     border-radius: 12px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
 .cuadro:hover {
     transform: scale(1.05) rotate(1deg);
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
     background-color: #45a049;
+}
+
+.info-producto {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    height: 70px;
+    padding: 8px 12px;
+    margin-top: auto;
+}
+
+.nombre-producto, .precio-producto {
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 2px;
 }
 
 @media (max-width: 900px) {
@@ -151,3 +170,100 @@ nav {
     transition: opacity 0.3s;
 }
 
+.filtro-barra {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin: 20px 0 30px 0;
+}
+
+.filtro-btn {
+    background: #e75480;
+    color: #fff;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s, color 0.2s;
+}
+
+.filtro-btn:hover {
+    background: #fff;
+    color: #e75480;
+    border: 1px solid #e75480;
+}
+
+.carrito-box {
+    background: transparent;
+    border-radius: 10px;
+    padding: 0;
+    margin-left: 24px;
+    display: flex;
+    align-items: center;
+    box-shadow: none;
+    position: relative;
+}
+
+.carrito-menu {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 18px;
+    border-radius: 5px;
+    transition: background 0.2s, color 0.2s;
+    font-size: 1.5rem;
+    background: transparent;
+    position: relative;
+    justify-content: center;
+}
+
+.carrito-menu svg {
+    color: #fff;
+    fill: #fff;
+    transition: color 0.2s, fill 0.2s;
+}
+
+.carrito-menu:hover {
+    background: #fff;
+    color: #e75480;
+}
+
+.carrito-menu:hover svg {
+    color: #e75480;
+    fill: #e75480;
+}
+
+/* Contador del carrito */
+.contador-carrito {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #e75480;
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 7px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+/* Responsive ajustes para el carrito */
+@media (max-width: 900px) {
+    .carrito-box {
+        margin-left: 0;
+        margin-top: 10px;
+        width: 100%;
+        justify-content: center;
+        order: 2;
+    }
+    .carrito-menu {
+        margin-left: 0;
+        margin-top: 0;
+        width: auto;
+        justify-content: center;
+    }
+}

@@ -118,15 +118,15 @@ h1 {
 
 nav {
     background: #e75480;
-    padding: 10px 0; /* Menos gruesa */
+    padding: 10px 0;
     margin-bottom: 30px;
-    margin-top: 0; /* Asegura que no haya margen arriba */
 }
 
 .nav-content {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
     max-width: 1100px;
     margin: 0 auto;
     padding: 0 16px;

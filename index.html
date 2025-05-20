@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
     <title>4E</title>
 </head>
 <body>
-    <!-- Menú -->
     <nav>
         <div class="nav-content">
             <a href="index.html" class="logo-emprendimiento">
@@ -32,42 +31,54 @@
             </div>
         </div>
     </nav>
-          <!-- Sección Ofertas -->
+
     <section class="ofertas-box">
         <h1 class="ofertas-title">Ofertas Destacadas</h1>
         <div class="galeria-fotos">
-            <div style="background-image: url('Imagenes/oferta1.png');"></div>
-            <div style="background-image: url('Imagenes/oferta2.png');"></div>
-            <div style="background-image: url('Imagenes/oferta3.png');"></div>
-            <div style="background-image: url('Imagenes/oferta4.png');"></div>
+          <div style="background-image: url('Imagenes/oferta1.png')"></div>
+          <div style="background-image: url('Imagenes/oferta2.png')"></div>
+          <div style="background-image: url('Imagenes/oferta3.png')"></div>
+          <div style="background-image: url('Imagenes/oferta4.png')"></div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN DE PRODUCTOS DESTACADOS -->
+      <section class="productos-destacados">
+        <h2 class="productos-title">Productos Destacados</h2>
+        <div class="productos-container">
+          <div class="producto-box">
+            <img src="Imagenes/box-escolares.jpg" alt="Producto 1" />
+            <h3>Producto 1</h3>
+            <p>$3.990</p>
+            <button
+              onclick="agregarAlCarrito({id:101, nombre:'Producto 1', precio:3990})"
+            >
+              Agregar al carrito
+            </button>
+          </div>
+          <div class="producto-box">
+            <img src="Imagenes/box-escolares.jpg" alt="Producto 2" />
+            <h3>Producto 2</h3>
+            <p>$5.500</p>
+            <button
+              onclick="agregarAlCarrito({id:102, nombre:'Producto 2', precio:5500})"
+            >
+              Agregar al carrito
+            </button>
+          </div>
+          <div class="producto-box">
+            <img src="Imagenes/box-escolares.jpg" alt="Producto 3" />
+            <h3>Producto 3</h3>
+            <p>$2.500</p>
+            <button
+              onclick="agregarAlCarrito({id:103, nombre:'Producto 3', precio:2500})"
+            >
+              Agregar al carrito
+            </button>
+          </div>
         </div>
     </section>
 
-    <!-- NUEVA SECCIÓN DE PRODUCTOS DESTACADOS -->
-    <section class="productos-destacados">
-        <h2 class="productos-title">Productos Destacados</h2>
-        <div class="productos-container">
-            <div class="producto-box">
-                <img src="Imagenes/box-escolares.jpg" alt="Producto 1">
-                <h3>Producto 1</h3>
-                <p>$3.990</p>
-                <button onclick="agregarAlCarrito({id:101, nombre:'Producto 1', precio:3990})">Agregar al carrito</button>
-            </div>
-            <div class="producto-box">
-                <img src="Imagenes/box-escolares.jpg" alt="Producto 2">
-                <h3>Producto 2</h3>
-                <p>$5.500</p>
-                <button onclick="agregarAlCarrito({id:102, nombre:'Producto 2', precio:5500})">Agregar al carrito</button>
-            </div>
-            <div class="producto-box">
-                <img src="Imagenes/box-escolares.jpg" alt="Producto 3">
-                <h3>Producto 3</h3>
-                <p>$2.500</p>
-                <button onclick="agregarAlCarrito({id:103, nombre:'Producto 3', precio:2500})">Agregar al carrito</button>
-            </div>
-        </div>
-    </section>
-    <!-- Sección Redes Sociales -->
     <footer>
         <div class="social-panel">
             <h2 class="panel-title">Síguenos en redes sociales</h2>
@@ -91,5 +102,5 @@
     </footer>
     <script src="transiciones.js"></script>
     <script src="carrito.js"></script>
-</body>
+  </body>
 </html>

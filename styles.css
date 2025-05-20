@@ -563,60 +563,41 @@ footer {
   left: 0;
   width: 100%;
   z-index: 1100;
-  height: 120px;
-  min-height: 90px;
+  height: 60px;
   background: #e75480;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.07);
 }
-footer {
-  color: white;
-  width: 100%;
-  text-align: center;
-  position: relative;
-  left: 0;
-  margin: 0;
-  padding: 0;
-  background: transparent;
-}
-.social-panel {
-  max-width: 200px;
-  margin: auto;
-  background-color: transparent; /* Sin fondo */
-  padding: 0;
-  border-radius: 0;
-  display: inline-block;
-  width: 100%;
-  box-shadow: none;
-}
-.panel-title {
-  font-size: clamp(1rem, 2vw, 1.5rem);
-  margin-top: 8px;
-  margin-bottom: 4px;
-  color: #fff;
-}
-.social-icons {
+
+.footer-content {
   display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
   justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-  margin-top: 4px;
 }
+
+.footer-text {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-right: 8px;
+  white-space: nowrap;
+}
+
 .social-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   background-color: #555;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   color: white;
   text-decoration: none;
   transition: background-color 0.3s, transform 0.3s;
-  margin: 10px;
-  position: relative;
   font-size: 1.2rem;
 }
 .social-icon:hover {
@@ -629,139 +610,27 @@ footer {
   background-color: #25d366;
 }
 .social-icon svg {
-  width: 24px;
-  height: 24px;
-}
-
-/* RESPONSIVE AJUSTES */
-@media (max-width: 900px) {
-  .nav-content {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-  .logo-emprendimiento {
-    width: 100%;
-    margin: 0 0 10px 0;
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    text-align: center;
-  }
-  .menu-horizontal {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  .menu-horizontal > li {
-    width: 100%;
-    text-align: center;
-  }
-  .menu-vertical {
-    position: static;
-    text-align: center;
-    box-shadow: none;
-    border-radius: 0;
-    min-width: 120px;
-    width: max-content;
-    margin: 0 auto;
-  }
-  .carrito-menu {
-    margin-left: 0;
-    margin-top: 10px;
-  }
-  .carrito-box {
-    margin-left: 0;
-    margin-top: 10px;
-    width: auto;
-    justify-content: center;
-  }
-  .productos-container {
-    gap: 1rem;
-  }
-  .producto-box {
-    width: 45vw;
-    min-width: 180px;
-    max-width: 260px;
-  }
-}
-
-@media (max-width: 768px) {
-  .menu-horizontal {
-    font-size: clamp(0.8rem, 2vw, 1rem);
-  }
-  .galeria-fotos {
-    flex-direction: column;
-    gap: 1rem;
-    margin: 1rem auto;
-    max-width: 100%;
-    padding: 0 0.5rem;
-  }
-  .galeria-fotos > div {
-    width: 100%;
-    min-width: unset;
-    aspect-ratio: 16/9;
-    margin-bottom: 0.5rem;
-    height: auto;
-  }
-  .galeria-fotos > div:hover {
-    flex: none;
-  }
-  .social-icons {
-    gap: 1rem;
-  }
-  .social-icon {
-    width: 50px;
-    height: 50px;
-  }
-  .social-icon svg {
-    width: 20px;
-    height: 20px;
-  }
+  width: 20px;
+  height: 20px;
 }
 
 @media (max-width: 600px) {
-  .navbar-fijo {
-    height: 60px;
-    min-height: 50px;
-  }
   .info-fija-abajo {
-    height: 60px;
-    min-height: 30px;
+    height: 48px;
   }
-  .contenido-scroll {
-    padding-top: 60px;
-    padding-bottom: 90px;
-    font-size: clamp(0.8rem, 2vw, 1rem);
+  .footer-content {
+    gap: 8px;
   }
-  .productos-container {
-    flex-direction: column;
-    align-items: center;
-  }
-  .producto-box {
-    width: 90vw;
-    max-width: 320px;
-  }
-}
-
-@media (max-width: 300px) {
-  .social-icons {
-    gap: 0.5rem;
+  .footer-text {
+    font-size: 0.9rem;
   }
   .social-icon {
-    width: 40px;
-    height: 40px;
+    width: 28px;
+    height: 28px;
   }
   .social-icon svg {
-    width: 18px;
-    height: 18px;
-  }
-  .panel-title {
-    font-size: 1rem;
+    width: 16px;
+    height: 16px;
   }
 }
 

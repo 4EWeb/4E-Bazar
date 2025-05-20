@@ -39,6 +39,7 @@ body {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 16px;
+  width: 100%;
 }
 
 .logo-emprendimiento {
@@ -59,7 +60,7 @@ body {
 
 nav {
   background: #e75480;
-  padding: 10px 0;
+  padding: 0px 0;
   margin-bottom: 30px;
 }
 
@@ -72,6 +73,7 @@ nav {
   gap: 2rem;
   margin: 0;
   padding: 0;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
 }
 .menu-horizontal > li {
   position: relative;
@@ -83,6 +85,7 @@ nav {
   padding: 10px 18px;
   border-radius: 5px;
   transition: background 0.2s;
+  font-size: inherit;
 }
 .menu-horizontal > li > a:hover {
   background: #fff;
@@ -94,7 +97,6 @@ nav {
   display: flex;
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(0);
 }
 
 .menu-vertical li {
@@ -102,13 +104,15 @@ nav {
 }
 
 .menu-vertical li a {
-  color: #e75480;
+  color: #fff;
   padding: 10px 18px;
   display: block;
   text-decoration: none;
   border-radius: 0 8px 8px 0;
-  transition: background 0.2s;
-
+  font-size: inherit;
+  background: transparent;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
 }
 .menu-vertical li a:hover {
   background: #fff;
@@ -122,8 +126,8 @@ nav {
   }
   .carrito-box {
     margin-left: 0;
-    margin-top: 0;
-    width: auto;
+    margin-top: 10px;
+    width: 100%;
     justify-content: center;
     order: 2;
   }

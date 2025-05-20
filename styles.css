@@ -39,7 +39,6 @@ body {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 16px;
-  width: 100%;
 }
 
 .logo-emprendimiento {
@@ -54,7 +53,7 @@ body {
 .logo-emprendimiento img {
   height: 70px;
   width: auto;
-  margin: 0 auto;
+  margin: 10px auto;
   display: block;
 }
 
@@ -73,8 +72,8 @@ nav {
   gap: 2rem;
   margin: 0;
   padding: 0;
-  font-size: clamp(0.9rem, 2vw, 1.1rem);
 }
+
 .menu-horizontal > li {
   position: relative;
 }
@@ -85,8 +84,8 @@ nav {
   padding: 10px 18px;
   border-radius: 5px;
   transition: background 0.2s;
-  font-size: inherit;
 }
+
 .menu-horizontal > li > a:hover {
   background: #fff;
   color: #e75480;
@@ -94,9 +93,10 @@ nav {
 
 .menu-horizontal > li:hover .menu-vertical,
 .menu-horizontal > li:focus-within .menu-vertical {
-  display: flex;
-  opacity: 1;
-  pointer-events: auto;
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
 .menu-vertical li {
@@ -104,15 +104,12 @@ nav {
 }
 
 .menu-vertical li a {
-  color: #fff;
-  padding: 10px 18px;
-  display: block;
-  text-decoration: none;
-  border-radius: 0 8px 8px 0;
-  font-size: inherit;
-  background: transparent;
-  transition: background 0.2s, color 0.2s;
-  white-space: nowrap;
+    color: #e75480;
+    padding: 10px 18px;
+    display: block;
+    text-decoration: none;
+    border-radius: 0 0 8px 8px;
+    transition: background 0.2s;
 }
 .menu-vertical li a:hover {
   background: #fff;
@@ -268,7 +265,7 @@ nav {
     text-align: center;
   }
   .logo-emprendimiento img {
-    margin: 0 auto !important;
+    margin: 10px auto !important;
     display: block;
   }
   .menu-horizontal {
@@ -302,7 +299,7 @@ nav {
   .carrito-box {
     margin-left: 0;
     margin-top: 10px;
-    width: auto;
+    width: center;
     justify-content: center;
   }
 }

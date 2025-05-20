@@ -16,10 +16,7 @@
           <li><a href="index.html">Inicio</a></li>
           <li>
             <a href="catalogo.html">Catálogo</a>
-            <ul class="menu-vertical">
-              <li><a href="escolares.html">Escolares</a></li>
-              <li><a href="aseo.html">Aseo</a></li>
-            </ul>
+            
           </li>
           <li><a href="nosotros.html">Sobre Nosotros</a></li>
           <li><a href="contacto.html">Contacto</a></li>
@@ -35,56 +32,86 @@
       </div>
     </nav>
     <div class="filtro-barra">
-        <button class="filtro-btn" onclick="filtrarCategoria('todos')">Todos</button>
-        <button class="filtro-btn" onclick="filtrarCategoria('escolares')">Escolares</button>
-        <button class="filtro-btn" onclick="filtrarCategoria('aseo')">Aseo</button>
+        <label for="filtro-categorias" style="font-weight:bold; margin-right:8px;">Filtrar por categoría:</label>
+        <select id="filtro-categorias" class="filtro-select" onchange="filtrarCategoria(this.value)">
+            <option value="todos">Todos</option>
+            <option value="papeleria">Papelería</option>
+            <option value="higiene">Higiene, Salud y Belleza</option>
+            <option value="utiles">Útiles</option>
+            <option value="hogar">Hogar y Decoración</option>
+            <option value="jugueteria">Juguetería</option>
+            <option value="ropa">Ropa</option>
+            <option value="juegos">Juegos de Mesa y Entretenimiento</option>
+            <option value="accesorios">Accesorios</option>
+            <option value="fiesta">Fiesta</option>
+        </select>
     </div>
-    <div class="catalogo">
-        <div class="cuadro">
-            <div class="info-producto">
-                <span class="nombre-producto">Producto:</span>
-                <span class="precio-producto">Precio:</span>
+    <div class="productos-container">
+            <div class="producto-box escolares">
+                <img src="Imagenes/box-escolares.jpg" alt="Producto 1">
+                <h3>Cuaderno Ross</h3>
+                <p>$1.200</p>
+                <button onclick="agregarAlCarrito({id:101, nombre:'Producto 1', precio:1200})">Agregar al carrito</button>
+            </div>
+            <div class="producto-box escolares">
+                <img src="Imagenes/box-escolares.jpg" alt="Producto 2">
+                <h3>Cuaderno Proarte</h3>
+                <p>$1.800</p>
+                <button onclick="agregarAlCarrito({id:102, nombre:'Producto 2', precio:1800})">Agregar al carrito</button>
+            </div>
+            <div class="producto-box aseo">
+                <img src="Imagenes/box-escolares.jpg" alt="Producto 3">
+                <h3>Cuaderno Proarte</h3>
+                <p>$1.000</p>
+                <button onclick="agregarAlCarrito({id:103, nombre:'Producto 3', precio:1000})">Agregar al carrito</button>
+            </div>
+            <div class="producto-box escolares">
+                <img src="Imagenes/box-escolares.jpg" alt="Producto 1">
+                <h3>Cuaderno Ross</h3>
+                <p>$1.200</p>
+                <button onclick="agregarAlCarrito({id:101, nombre:'Producto 1', precio:1200})">Agregar al carrito</button>
+            </div>
+            <div class="producto-box escolares">
+                <img src="Imagenes/box-escolares.jpg" alt="Producto 2">
+                <h3>Cuaderno Proarte</h3>
+                <p>$1.800</p>
+                <button onclick="agregarAlCarrito({id:102, nombre:'Producto 2', precio:1800})">Agregar al carrito</button>
+            </div>
+            <div class="producto-box aseo">
+                <img src="Imagenes/box-escolares.jpg" alt="Producto 3">
+                <h3>Cuaderno Proarte</h3>
+                <p>$1.000</p>
+                <button onclick="agregarAlCarrito({id:103, nombre:'Producto 3', precio:1000})">Agregar al carrito</button>
+            </div>
+            <div class="producto-box escolares">
+                <img src="Imagenes/box-escolares.jpg" alt="Producto 1">
+                <h3>Cuaderno Ross</h3>
+                <p>$1.200</p>
+                <button onclick="agregarAlCarrito({id:101, nombre:'Producto 1', precio:1200})">Agregar al carrito</button>
+            </div>
+            <div class="producto-box escolares">
+                <img src="Imagenes/box-escolares.jpg" alt="Producto 2">
+                <h3>Cuaderno Proarte</h3>
+                <p>$1.800</p>
+                <button onclick="agregarAlCarrito({id:102, nombre:'Producto 2', precio:1800})">Agregar al carrito</button>
+            </div>
+            <div class="producto-box aseo">
+                <img src="Imagenes/box-escolares.jpg" alt="Producto 3">
+                <h3>Cuaderno Proarte</h3>
+                <p>$1.000</p>
+                <button onclick="agregarAlCarrito({id:103, nombre:'Producto 3', precio:1000})">Agregar al carrito</button>
             </div>
         </div>
-        <div class="cuadro">
-            <div class="info-producto">
-                <span class="nombre-producto">Producto:</span>
-                <span class="precio-producto">Precio:</span>
-            </div>
-        </div>
-        <div class="cuadro">
-            <div class="info-producto">
-                <span class="nombre-producto">Producto:</span>
-                <span class="precio-producto">Precio:</span>
-            </div>
-        </div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-        <div class="cuadro"></div>
-    </div>
-    <script src="transiciones.js"></script>
+    
+    <script src="carrito.js"></script>
     <script>
 function filtrarCategoria(cat) {
-    const cuadros = document.querySelectorAll('.cuadro');
-    cuadros.forEach(cuadro => {
+    const productos = document.querySelectorAll('.producto-box');
+    productos.forEach(producto => {
         if (cat === 'todos') {
-            cuadro.style.display = '';
+            producto.style.display = '';
         } else {
-            // Suponiendo que agregues clases como 'escolares' o 'aseo' a los cuadros
-            cuadro.style.display = cuadro.classList.contains(cat) ? '' : 'none';
+            producto.style.display = producto.classList.contains(cat) ? '' : 'none';
         }
     });
 }

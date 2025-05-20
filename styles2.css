@@ -172,24 +172,7 @@ nav {
     background: #fff;
     color: #e75480;
 }
-.menu-vertical {
-    list-style: none;
-    display: none;
-    position: absolute;
-    left: 0;
-    top: 100%;
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-    border-radius: 0 0 8px 8px;
-    min-width: 120px;
-    width: max-content;
-    padding: 4px 0;
-    z-index: 10;
-    opacity: 0;
-    transform: translateY(10px);
-    pointer-events: none;
-    transition: opacity 0.25s, transform 0.25s;
-}
+
 .menu-horizontal > li:hover .menu-vertical,
 .menu-horizontal > li:focus-within .menu-vertical {
     display: block;

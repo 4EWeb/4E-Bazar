@@ -332,7 +332,6 @@ footer {
   text-align: center;
   position: relative;
   width: 100%;
-
   left: 0;
   top: 100%;
   flex-direction: column;
@@ -342,7 +341,7 @@ footer {
   width: max-content;
   margin: 0 auto;
   opacity: 1;
-  display: none;
+  display: block;
   background: #e75480;
   transform: none;
 }

@@ -34,8 +34,8 @@ body {
 .nav-content {
   top: 0;
   z-index: 1000;
-  background: #a83f7e; /* O el color de fondo de tu nav */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Opcional: sombra para destacar */
+  background: #e75480; /* O el color de fondo de tu nav */
+  box-shadow: 0 2px 8px rgba(77, 62, 62, 0.05); /* Opcional: sombra para destacar */
   display: flex;
   align-items: center;
   justify-content: space-between; /* Igual que styles2.css */

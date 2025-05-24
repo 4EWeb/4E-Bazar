@@ -32,6 +32,10 @@ body {
 }
 
 .nav-content {
+  top: 0;
+  z-index: 1000;
+  background: #a83f7e; /* O el color de fondo de tu nav */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Opcional: sombra para destacar */
   display: flex;
   align-items: center;
   justify-content: space-between; /* Igual que styles2.css */
@@ -63,7 +67,6 @@ nav {
   margin-bottom: 30px;
 }
 
-
 /* MENÚ PRINCIPAL */
 .menu-horizontal {
   list-style: none;
@@ -93,10 +96,10 @@ nav {
 
 .menu-horizontal > li:hover .menu-vertical,
 .menu-horizontal > li:focus-within .menu-vertical {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .menu-vertical li {
@@ -104,12 +107,12 @@ nav {
 }
 
 .menu-vertical li a {
-    color: #e75480;
-    padding: 10px 18px;
-    display: block;
-    text-decoration: none;
-    border-radius: 0 0 8px 8px;
-    transition: background 0.2s;
+  color: #e75480;
+  padding: 10px 18px;
+  display: block;
+  text-decoration: none;
+  border-radius: 0 0 8px 8px;
+  transition: background 0.2s;
 }
 .menu-vertical li a:hover {
   background: #fff;
@@ -638,4 +641,3 @@ footer {
   opacity: 0;
   transition: opacity 0.3s;
 }
-

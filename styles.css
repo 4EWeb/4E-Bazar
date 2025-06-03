@@ -145,8 +145,8 @@ nav {
   border: 4px solid #ee9ddaaf;
   border-radius: 16px;
   padding: 2rem;
-  margin: 3rem auto;
-  max-width: 75%;
+  margin: 5rem auto 3rem auto; /* Aumenta el margen superior aquí */
+  max-width: 65%;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease;
 }
@@ -345,7 +345,6 @@ footer {
   margin: 0 auto;
   opacity: 1;
   display: block;
-  background: #e75480;
   transform: none;
 }
 .menu-horizontal > li:hover .menu-vertical,
@@ -407,7 +406,7 @@ footer {
 
 /* CONTENIDO PRINCIPAL */
 .contenido-scroll {
-  padding-top: 90px;
+  padding-top: 80px;
   padding-bottom: 120px;
   min-height: 100vh;
   font-size: clamp(1rem, 2vw, 1.2rem);
@@ -420,8 +419,8 @@ footer {
   border: 4px solid #ee9ddaaf;
   border-radius: 16px;
   padding: 2rem;
-  margin: 3rem auto;
-  max-width: 95%;
+  margin: 5rem auto 3rem auto; /* Aumenta el margen superior aquí */
+  max-width: 85%;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease;
 }
@@ -580,13 +579,13 @@ footer {
   align-items: center;
   justify-content: center;
   background-color: #555;
-  width: 36px;
-  height: 36px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   color: white;
   text-decoration: none;
   transition: background-color 0.3s, transform 0.3s;
-  font-size: 1.2rem;
+  font-size: 2rem;
 }
 .social-icon:hover {
   transform: scale(1.1);
@@ -598,8 +597,8 @@ footer {
   background-color: #25d366;
 }
 .social-icon svg {
-  width: 20px;
-  height: 20px;
+  width: 32px;
+  height: 32px;
 }
 
 @media (max-width: 600px) {
@@ -619,6 +618,22 @@ footer {
   .social-icon svg {
     width: 16px;
     height: 16px;
+  }
+}
+
+/* Más separación entre los iconos de redes sociales */
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem; /* Separación amplia en escritorio */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Responsive: menos separación en pantallas pequeñas */
+@media (max-width: 600px) {
+  .social-icons {
+    gap: 1rem;
   }
 }
 
@@ -644,13 +659,22 @@ footer {
 
 /* Estilos para la sección de Servicios Gráficos */
 .servicios-graficos-index {
-  background: linear-gradient(120deg, #ffe0ec 60%, #f8b6d8 100%);
-  border: 3px solid #e75480;
-  margin-top: 2rem;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 16px rgba(231, 84, 128, 0.08);
+  background-color: rgba(255, 255, 255, 0.555);
+  border: 4px solid #ee9ddaaf;
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 5rem auto 3rem auto; /* Aumenta el margen superior aquí */
+  max-width: 85%;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+/* Responsive: ancho casi completo en móviles */
+@media (max-width: 600px) {
+  .servicios-graficos-index {
+    max-width: 98vw;
+    padding: 1rem 0.5rem;
+  }
 }
 
 .Servicios-box-index {
@@ -776,4 +800,14 @@ footer {
     padding: 1.2rem 0.5rem 1rem 0.5rem;
     max-width: 98vw;
   }
+}
+
+/* SOCIAL PANEL */
+.social-panel {
+  background: #e75480;
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  padding: 2rem 1rem 1.5rem 1rem;
+  margin: 2.5rem auto 0 auto;
+  max-width: 500px;
 }

@@ -61,15 +61,40 @@
           </label>
           <label for="anillado">
             <input type="checkbox" name="anillado" id="anillado" />
-            Anillado (+$1.000)
+            Anillado
           </label>
           <label for="doble_cara">
             <input type="checkbox" name="doble_cara" id="doble_cara" />
-            Impresión doble cara (+$500)
+            Impresión doble cara (descuento por hoja)
           </label>
-          <label for="plastificado">
-            <input type="checkbox" name="plastificado" id="plastificado" />
-            Plastificado (+$700)
+          <label>
+            Tipo de impresión:
+            <select name="tipo_impresion" id="tipo_impresion">
+              <option value="bn">Blanco y negro ($100/hoja)</option>
+              <option value="color">Color ($200/hoja)</option>
+              <option value="foto">Foto ($300/hoja)</option>
+              <option value="foto_papel">
+                Foto en papel fotográfico ($500/hoja)
+              </option>
+            </select>
+          </label>
+          <label>
+            Termolaminado:
+            <select name="termolaminado" id="termolaminado">
+              <option value="ninguno">Ninguno</option>
+              <option value="media_carta">Media carta (+$1200/hoja)</option>
+              <option value="oficio">Oficio (+$1500/hoja)</option>
+            </select>
+          </label>
+          <label>
+            Comentarios adicionales:
+            <textarea
+              name="comentarios"
+              id="comentarios"
+              maxlength="200"
+              rows="3"
+              placeholder="Máx. 200 caracteres"
+            ></textarea>
           </label>
           <div class="precio-total">
             <strong>Total: $<span id="precio-total">500</span></strong>

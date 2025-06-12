@@ -3,14 +3,14 @@ require __DIR__ . '/db.php';
 
 
 $categorias_fijas = [
-  'papeleria', 'higiene', 'utiles', 'hogar', 'jugueteria', 'ropa', 'juegos', 'accesorios', 'fiesta'
+  '1', 'higiene', 'utiles', 'hogar', 'jugueteria', 'ropa', 'juegos', 'accesorios', 'fiesta'
 ];
 
-$categoriaSeleccionada = $_GET['categoria'] ?? '';
+$categoriaSeleccionada = $_GET['categoriaID'] ?? '';
 
 try {
     if ($categoriaSeleccionada && in_array($categoriaSeleccionada, $categorias_fijas)) {
-        $stmt = $pdo->prepare("SELECT * FROM productos WHERE categoria = ?");
+        $stmt = $pdo->prepare("SELECT * FROM productos WHERE categoriaID = ?");
         $stmt->execute([$categoriaSeleccionada]);
     } else {
         $stmt = $pdo->query("SELECT * FROM productos");
@@ -59,8 +59,8 @@ try {
     </nav>
     <h1>Catálogo</h1>
     <form method="GET" action="catalog.php">
-    <label for="categoria">Filtrar por categoría:</label>
-    <select name="categoria" id="categoria" onchange="this.form.submit()">
+    <label for="categoriaID">Filtrar por categoría:</label>
+    <select name="categoriaID" id="categoriaID" onchange="this.form.submit()">
       <option value="">Todos</option>
       <?php foreach ($categorias_fijas as $cat): ?>
         <option value="<?= $cat ?>" <?= ($categoriaSeleccionada === $cat) ? 'selected' : '' ?>>
@@ -78,7 +78,7 @@ try {
           <h4><?= htmlspecialchars($producto['nombre']) ?></h4>
           <p><?= htmlspecialchars($producto['descripcion']) ?></p>
           <p>Precio: $<?= number_format($producto['precio'], 2) ?></p>
-          <p>Categoría: <?= ucfirst($producto['categoria']) ?></p>
+          <p>Categoría: <?= ucfirst($producto['categoriaID']) ?></p>
         </div>
       <?php endforeach; ?>
     <?php else: ?>

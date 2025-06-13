@@ -97,6 +97,7 @@ try {
             <p>Precio: $<?= number_format($producto['precio'], 2) ?></p>
           <?php endif; ?>
           <p>Categoría: <?= ucfirst($producto['nombreCategoria']) ?></p>
+          <p href="add_to_cart.php?id=<?= $p['id'] ?>">Agregar al carrito</p>
         </a>
       <?php endforeach; ?>
     <?php else: ?>

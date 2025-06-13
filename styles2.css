@@ -76,44 +76,6 @@ h1 {
     margin: 0;
     padding: 0;
 }
-.menu-horizontal > li {
-    position: relative;
-}
-.menu-horizontal > li > a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 10px 18px;
-    border-radius: 5px;
-    transition: background 0.2s;
-}
-.menu-horizontal > li > a:hover {
-    background: #fff;
-    color: #e75480;
-}
-
-.menu-horizontal > li:hover .menu-vertical,
-.menu-horizontal > li:focus-within .menu-vertical {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-}
-.menu-vertical li {
-    width: 100%;
-}
-.menu-vertical li a {
-    color: #e75480;
-    padding: 10px 18px;
-    display: block;
-    text-decoration: none;
-    border-radius: 0 0 8px 8px;
-    transition: background 0.2s;
-}
-.menu-vertical li a:hover {
-    background: #cccccc;
-    color: #e75480;
-}
 
 
 

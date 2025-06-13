@@ -17,7 +17,12 @@ h1 {
     text-align: center;
 }
 
-
+.productos-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #e75480;
+    font-weight: bold;
+}
 
 .productos-container {
     display: flex;
@@ -27,6 +32,78 @@ h1 {
     margin-top: 10px;
 }
 
+.producto-box {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 18px 20px 22px 20px;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.producto-box:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 4px 16px rgba(231,84,128,0.13);
+}
+
+.producto-box img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin-bottom: 12px;
+}
+
+.producto-box h3 {
+    font-size: 1.1rem;
+    margin: 8px 0 4px 0;
+    color: #e75480;
+}
+
+.producto-box p {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.producto-box button {
+    background: #e75480;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.producto-box button:hover {
+    background: #c13c6a;
+}
+
+@media (max-width: 900px) {
+    .productos-container {
+        gap: 1rem;
+    }
+    .producto-box {
+        width: 45vw;
+        min-width: 180px;
+        max-width: 260px;
+    }
+}
+
+@media (max-width: 600px) {
+    .productos-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .producto-box {
+        width: 90vw;
+        max-width: 320px;
+    }
+}
 
 
 
@@ -46,6 +123,11 @@ h1 {
 
 
 
+nav {
+    background: #e75480;
+    padding: 10px 0;
+    margin-bottom: 30px;
+}
 .nav-content {
     display: flex;
     align-items: center;
@@ -56,6 +138,12 @@ h1 {
     padding: 0 16px;
 }
 
+.logo-emprendimiento img {
+    height: 70px;
+    width: auto;
+    margin: 0 auto;
+    display: block;
+}
 .logo-emprendimiento {
     display: flex;
     align-items: center;
@@ -77,6 +165,21 @@ h1 {
     padding: 0;
 }
 
+.fade-in {
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.filtro-barra {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 24px 0 32px 0;
+}
 
 
 
@@ -128,7 +231,15 @@ h1 {
     fill: #fff;
     transition: color 0.2s, fill 0.2s;
 }
+.carrito-menu:hover {
+    background: #fff;
+    color: #e75480;
+}
 
+.carrito-menu:hover svg {
+    color: #e75480;
+    fill: #e75480;
+}
 
 
 /* Contador del carrito */

@@ -83,7 +83,7 @@ try {
   <div class="productos-container">
     <?php if (count($productos) > 0): ?>
       <?php foreach ($productos as $producto): ?>
-        <a href="productos-.php?id=<?= $producto['id'] ?>" class="producto-box" style="text-decoration: none; color: inherit;">
+        <a href="productos-.php?id=<?= $producto['id'] ?>" class="producto-box">
           <img src="<?= htmlspecialchars($producto['imagen']) ?>" alt="<?= htmlspecialchars($producto['nombre']) ?>" style="width:100%;">
           <h4><?= htmlspecialchars($producto['nombre']) ?></h4>
           <p><?= htmlspecialchars($producto['descripcion']) ?></p>

@@ -3,17 +3,26 @@ require __DIR__ . '/db.php';
 
 
 $categorias_fijas = [
-  '1', 'higiene', 'utiles', 'hogar', 'jugueteria', 'ropa', 'juegos', 'accesorios', 'fiesta'
+  'papeleria', 'higiene', 'utiles', 'hogar', 'jugueteria', 'ropa', 'juegos', 'accesorios', 'fiesta'
 ];
 
 $categoriaSeleccionada = $_GET['categoriaID'] ?? '';
 
 try {
     if ($categoriaSeleccionada && in_array($categoriaSeleccionada, $categorias_fijas)) {
-        $stmt = $pdo->prepare("SELECT * FROM productos WHERE categoriaID = ?");
-        $stmt->execute([$categoriaSeleccionada]);
+        $stmt = $pdo->prepare("
+            SELECT p.*, c.nombreCategoria 
+            FROM productos p 
+            INNER JOIN categorias c ON p.categoriaID = c.id 
+            WHERE LOWER(c.nombreCategoria) = ?
+        ");
+        $stmt->execute([strtolower($categoriaSeleccionada)]);
     } else {
-        $stmt = $pdo->query("SELECT * FROM productos");
+        $stmt = $pdo->query("
+            SELECT p.*, c.nombreCategoria 
+            FROM productos p 
+            INNER JOIN categorias c ON p.categoriaID = c.id
+        ");
     }
 
     $productos = $stmt->fetchAll();
@@ -31,6 +40,9 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo de Productos</title>
     <link rel="stylesheet" href="styles2.css">
+    <style>
+      .price-old { text-decoration: line-through; color: #888; }
+    </style>  
 </head>
 <body>
     <nav>
@@ -40,10 +52,7 @@ try {
         </a>
         <ul class="menu-horizontal">
           <li><a href="index.html">Inicio</a></li>
-          <li>
-            <a href="catalogo.html">Catálogo</a>
-            
-          </li>
+          <li><a href="catalogo.html">Catálogo</a></li>
           <li><a href="nosotros.html">Sobre Nosotros</a></li>
           <li><a href="contacto.html">Contacto</a></li>
         </ul>
@@ -58,32 +67,44 @@ try {
       </div>
     </nav>
     <h1>Catálogo</h1>
-    <form method="GET" action="catalog.php">
-    <label for="categoriaID">Filtrar por categoría:</label>
-    <select name="categoriaID" id="categoriaID" onchange="this.form.submit()">
-      <option value="">Todos</option>
-      <?php foreach ($categorias_fijas as $cat): ?>
-        <option value="<?= $cat ?>" <?= ($categoriaSeleccionada === $cat) ? 'selected' : '' ?>>
-          <?= ucfirst($cat) ?>
-        </option>
-      <?php endforeach; ?>
-    </select>
-  </form>
-
+    <div class="filtro">
+      <form method="GET" action="catalog.php">
+      <label for="categoriaID">Filtrar por categoría:</label>
+      <select name="categoriaID" id="categoriaID" onchange="this.form.submit()">
+        <option class="filtro-barra" value="">Todos</option>
+        <?php foreach ($categorias_fijas as $cat): ?>
+          <option class="filtro-select" value="<?= $cat ?>" <?= ($categoriaSeleccionada === $cat) ? 'selected' : '' ?>>
+            <?= ucfirst($cat) ?>
+          </option>
+        <?php endforeach; ?>
+      </select>
+      </form>
+    </div>
   <div class="productos-container">
     <?php if (count($productos) > 0): ?>
       <?php foreach ($productos as $producto): ?>
-        <div class="producto-box">
+        <a href="productos-.php?id=<?= $producto['id'] ?>" class="producto-box" style="text-decoration: none; color: inherit;">
           <img src="<?= htmlspecialchars($producto['imagen']) ?>" alt="<?= htmlspecialchars($producto['nombre']) ?>" style="width:100%;">
           <h4><?= htmlspecialchars($producto['nombre']) ?></h4>
           <p><?= htmlspecialchars($producto['descripcion']) ?></p>
-          <p>Precio: $<?= number_format($producto['precio'], 2) ?></p>
-          <p>Categoría: <?= ucfirst($producto['categoriaID']) ?></p>
-        </div>
+          <?php if (!empty($producto['descuento']) && $producto['descuento'] > 0): ?>
+            <?php $precio_final = $producto['precio'] * (1 - $producto['descuento'] / 100); ?>
+            <p>
+              <span class="price-old">$<?= number_format($producto['precio'], 2) ?></span>
+              $<?= number_format($precio_final, 2) ?> (<?= $producto['descuento'] ?>% off)
+            </p>
+          <?php else: ?>
+            <p>Precio: $<?= number_format($producto['precio'], 2) ?></p>
+          <?php endif; ?>
+          <p>Categoría: <?= ucfirst($producto['nombreCategoria']) ?></p>
+        </a>
       <?php endforeach; ?>
     <?php else: ?>
       <p>No hay productos disponibles en esta categoría.</p>
     <?php endif; ?>
   </div>
+    <footer>
+        <p>&copy; 2025 4E Bazar. Todos los derechos reservados.</p>
+    </footer>
 </body>
 </html>

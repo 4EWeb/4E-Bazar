@@ -1,24 +1,76 @@
+<?php
+require __DIR__ . '/db.php'; // Incluimos la conexión a la base de datos
+
+try {
+    // Consulta para obtener 3 productos marcados como destacados.
+    // RECOMENDACIÓN: Añade una columna 'es_destacado' (TINYINT) a tu tabla 'productos'.
+    $stmt = $pdo->query("
+        SELECT p.*, c.nombreCategoria 
+        FROM productos p
+        LEFT JOIN categorias c ON p.categoriaID = c.id
+        WHERE p.es_destacado = 1 
+        LIMIT 3
+    ");
+
+    /* --- ALTERNATIVA SI NO QUIERES USAR 'es_destacado' ---
+       Descomenta la siguiente línea y comenta la de arriba para mostrar los 3 productos más nuevos.
+    
+    $stmt = $pdo->query("
+        SELECT p.*, c.nombreCategoria 
+        FROM productos p
+        LEFT JOIN categorias c ON p.categoriaID = c.id
+        ORDER BY p.id DESC 
+        LIMIT 3
+    ");
+    */
+
+    $productos_destacados = $stmt->fetchAll();
+
+} catch (Exception $e) {
+    // Manejo de error si la consulta falla
+    echo "Error al cargar productos destacados: " . $e->getMessage();
+    $productos_destacados = []; // Asegurarse de que la variable exista para evitar errores en el HTML
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>4E</title>
+    <title>4E Bazar - Inicio</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="cart-styles.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
+    <style>
+      .price-old { text-decoration: line-through; color: #888; margin-left: 5px; }
+      .btn-add-to-cart {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        width: 100%;
+        font-size: 1rem;
+        transition: background-color 0.2s;
+      }
+      .btn-add-to-cart:hover {
+        background-color: #0056b3;
+      }
+    </style>
   </head>
   <body>
     <nav class="navbar-fijo">
       <div class="nav-content">
-        <a href="index.html" class="logo-emprendimiento">
+        <a href="index.php" class="logo-emprendimiento">
           <img src="Imagenes/4e logo actualizado.png" alt="Logo 4E Bazar" />
         </a>
         <ul class="menu-horizontal">
-          <li><a href="index.html">Inicio</a></li>
+          <li><a href="index.php">Inicio</a></li>
           <li><a href="catalogo.php">Catálogo</a></li>
           <li><a href="nosotros.html">Sobre Nosotros</a></li>
           <li><a href="contacto.html">Contacto</a></li>
@@ -60,41 +112,49 @@
           <div style="background-image: url('Imagenes/oferta4.png')"></div>
         </div>
       </section>
+      
       <section class="productos-destacados">
         <h2 class="productos-title">Productos Destacados</h2>
         <div class="productos-container">
-          <div class="producto-box">
-            <img src="Imagenes/box-escolares.jpg" alt="Producto 1" />
-            <h3>Producto 1</h3>
-            <p>$3.990</p>
-            <button
-              onclick="agregarAlCarrito({id:101, nombre:'Producto 1', price:3990, imagen: 'Imagenes/box-escolares.jpg'})"
-            >
-              Agregar al carrito
-            </button>
-          </div>
-          <div class="producto-box">
-            <img src="Imagenes/box-escolares.jpg" alt="Producto 2" />
-            <h3>Producto 2</h3>
-            <p>$5.500</p>
-            <button
-              onclick="agregarAlCarrito({id:102, nombre:'Producto 2', price:5500, imagen: 'Imagenes/box-escolares.jpg'})"
-            >
-              Agregar al carrito
-            </button>
-          </div>
-          <div class="producto-box">
-            <img src="Imagenes/box-escolares.jpg" alt="Producto 3" />
-            <h3>Producto 3</h3>
-            <p>$2.500</p>
-            <button
-              onclick="agregarAlCarrito({id:103, nombre:'Producto 3', price:2500, imagen: 'Imagenes/box-escolares.jpg'})"
-            >
-              Agregar al carrito
-            </button>
-          </div>
+            <?php if (count($productos_destacados) > 0): ?>
+                <?php foreach ($productos_destacados as $producto): ?>
+                    <div class="producto-box">
+                        <img src="<?= htmlspecialchars($producto['imagen']) ?>" alt="<?= htmlspecialchars($producto['nombre']) ?>" />
+                        <h3><?= htmlspecialchars($producto['nombre']) ?></h3>
+
+                        <?php
+                            // Lógica de precios para mostrar y para el carrito
+                            $precio_final_js = $producto['precio'];
+                            if (!empty($producto['descuento']) && $producto['descuento'] > 0) {
+                                $precio_final_js = $producto['precio'] * (1 - $producto['descuento'] / 100);
+                            }
+                        ?>
+                        
+                        <div class="price-info">
+                            <?php if ($precio_final_js != $producto['precio']): ?>
+                                <p>
+                                    $<?= number_format($precio_final_js, 0, ',', '.') ?>
+                                    <span class="price-old">$<?= number_format($producto['precio'], 0, ',', '.') ?></span>
+                                </p>
+                            <?php else: ?>
+                                <p>$<?= number_format($producto['precio'], 0, ',', '.') ?></p>
+                            <?php endif; ?>
+                        </div>
+                        
+                        <button
+                          class="btn-add-to-cart"
+                          onclick="agregarAlCarrito({id: <?= $producto['id'] ?>, name: '<?= htmlspecialchars(addslashes($producto['nombre'])) ?>', price: <?= $precio_final_js ?>, image: '<?= htmlspecialchars($producto['imagen']) ?>'})"
+                        >
+                          Agregar al carrito
+                        </button>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>No hay productos destacados disponibles en este momento.</p>
+            <?php endif; ?>
         </div>
       </section>
+      
       <section class="servicios-graficos-index">
         <h1 class="ofertas-title">Servicios gráficos</h1>
         <div class="Servicios-box-index">

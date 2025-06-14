@@ -35,11 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const updateCartInfo = () => {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    cartCounterSpan.textContent = totalItems;
-    cartTotalPriceEl.textContent = `$${totalPrice.toLocaleString('es-CL')}`;
+    if(cartCounterSpan) cartCounterSpan.textContent = totalItems;
+    if(cartTotalPriceEl) cartTotalPriceEl.textContent = `$${totalPrice.toLocaleString('es-CL', { minimumFractionDigits: 0 })}`;
   };
 
   const renderCartItems = () => {
+    if (!cartBody) return; // Si no hay carrito en la página, no hagas nada
     cartBody.innerHTML = '';
     if (cart.length === 0) {
       cartBody.appendChild(emptyCartMsg);
@@ -47,13 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       emptyCartMsg.style.display = 'none';
       cart.forEach(item => {
-        const itemTotalPrice = (item.price * item.quantity).toLocaleString('es-CL');
+        const itemTotalPrice = (item.price * item.quantity).toLocaleString('es-CL', { minimumFractionDigits: 0 });
         const cartItemDiv = document.createElement('div');
         cartItemDiv.className = 'cart-item';
         cartItemDiv.innerHTML = `
-          <img src="${item.imagen}" alt="${item.nombre}" class="cart-item-img">
+          <img src="${item.image}" alt="${item.name}" class="cart-item-img">
           <div class="cart-item-info">
-            <p class="cart-item-title">${item.nombre}</p>
+            <p class="cart-item-title">${item.name}</p>
             <p class="cart-item-price">$${itemTotalPrice}</p>
             <div class="cart-item-actions">
               <div class="quantity-controls">
@@ -77,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   agregarAlCarrito = (product) => {
+
     const existingItem = cart.find(item => item.id === product.id);
     if (existingItem) {
       existingItem.quantity++;
@@ -88,60 +90,62 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // === EVENT LISTENERS ===
+  if (cartIconBtn) {
+    cartIconBtn.addEventListener('click', openCart);
+    cartCloseBtn.addEventListener('click', closeCart);
+    cartOverlay.addEventListener('click', closeCart);
+  }
 
-  cartIconBtn.addEventListener('click', openCart);
-  cartCloseBtn.addEventListener('click', closeCart);
-  cartOverlay.addEventListener('click', closeCart);
+  if (cartBody) {
+    cartBody.addEventListener('click', (e) => {
+      const target = e.target.closest('button');
+      if (!target) return;
+      const id = parseInt(target.dataset.id);
+      const itemToUpdate = cart.find(item => item.id === id);
+      if (!itemToUpdate) return;
 
-  cartBody.addEventListener('click', (e) => {
-    const target = e.target.closest('button');
-    if (!target) return;
-    const id = parseInt(target.dataset.id);
-    const itemToUpdate = cart.find(item => item.id === id);
-    if (!itemToUpdate) return;
-
-    if (target.classList.contains('quantity-btn')) {
-      const action = target.dataset.action;
-      if (action === 'increase') {
-        itemToUpdate.quantity++;
-      } else if (action === 'decrease') {
-        if (itemToUpdate.quantity > 1) {
-          itemToUpdate.quantity--;
-        } else {
-          cart = cart.filter(item => item.id !== id);
+      if (target.classList.contains('quantity-btn')) {
+        const action = target.dataset.action;
+        if (action === 'increase') {
+          itemToUpdate.quantity++;
+        } else if (action === 'decrease') {
+          if (itemToUpdate.quantity > 1) {
+            itemToUpdate.quantity--;
+          } else {
+            cart = cart.filter(item => item.id !== id);
+          }
         }
       }
-    }
 
-    if (target.classList.contains('remove-item-btn')) {
-      cart = cart.filter(item => item.id !== id);
-    }
-    saveCart();
-    renderCartItems();
-  });
-
-  // MODIFICADO: Event listener para el botón de finalizar compra por WhatsApp
-  finalizePurchaseBtn.addEventListener('click', () => {
-    if (cart.length === 0) {
-      alert('Tu carrito está vacío. Agrega productos antes de continuar.');
-      return;
-    }
-
-    const phoneNumber = '56976509490'; // Número de WhatsApp del emprendimiento
-    let message = '¡Hola! Me gustaría cotizar los siguientes productos de su catálogo:\n\n';
-
-    cart.forEach(item => {
-      // Formato: *Cantidadx* - NombreProducto
-      message += `*${item.quantity}x* - ${item.nombre}\n`;
+      if (target.classList.contains('remove-item-btn')) {
+        cart = cart.filter(item => item.id !== id);
+      }
+      saveCart();
+      renderCartItems();
     });
+  }
 
-    const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    message += `\n*Total estimado: $${totalPrice.toLocaleString('es-CL')}*`;
+  if (finalizePurchaseBtn) {
+    finalizePurchaseBtn.addEventListener('click', () => {
+      if (cart.length === 0) {
+        alert('Tu carrito está vacío. Agrega productos antes de continuar.');
+        return;
+      }
 
-    // Codificar mensaje para la URL y abrir en una nueva pestaña
-    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappURL, '_blank');
-  });
+      const phoneNumber = '56976509490';
+      let message = '¡Hola! Me gustaría cotizar los siguientes productos de su catálogo:\n\n';
+
+      cart.forEach(item => {
+        message += `*${item.quantity}x* - ${item.name}\n`;
+      });
+
+      const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      message += `\n*Total estimado: $${totalPrice.toLocaleString('es-CL', { minimumFractionDigits: 0 })}*`;
+
+      const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+      window.open(whatsappURL, '_blank');
+    });
+  }
 
 
   // === INICIALIZACIÓN ===

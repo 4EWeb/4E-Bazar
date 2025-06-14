@@ -115,7 +115,6 @@ ksort($categorias_disponibles);
         <ul class="menu-horizontal">
           <li><a href="index.php">Inicio</a></li>
           <li><a href="catalogo.php">Catálogo</a></li>
-          <li><a href="nosotros.html">Sobre Nosotros</a></li>
           <li><a href="contacto.html">Contacto</a></li>
         </ul>
         <div class="carrito-box">

@@ -1,8 +1,6 @@
 <?php
-// Variable para mostrar mensajes de error al usuario
 $mensaje = '';
 
-// Verificar si el formulario fue enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require __DIR__ . '/db.php'; 
 
@@ -29,11 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$nombre, $rut, $direccion, $telefono, $correo, $password_hashed]);
 
-            // ==================================================================
-            // MODIFICACIÓN CLAVE: Redirigir al login en caso de éxito
-            // ==================================================================
             header("Location: login.php?registro=exitoso");
-            exit(); // Es importante terminar el script después de una redirección
+            exit();
 
         } catch (PDOException $e) {
             if ($e->getCode() == 23000) {
@@ -50,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="stylesformulario.css">
+    <link rel="stylesheet" href="css/stylesformulario.css">
     <title>Formulario de Registro - 4E Bazar</title>
     <style>
         .mensaje { padding: 15px; margin: 20px 0; border-radius: 5px; text-align: center; font-weight: bold; }
@@ -78,6 +73,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 
-    <script src="formulario.js"></script>
+    <script src="js/formulario.js"></script>
 </body>
 </html>

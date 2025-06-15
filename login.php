@@ -55,13 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styleslogin.css">
+    <link rel="stylesheet" href="css/styleslogin.css">
     <title>Iniciar Sesión - 4E Bazar</title>
-    <style>
-        .mensaje-login { padding: 10px; margin-bottom: 20px; border-radius: 5px; text-align: center; }
-        .mensaje-login.exito { background-color: #d4edda; color: #155724; }
-        .mensaje-login.error { background-color: #f8d7da; color: #721c24; }
-    </style>
 </head>
 <body>
     
@@ -86,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="password" name="contrasena_usuario" required>
                 <label>Contraseña</label>
             </div>
-            <div class="recordar">¿Olvidó su contraseña?</div>
+            <div class="recordar"><a href="olvido-contrasena.php">¿Olvidó su contraseña?</a></div>
             <input type="submit" value="Iniciar">
             <div class="registrarse">
                 <p>¿No tienes cuenta? <a href="formulario.php">Regístrate</a></p>

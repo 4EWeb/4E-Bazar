@@ -597,3 +597,96 @@ textarea.form-control {
 .status-completado { background-color: #28a745; }
 .status-enviado { background-color: #17a2b8; }
 .status-cancelado { background-color: #dc3545; }
+
+/* =================================
+   NUEVO: ESTILOS PARA CARRUSEL DE OFERTAS
+   ================================= */
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); } /* Se mueve la mitad del ancho total */
+}
+
+.slider-container {
+  max-width: 1000px;
+  margin: 8rem auto 3rem auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.slider {
+  width: 100%;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+}
+
+.slider .slide-track {
+  display: flex;
+  /* El doble de ancho porque duplicamos las imágenes */
+  width: calc(250px * 8); /* 250px por imagen, 8 imágenes en total */
+  animation: scroll 30s linear infinite; /* La duración controla la velocidad */
+}
+
+.slider .slide {
+  height: 200px;
+  width: 250px;
+  padding: 15px;
+}
+
+.slider .slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* =================================
+   NUEVO: ESTILOS PARA SECCIÓN "FEATURES"
+   ================================= */
+.features-section {
+    max-width: 1100px;
+    margin: 4rem auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.features-grid {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.feature-item {
+    flex-basis: 300px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(231, 84, 128, 0.2);
+}
+
+.feature-item i {
+    font-size: 3rem;
+    color: #e75480;
+    margin-bottom: 1rem;
+}
+
+.feature-item h3 {
+    font-size: 1.3rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.feature-item p {
+    color: #666;
+    line-height: 1.6;
+}

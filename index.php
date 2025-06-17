@@ -67,6 +67,28 @@ try {
           <div style="background-image: url('Imagenes/oferta4.png')"></div>
         </div>
       </section>
+
+            
+       <section class="features-section">
+            <h2 class="productos-title">¿Por Qué Comprar con Nosotros?</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-box-open"></i>
+                    <h3>Variedad de Productos</h3>
+                    <p>Todo lo que necesitas para tu hogar, estudio y oficina en un solo lugar.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-star"></i>
+                    <h3>Calidad Garantizada</h3>
+                    <p>Seleccionamos los mejores productos para asegurar tu satisfacción.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-shipping-fast"></i>
+                    <h3>Atención Personalizada</h3>
+                    <p>Te atendemos por WhatsApp para una experiencia de compra cercana y rápida.</p>
+                </div>
+            </div>
+      </section>
       
       <section class="productos-destacados">
         <h2 class="productos-title">Productos Destacados</h2>
@@ -99,6 +121,7 @@ try {
             <?php endif; ?>
         </div>
       </section>
+
       
       <section class="servicios-graficos-index">
         <h1 class="ofertas-title">Servicios gráficos</h1>

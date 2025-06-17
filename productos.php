@@ -1,9 +1,9 @@
 <?php
+session_start();
 require __DIR__ . '/db.php';
 
 // Validar que el ID sea un número válido
 if (!isset($_GET['id']) || !filter_var($_GET['id'], FILTER_VALIDATE_INT)) {
-    // Si no es válido, podemos redirigir al catálogo
     header("Location: catalogo.php");
     exit;
 }
@@ -18,17 +18,15 @@ try {
         WHERE p.id = ?
     ');
     $stmt->execute([$id]);
-    $producto = $stmt->fetch();
+    $producto = $stmt->fetch(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
-    // Es buena práctica manejar errores de base de datos
     die('Error al conectar con la base de datos: ' . $e->getMessage());
 }
 
-// Si después de la consulta el producto no existe, mostramos un mensaje amigable
 if (!$producto) {
     $producto_no_encontrado = true;
 } else {
-    // Calculamos el precio final para usarlo en el botón del carrito
+    $variaciones = !empty($producto['variaciones']) ? json_decode($producto['variaciones'], true) : [];
     $precio_final_js = $producto['precio'];
     if (!empty($producto['descuento']) && $producto['descuento'] > 0) {
         $precio_final_js = $producto['precio'] * (1 - $producto['descuento'] / 100);
@@ -40,100 +38,158 @@ if (!$producto) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $producto ? htmlspecialchars($producto['nombre']) : 'Producto no encontrado' ?> - 4E Bazar</title>
+    <title><?= isset($producto_no_encontrado) ? 'Producto no encontrado' : htmlspecialchars($producto['nombre']) ?> - 4E Bazar</title>
     
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="styles2.css">
-    <link rel="stylesheet" href="cart-styles.css">
+    <link rel="stylesheet" href="css/styles.css">     
+    <link rel="stylesheet" href="css/layout.css">     
+    <link rel="stylesheet" href="css/components.css"> 
+    <link rel="stylesheet" href="css/cart.css">       
+    <link rel="stylesheet" href="css/responsive.css"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
     
     <style>
       /* Estilos para la página de detalle del producto */
-      .page-container { max-width: 1000px; margin: 50px auto; padding: 20px; }
+      .page-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        /* Espacio para la navbar fija */
+        padding-top: 120px; 
+      }
       
-      .product-detail-container {
-        display: flex;
-        flex-wrap: wrap; /* Para que se adapte en móviles */
-        gap: 40px;
+      .product-detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 50px;
+        align-items: flex-start;
       }
-      .product-image-column {
-        flex: 1;
-        min-width: 300px;
-      }
-      .product-image-column img {
+      .product-image-container img {
         width: 100%;
-        border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border: 1px solid rgba(0,0,0,0.05);
       }
-      .product-info-column {
-        flex: 1.5;
-        min-width: 300px;
-      }
-      .product-info-column h1 {
+      .product-info h1 {
         font-size: 2.5rem;
         margin-top: 0;
         margin-bottom: 10px;
+        color: #333;
+        line-height: 1.2;
       }
-      .product-info-column .descripcion {
+      .product-info .descripcion {
         font-size: 1.1rem;
         line-height: 1.6;
         color: #555;
+        margin: 15px 0;
       }
-      .price-box { margin: 20px 0; }
-      .price-final { font-size: 2rem; font-weight: bold; color: #333; }
-      .price-old { text-decoration: line-through; color: #888; margin-left: 15px; }
-      .product-stock, .product-category { color: #777; margin: 10px 0; }
-      
-      .btn-add-to-cart {
-        background-color: #e75480;
-        color: white;
-        border: none;
-        padding: 15px 25px;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-top: 20px;
-        font-size: 1.1rem;
+      .price-box {
+        margin: 20px 0;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        padding: 20px 0;
+      }
+      .price-final {
+        font-size: 2.5rem;
         font-weight: bold;
-        transition: background-color 0.2s;
+        color: #e75480;
       }
-      .btn-add-to-cart:hover { background-color:rgb(238, 128, 161); }
-
-      .back-link { display: inline-block; margin-top: 30px; color: #007bff; }
-      .error-message { text-align: center; padding: 50px; }
+      .price-old {
+        text-decoration: line-through;
+        color: #aaa;
+        margin-left: 15px;
+        font-size: 1.5rem;
+      }
+      .stock-info {
+        font-weight: 600;
+        color: #28a745;
+        margin: 15px 0;
+      }
+      .variations-container, .quantity-container {
+        margin-top: 20px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #444;
+      }
+      .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+        background-color: #f8f9fa;
+      }
+      .btn-add-to-cart {
+        width: 100%;
+        padding: 15px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        cursor: pointer;
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #e75480, #ff6b9d);
+        color: white;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+      }
+      .btn-add-to-cart:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(231, 84, 128, 0.4);
+      }
+      .back-link {
+        display: inline-block;
+        margin-top: 30px;
+        color: #e75480;
+        font-weight: bold;
+        text-decoration: none;
+      }
+       .back-link:hover {
+        text-decoration: underline;
+      }
+      .error-message {
+        text-align: center;
+        padding: 50px;
+      }
+      /* Diseño responsivo para la página de producto */
+      @media (max-width: 768px) {
+        .product-detail-grid {
+          grid-template-columns: 1fr;
+          gap: 30px;
+        }
+        .product-info h1 {
+          font-size: 2rem;
+        }
+        .price-final {
+          font-size: 2rem;
+        }
+        .page-container {
+          padding-top: 100px;
+        }
+      }
     </style>
 </head>
 <body>
-    <nav class="navbar-fijo">
-      <div class="nav-content">
-        <a href="index.php" class="logo-emprendimiento"><img src="Imagenes/4e logo actualizado.png" alt="Logo 4E Bazar" /></a>
-        <ul class="menu-horizontal">
-          <li><a href="index.php">Inicio</a></li>
-          <li><a href="catalogo.php">Catálogo</a></li>
-          <li><a href="nosotros.html">Sobre Nosotros</a></li>
-          <li><a href="contacto.html">Contacto</a></li>
-        </ul>
-        <div class="carrito-box">
-          <button class="carrito-menu" id="cart-icon-btn" title="Ver carrito de compras">
-            <svg viewBox="0 0 576 512" width="32" height="32" fill="currentColor"><path d="M528.12 301.319l47.273-208A16 16 0 0 0 560 80H120l-9.4-44.5A24 24 0 0 0 87 16H24A24 24 0 0 0 24 64h47.2l70.4 332.8A56 56 0 1 0 216 464h256a56 56 0 1 0 56-56H159.2l-7.2-32H528a16 16 0 0 0 15.12-12.681zM504 464a24 24 0 1 1-24-24 24 24 0 0 1 24 24zm-288 0a24 24 0 1 1-24-24 24 24 0 0 1 24 24z"/></svg>
-            <span id="contador-carrito" class="contador-carrito">0</span>
-          </button>
-        </div>
-      </div>
-    </nav>
+    
+    <?php include 'nav.php'; ?>
 
     <main class="page-container">
         <?php if (isset($producto_no_encontrado)): ?>
             <div class="error-message">
-                <h1>Producto no encontrado</h1>
-                <p>El producto que buscas no existe o fue eliminado.</p>
+                <h1>Producto no Encontrado</h1>
+                <p>Lo sentimos, el producto que buscas no existe o ya no está disponible.</p>
                 <a href="catalogo.php" class="back-link">« Volver al catálogo</a>
             </div>
         <?php else: ?>
-            <div class="product-detail-container">
-                <div class="product-image-column">
+            <div class="product-detail-grid">
+                <div class="product-image-container">
                     <img src="<?= htmlspecialchars($producto['imagen']) ?>" alt="<?= htmlspecialchars($producto['nombre']) ?>">
                 </div>
-                <div class="product-info-column">
+                <div class="product-info">
                     <h1><?= htmlspecialchars($producto['nombre']) ?></h1>
                     
                     <div class="price-box">
@@ -144,35 +200,91 @@ if (!$producto) {
                     </div>
                     
                     <p class="descripcion"><?= nl2br(htmlspecialchars($producto['descripcion'])) ?></p>
-                    
-                    <p class="product-stock"><strong>Disponibles:</strong> <?= (int)$producto['cantidad'] ?></p>
-                    <p class="product-category"><strong>Categoría:</strong> <?= htmlspecialchars($producto['nombreCategoria']) ?></p>
+                    <p class="stock-info">Disponibles: <?= (int)$producto['cantidad'] ?></p>
 
-                    <button 
-                      class="btn-add-to-cart"
-                      onclick="agregarAlCarrito({id: <?= $producto['id'] ?>, name: '<?= htmlspecialchars(addslashes($producto['nombre'])) ?>', price: <?= $precio_final_js ?>, image: '<?= htmlspecialchars($producto['imagen']) ?>'})">
-                      Agregar al carrito
-                    </button>
+                    <form id="product-form">
+                        <?php if (!empty($variaciones)): ?>
+                            <div class="variations-container">
+                                <?php foreach ($variaciones as $nombre_variacion => $opciones): ?>
+                                    <div class="form-group">
+                                        <label for="variacion-<?= strtolower($nombre_variacion) ?>"><?= htmlspecialchars($nombre_variacion) ?>:</label>
+                                        <select id="variacion-<?= strtolower($nombre_variacion) ?>" class="form-control">
+                                            <?php foreach ($opciones as $opcion): ?>
+                                                <option value="<?= htmlspecialchars($opcion) ?>"><?= htmlspecialchars($opcion) ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <div class="quantity-container">
+                             <div class="form-group">
+                                <label for="cantidad">Cantidad:</label>
+                                <input type="number" id="cantidad" class="form-control" value="1" min="1" max="<?= (int)$producto['cantidad'] ?>">
+                             </div>
+                        </div>
+
+                        <button type="button" id="add-to-cart-btn" class="btn-add-to-cart">Agregar al carrito</button>
+                    </form>
                 </div>
             </div>
             <a href="catalogo.php" class="back-link">« Volver al catálogo</a>
         <?php endif; ?>
     </main>
 
-    <footer>
-        <p>&copy; <?= date('Y') ?> 4E Bazar. Todos los derechos reservados.</p>
-    </footer>
-
-    <aside class="cart-sidebar">
-      <div class="cart-header"><h3>Tu Carrito</h3><button class="cart-close-btn" aria-label="Cerrar carrito">&times;</button></div>
-      <div class="cart-body"><p class="cart-empty-msg">Tu carrito está vacío.</p></div>
-      <div class="cart-footer">
-        <div class="cart-total"><strong>Total:</strong><span id="cart-total-price">$0</span></div>
-        <button class="btn-checkout" id="btn-finalize-purchase"><i class="fab fa-whatsapp"></i> Pedir por WhatsApp</button>
-      </div>
-    </aside>
+    <aside class="cart-sidebar"></aside>
     <div class="cart-overlay"></div>
+    <script src="js/carrito.js"></script>
+    <script src="js/nav-responsive.js"></script>
+    <script>
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
+    if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', () => {
+            const productoBase = {
+                id: <?= $producto['id'] ?? 'null' ?>,
+                name: '<?= isset($producto) ? htmlspecialchars(addslashes($producto['nombre'])) : '' ?>',
+                price: <?= $precio_final_js ?? 0 ?>,
+                image: '<?= isset($producto) ? htmlspecialchars($producto['imagen']) : '' ?>'
+            };
 
-    <script src="carrito.js"></script>
+            const cantidadSeleccionada = parseInt(document.getElementById('cantidad').value);
+            const stockDisponible = <?= (int)($producto['cantidad'] ?? 0) ?>;
+
+            if (cantidadSeleccionada > stockDisponible) {
+                alert(`No hay suficiente stock. Solo quedan ${stockDisponible} unidades disponibles.`);
+                return;
+            }
+
+            let nombreFinal = productoBase.name;
+            const detalles = [];
+            
+            const variacionesSelects = document.querySelectorAll('.variations-container select');
+            variacionesSelects.forEach(select => {
+                const nombreVariacion = select.previousElementSibling.textContent.replace(':', '');
+                detalles.push(`${nombreVariacion}: ${select.value}`);
+            });
+
+            if (detalles.length > 0) {
+                nombreFinal += ` (${detalles.join(', ')})`;
+            }
+
+            const productoParaCarrito = {
+                id: `${productoBase.id}-${Date.now()}`,
+                name: nombreFinal,
+                price: productoBase.price,
+                image: productoBase.image,
+                quantity: cantidadSeleccionada
+            };
+
+            if (typeof agregarAlCarrito === "function") {
+                agregarAlCarrito(productoParaCarrito);
+                alert('¡Producto agregado al carrito!');
+            } else {
+                alert('Error al agregar al carrito.');
+            }
+        });
+    }
+    </script>
 </body>
 </html>

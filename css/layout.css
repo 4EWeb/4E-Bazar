@@ -1,0 +1,134 @@
+/* --- Navbar --- */
+.navbar-fijo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 90px;
+  background: #e75480;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  z-index: 1000;
+}
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.logo-emprendimiento img {
+  height: 70px;
+  width: auto;
+  display: block;
+}
+
+/* Menú de Navegación */
+.menu-horizontal {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.menu-horizontal > li > a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 10px 18px;
+  border-radius: 5px;
+  transition: background 0.2s;
+}
+
+.menu-horizontal > li > a:hover {
+  background: #fff;
+  color: #e75480;
+}
+
+/* --- Login --- */
+.login-box {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.login-menu {
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  padding: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(231, 84, 128, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.2s, background 0.2s;
+}
+
+.login-menu:hover {
+  background: #ffe0ec;
+  box-shadow: 0 4px 16px rgba(231, 84, 128, 0.18);
+}
+
+.login-menu img {
+  width: 32px;
+  height: 32px;
+}
+
+/* =======================================================
+   MODIFICACIÓN PARA EL MENÚ DESPLEGABLE
+   ======================================================= */
+
+/* Estilo del submenú cuando está oculto */
+.submenu {
+  position: absolute;
+  top: 100%; /* Lo posiciona debajo del ícono */
+  right: 0;
+  margin-top: 10px; /* Mantenemos el espacio visual */
+  
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  min-width: 160px;
+  z-index: 1001;
+  list-style: none;
+  padding: 0.5rem 0;
+
+  /* Animación para desaparecer */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px); /* Efecto de subida/bajada */
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s; /* El retraso en 'visibility' es la clave */
+}
+
+/* Estilo del submenú cuando está visible (al pasar el mouse) */
+.login-box:hover .submenu,
+.login-box:focus-within .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition-delay: 0s; /* Sin retraso al aparecer */
+}
+
+.submenu li a {
+  display: block;
+  padding: 10px 18px;
+  color: #e75480;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.submenu li a:hover {
+  background: #ffe0ec;
+  color: #c13c6a;
+}
+
+.submenu li a:hover {
+  background: #ffe0ec;
+  color: #c13c6a;
+}

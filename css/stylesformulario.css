@@ -1,0 +1,134 @@
+/* =================================
+   ESTILOS PARA FORMULARIO DE REGISTRO
+   ================================= */
+
+/* --- Estilos Globales y Fondo --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 2rem 1rem; /* Añadimos padding para que no se pegue en móviles */
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ffc0cb, #ffb6c1, #ffa0b4);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- Logo Superior --- */
+.logo {
+    width: 150px;
+    margin-bottom: 20px;
+}
+
+/* --- Contenedor Principal del Formulario --- */
+.form-registro {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    padding: 40px;
+    width: 450px;
+    max-width: 95%;
+    text-align: center;
+}
+
+.form-registro h4 {
+    font-size: 1.8rem;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    margin-bottom: 30px;
+}
+
+/* --- Estilos para los Campos de Texto --- */
+.controls {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.controls::placeholder {
+    color: #6c5a63;
+}
+
+.controls:focus {
+    outline: none;
+    background: #fff;
+    border-color: #e75480;
+    box-shadow: 0 0 0 3px rgba(231, 84, 128, 0.3);
+}
+
+/* --- Textos y Enlaces --- */
+.form-registro p {
+    color: #444;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 15px;
+}
+
+.form-registro a {
+    color: #e75480;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.form-registro a:hover {
+    text-decoration: underline;
+}
+
+/* --- Botón Principal de 'Registrarse' --- */
+.botons {
+    width: 100%;
+    height: 50px;
+    margin-top: 20px;
+    border: none;
+    background: #e75480;
+    border-radius: 25px;
+    font-size: 18px;
+    color: #e9f4fb;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.botons:hover {
+    background-color: #d14a6f;
+    box-shadow: 0 5px 15px rgba(231, 84, 128, 0.4);
+    transform: translateY(-2px);
+}
+
+/* --- Mensajes de Éxito o Error --- */
+.mensaje {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    width: 450px;
+    max-width: 95%;
+}
+.mensaje.exito {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+.mensaje.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}

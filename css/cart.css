@@ -1,0 +1,172 @@
+/* =================================
+   ESTILOS DEL CARRITO
+   ================================= */
+
+/* --- Estilos para el Ícono del Carrito en la Navbar --- */
+.carrito-box {
+  position: relative; /* Contenedor de referencia para la insignia */
+}
+
+.carrito-menu {
+  background: transparent;
+  border: none; /* Quitamos el borde del botón */
+  cursor: pointer;
+  padding: 8px;
+  color: #fff; /* El SVG usará este color blanco */
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.carrito-menu:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.carrito-menu svg {
+    width: 28px;
+    height: 28px;
+}
+
+.contador-carrito {
+  position: absolute;
+  top: 0;
+  right: 0;
+  
+  /* Estilo de la insignia */
+  background-color: #fff;
+  color: #e75480; /* Número en color rosado */
+  
+  /* Tamaño y forma */
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  
+  /* Centrar el número */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Estilo del texto */
+  font-size: 11px;
+  font-weight: bold;
+  
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  border: 1px solid #e75480;
+}
+
+
+/* --- Estilos para el Panel Lateral del Carrito --- */
+
+/* --- Variables --- */
+:root {
+  --cart-primary-color: #e75480;
+  --cart-light-color: #fff;
+  --cart-dark-color: #333;
+  --cart-transition: all 0.3s ease-in-out;
+}
+
+/* --- Contenedor del Panel --- */
+.cart-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 380px;
+  height: 100%;
+  background-color: var(--cart-light-color);
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.15);
+  transform: translateX(100%);
+  transition: var(--cart-transition);
+  display: flex;
+  flex-direction: column;
+  z-index: 1001;
+}
+
+.cart-sidebar.active {
+  transform: translateX(0);
+}
+
+/* --- Fondo Oscuro (Overlay) --- */
+.cart-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--cart-transition);
+  z-index: 1000;
+}
+
+.cart-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* --- Contenido del Carrito --- */
+.cart-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-header h3 { margin: 0; font-size: 1.4rem; }
+
+.cart-close-btn { background: none; border: none; font-size: 2.2rem; cursor: pointer; color: #888; }
+
+.cart-body { flex-grow: 1; overflow-y: auto; padding: 0.5rem 1.25rem; }
+
+.cart-empty-msg { text-align: center; color: #757575; margin-top: 3rem; font-size: 1rem; }
+
+/* Items */
+.cart-item { display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #f0f0f0; }
+.cart-item-img { width: 70px; height: 70px; object-fit: cover; border-radius: 4px; }
+.cart-item-info { flex-grow: 1; }
+.cart-item-info p { margin: 0; }
+.cart-item-title { font-weight: 600; font-size: 0.95rem; }
+.cart-item-price { font-size: 0.9rem; color: #666; }
+.cart-item-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 0.6rem; }
+.quantity-controls { display: flex; align-items: center; border: 1px solid #ddd; border-radius: 5px; }
+.quantity-btn { background: none; border: none; cursor: pointer; padding: 0.3rem 0.7rem; font-size: 1.1rem; }
+.item-quantity { padding: 0 0.5rem; font-weight: 500; }
+.remove-item-btn { background: none; border: none; color: #aaa; cursor: pointer; font-size: 1.2rem; }
+.remove-item-btn:hover { color: #d32f2f; }
+
+/* Pie del carrito */
+.cart-footer { padding: 1.25rem; border-top: 1px solid #e0e0e0; background-color: #f8f9fa; }
+.cart-total { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; }
+
+/* Botón de Checkout */
+.btn-checkout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #25D366; /* Verde WhatsApp */
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-checkout:hover {
+  background-color: #1DAA50; /* Verde más oscuro */
+}
+
+.btn-checkout i {
+  margin-right: 8px;
+  font-size: 1.2rem;
+}

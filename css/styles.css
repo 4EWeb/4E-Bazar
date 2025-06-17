@@ -1,0 +1,56 @@
+/* =================================
+   1. ESTILOS GLOBALES Y RESET
+   ================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #ffc0cb, #ffb6c1, #ffa0b4);
+  background-size: cover;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* =================================
+   2. DEFINICIÓN DE ANIMACIONES
+   (AQUÍ ESTÁN LAS ANIMACIONES QUE FALTABAN)
+   ================================= */
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* =================================
+   3. CLASES DE UTILIDAD (Helpers)
+   ================================= */
+
+/* Texto */
+.texto-blanco {
+  color: white;
+}
+
+/* Efectos Visuales */
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}

@@ -1,0 +1,599 @@
+/* =================================
+   ESTILOS PARA FORMULARIOS (servicios.php)
+   ================================= */
+.form-group, .form-group-checkbox {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label, .form-group-checkbox label {
+    display: block;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.form-control, .form-control-file {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #f8f9fa;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus, .form-control-file:focus {
+    outline: none;
+    border-color: #e75480;
+    box-shadow: 0 0 0 3px rgba(231, 84, 128, 0.2);
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-group-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: #fdf2f7;
+    border-radius: 8px;
+}
+
+.form-group-checkbox input[type="checkbox"] {
+    width: 1.3em;
+    height: 1.3em;
+    accent-color: #e75480;
+    cursor: pointer;
+}
+
+.form-group-checkbox label {
+    margin-bottom: 0;
+    font-weight: 500;
+    cursor: pointer;
+}
+/* --- Sección de Ofertas --- */
+.ofertas-box {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 4px solid #ee9ddaaf;
+  border-radius: 20px;
+  padding: 2rem;
+  margin: 8rem auto 3rem auto;
+  max-width: 85%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+/* MODIFICADO: Se añaden las propiedades 'position' y 'overflow' */
+.ofertas-title {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: bold;
+  text-align: center;
+  color: #fff;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #ff7e5f, #feb47b, #ff6b9d);
+  padding: 15px 25px;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(255, 126, 95, 0.3);
+  margin-top: 30px;
+  animation: pulse 4s ease-in-out infinite;
+  /* --- Propiedades necesarias para la animación de brillo --- */
+  position: relative;
+  overflow: hidden;
+}
+
+/* AÑADIDO: El pseudo-elemento que crea el efecto de brillo */
+.ofertas-title::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.6s;
+}
+
+/* AÑADIDO: La acción que mueve el brillo al pasar el mouse */
+.ofertas-title:hover::before {
+  left: 100%;
+}
+
+/* Este hover ya lo tenías, se mantiene */
+.ofertas-title:hover {
+  transform: scale(1.1) rotate(1deg);
+  background: linear-gradient(135deg, #feb47b, #ff7e5f, #e75480);
+  box-shadow: 0 10px 30px rgba(255, 126, 95, 0.4);
+}
+
+/* --- Galería de Fotos --- */
+.galeria-fotos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 4rem auto;
+  gap: 1rem;
+  max-width: 90%;
+  flex-wrap: wrap;
+}
+
+.galeria-fotos > div {
+  flex: 1 1 250px;
+  min-width: 250px;
+  aspect-ratio: 4/3;
+  background-size: cover;
+  background-position: center;
+  border-radius: 1rem;
+  transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+}
+
+.galeria-fotos > div:hover {
+  flex-grow: 1.5;
+  transform: translateY(-10px);
+}
+
+/* --- Tarjetas de Producto --- */
+.productos-destacados {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.productos-title {
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  margin-bottom: 1.5rem;
+  color: #e75480;
+  font-weight: bold;
+}
+
+.productos-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.producto-box {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 25px 20px 30px;
+  width: 280px;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+}
+
+.producto-box:hover {
+  transform: translateY(-15px) scale(1.05);
+}
+
+.producto-box img {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease;
+}
+
+.producto-box:hover img {
+  transform: scale(1.1) rotate(3deg);
+}
+
+.producto-box h3 {
+  color: #e75480;
+  margin: 10px 0 6px;
+  font-size: 1.2rem;
+}
+
+.producto-box p {
+  color: #555;
+  margin-bottom: 15px;
+  line-height: 1.4;
+  flex-grow: 1; /* Para que la descripción ocupe espacio */
+}
+
+/* --- Sección de Servicios (Index) --- */
+.servicios-graficos-index {
+  background: rgba(255, 255, 255, 0.9);
+  border: 3px solid rgba(238, 157, 218, 0.7);
+  border-radius: 25px;
+  padding: 2.5rem;
+  margin: 5rem auto 3rem auto;
+  max-width: 85%;
+}
+
+.Servicios-box-index {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.Servicios-Title-index {
+  font-size: 1.5rem;
+  color: #7a2b5b;
+  text-align: center;
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+/* ======================================================= */
+/* CÓDIGO DE ANIMACIÓN RESTAURADO PARA EL BOTÓN DE SERVICIOS */
+/* ======================================================= */
+.btn-servicios-index {
+  display: inline-block;
+  background: linear-gradient(135deg, #e75480 0%, #ff6b9d 50%, #f44336 100%);
+  color: #fff;
+  font-weight: bold;
+  padding: 15px 35px;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  text-decoration: none;
+  box-shadow: 0 8px 25px rgba(231, 84, 128, 0.3);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-servicios-index::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.6s;
+}
+
+.btn-servicios-index:hover::before {
+  left: 100%;
+}
+
+.btn-servicios-index:hover {
+  background: linear-gradient(135deg, #f44336 0%, #ff6b9d 50%, #e75480 100%);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 35px rgba(231, 84, 128, 0.4);
+}
+
+
+/* --- Panel de Redes Sociales --- */
+.social-panel {
+  background: linear-gradient(135deg, #e75480 0%, #ff6b9d 50%, #ff8fa3 100%);
+  border-radius: 30px;
+  box-shadow: 0 20px 60px rgba(231, 84, 128, 0.3);
+  padding: 3.5rem 3rem;
+  margin: 4rem auto;
+  max-width: 600px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transform: translateZ(0); /* Fix para recorte de bordes */
+}
+
+.social-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.2) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.social-panel::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.1), transparent);
+  animation: rotate 20s linear infinite;
+  pointer-events: none;
+}
+
+.social-panel-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 2.5rem;
+  color: #fff;
+  text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  position: relative;
+  z-index: 2;
+}
+
+.iconos-horizontales {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.social-panel .social-icon {
+  background: rgba(255, 255, 255, 0.2);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(20px);
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: float 6s ease-in-out infinite;
+}
+
+.social-panel .social-icon:nth-child(2) {
+  animation-delay: -2s;
+}
+
+.social-panel .social-icon:hover::before {
+  transform: scale(1);
+}
+
+.social-panel .social-icon:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-15px) scale(1.2);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.social-panel .social-icon.instagram:hover {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  border-color: #e1306c;
+  box-shadow: 0 25px 50px rgba(225, 48, 108, 0.4);
+}
+
+.social-panel .social-icon.whatsapp:hover {
+  background: linear-gradient(45deg, #25d366, #128c7e);
+  border-color: #25d366;
+  box-shadow: 0 25px 50px rgba(37, 211, 102, 0.4);
+}
+
+.social-panel .social-icon svg {
+  width: 45px;
+  height: 45px;
+  fill: white;
+  position: relative;
+  z-index: 3;
+  transition: all 0.4s ease;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.social-panel .social-icon:hover svg {
+  transform: scale(1.2) rotate(-10deg);
+}
+
+/* =================================
+   ESTILOS PARA PÁGINA DE CONTACTO
+   ================================= */
+
+.container-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.info-form {
+    color: #333;
+}
+
+.info-form h1 {
+    font-size: 2.5rem;
+    color: #e75480;
+    margin-bottom: 15px;
+}
+
+.info-form > p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.datos-contacto {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.dato-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+    color: #333;
+    font-size: 1.1rem;
+    transition: color 0.2s;
+}
+
+.dato-item:hover {
+    color: #e75480;
+}
+
+.dato-item i {
+    font-size: 1.5rem;
+    color: #e75480;
+}
+
+.formulario-wrapper form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.formulario-wrapper h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.formulario-wrapper .campo,
+.formulario-wrapper textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.formulario-wrapper textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.btn-enviar {
+    background: #e75480;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-enviar:hover {
+    background-color: #d14a6f;
+}
+
+/* Estilos para mensajes de envío */
+.mensaje { padding: 15px; margin-bottom: 20px; border-radius: 5px; text-align: center; font-weight: bold; }
+.mensaje.exito { background-color: #d4edda; color: #155724; }
+.mensaje.error { background-color: #f8d7da; color: #721c24; }
+
+/* =================================
+   ESTILOS PARA PÁGINA "MI CUENTA"
+   ================================= */
+.account-container {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    max-width: 800px;
+    margin: 2rem auto;
+}
+
+.account-container h1 {
+    color: #e75480;
+    margin-bottom: 5px;
+}
+
+.account-container .subtitle {
+    margin-bottom: 30px;
+    color: #666;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas */
+    gap: 25px;
+}
+
+.info-item {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.info-label {
+    display: block;
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+.info-value {
+    display: block;
+    font-size: 1.1rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.edit-btn {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 25px;
+    background-color: #e75480;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.edit-btn:hover {
+    background-color: #d14a6f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(231, 84, 128, 0.3);
+}
+
+/* Hacerlo de una columna en móviles */
+@media (max-width: 600px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 1rem;
+}
+
+.orders-table th, .orders-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.orders-table thead th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+}
+
+.orders-table tbody tr:hover {
+    background-color: #fdf2f7; /* Rosado muy claro al pasar el mouse */
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #fff;
+    text-transform: capitalize;
+}
+
+.status-pendiente { background-color: #ffc107; color: #333; }
+.status-completado { background-color: #28a745; }
+.status-enviado { background-color: #17a2b8; }
+.status-cancelado { background-color: #dc3545; }

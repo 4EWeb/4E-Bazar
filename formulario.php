@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input class="controls" type="tel" name="telefono_usuario" id="telefono" placeholder="Ingrese su Número de Teléfono (9xxxxxxxx)" pattern="[0-9]{9}" title="Ingrese 9 dígitos, sin +56" required>       
             <input class="controls" type="email" name="correo_usuario" id="correo" placeholder="Ingrese su Correo" required>
             <input class="controls" type="password" name="contrasena_usuario" id="contraseña" placeholder="Ingrese su Contraseña" required>
-            <p>Estoy de acuerdo con <a href="#">Términos y Condiciones</a></p>
+            <p>Estoy de acuerdo con <a href="terminos.php">Términos y Condiciones</a></p>
             <input class="botons" type="submit" value="Registrarse">
             <p><a href="login.php">¿Ya tienes una cuenta? Inicia Sesión</a></p>
         </form>

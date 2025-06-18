@@ -1,101 +1,103 @@
+/* Importar fuente Poppins desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
 /* Generales para el body y la fuente */
 body {
-    font-family: 'Poppins', sans-serif; /* Usaremos Poppins, que es moderna y limpia, idealmente la importarías desde Google Fonts */
-    line-height: 1.8; /* Aumentamos el interlineado para mejor lectura */
+    font-family: 'Poppins', sans-serif; /* Usaremos Poppins para una estética moderna */
+    line-height: 1.8; /* Aumentamos el interlineado para mejor legibilidad */
     color: #4a4a4a; /* Gris oscuro para el texto principal */
-    background-color: #f7e6f8; /* Un rosa muy suave, casi lavanda */
+    background-color: #f7e6f8; /* Un rosa muy suave, casi lavanda, que complementa tu index */
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    overflow-x: hidden; /* Previene scroll horizontal no deseado */
+    display: flex; /* Para centrar el contenedor principal */
+    justify-content: center; /* Centra horizontalmente */
+    align-items: flex-start; /* Alinea el contenido al inicio verticalmente (arriba) */
+    min-height: 100vh; /* Asegura que el body ocupe al menos la altura completa de la ventana */
+    overflow-x: hidden; /* Previene el scroll horizontal no deseado */
 }
 
-/* Importar fuente Poppins (añadir esto al principio de tu archivo CSS o en el <head> de tu HTML) */
-/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap'); */
-
-/* Contenedor principal de la política */
+/* Contenedor principal de la política (el "recuadro" central) */
 .container {
-    background: linear-gradient(135deg, #ffffff, #fdfdff); /* Fondo degradado suave */
-    border-radius: 25px; /* Más redondeado */
+    background: linear-gradient(135deg, #ffffff, #fdfdff); /* Fondo degradado suave para un toque premium */
+    border-radius: 25px; /* Bordes más redondeados, siguiendo la línea de tu diseño */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 5px 15px rgba(0, 0, 0, 0.05); /* Sombra más pronunciada pero difuminada */
-    padding: 40px 60px; /* Más espacio interno */
-    max-width: 950px; /* Un poco más ancho */
-    width: 90%; /* Se adapta mejor a la pantalla */
-    margin: 60px auto; /* Centrado y con margen superior/inferior */
-    animation: fadeIn 1s ease-out; /* Animación de entrada */
+    padding: 40px 60px; /* Espaciado interno generoso para que el contenido respire */
+    max-width: 950px; /* Un poco más ancho para mejorar la lectura en pantallas grandes */
+    width: 90%; /* Ocupa el 90% del ancho disponible, adaptándose */
+    margin: 60px auto; /* Centrado horizontalmente y con margen superior/inferior */
+    animation: fadeIn 1s ease-out; /* Animación de entrada suave al cargar la página */
 }
 
-/* Animación de entrada */
+/* Animación de entrada para el contenedor */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Título principal */
+/* Título principal de la página (ej. "Política de Privacidad") */
 h1 {
-    color: #d81b60; /* Rosa vibrante */
+    color: #d81b60; /* Un rosa vibrante y dominante */
     text-align: center;
     margin-bottom: 20px;
-    font-size: 3.2em; /* Título más grande y con impacto */
-    font-weight: 700; /* Más audaz */
-    letter-spacing: 1px; /* Espaciado entre letras */
-    position: relative;
-    padding-bottom: 15px; /* Espacio para el pseudo-elemento */
+    font-size: 3.2em; /* Título grande para un impacto visual */
+    font-weight: 700; /* Negrita pronunciada */
+    letter-spacing: 1px; /* Espaciado sutil entre letras */
+    position: relative; /* Para posicionar la línea decorativa */
+    padding-bottom: 15px; /* Espacio para la línea */
 }
 
+/* Línea decorativa bajo el título principal */
 h1::after {
     content: '';
     display: block;
-    width: 80px; /* Ancho de la línea decorativa */
+    width: 80px; /* Ancho de la línea */
     height: 5px;
     background: linear-gradient(90deg, #ff8a80, #e91e63); /* Degradado en la línea */
-    border-radius: 5px;
+    border-radius: 5px; /* Bordes redondeados para la línea */
     margin: 0 auto;
     position: absolute;
     bottom: 0;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%); /* Centra la línea */
 }
 
-/* Fecha de actualización */
+/* Estilo para el párrafo de la fecha de última actualización */
 .last-updated {
     text-align: center;
     font-style: italic;
     color: #9c27b0; /* Un púrpura suave para la fecha */
-    margin-bottom: 50px; /* Más espacio debajo de la fecha */
+    margin-bottom: 50px; /* Más espacio debajo de la fecha para separar del contenido */
     font-size: 1.1em;
-    font-weight: 300;
+    font-weight: 300; /* Fuente más delgada */
 }
 
-/* Subtítulos de sección (ej. "Cómo usamos tu información") */
+/* Subtítulos de sección (ej. "Cómo usamos tu información", "Retención de tus datos personales") */
 h2 {
-    color: #880e4f; /* Un rosa oscuro y elegante */
+    color: #880e4f; /* Un rosa oscuro y elegante para las secciones */
     margin-top: 45px; /* Más espacio antes de cada sección principal */
     margin-bottom: 25px;
     font-size: 2.2em; /* Más grande y prominente */
-    font-weight: 600;
-    position: relative;
-    padding-left: 15px; /* Espacio para la barra lateral decorativa */
+    font-weight: 600; /* Seminegrita */
+    position: relative; /* Para posicionar la barra lateral */
+    padding-left: 20px; /* Espacio para la barra lateral decorativa */
 }
 
+/* Barra lateral decorativa para los subtítulos de sección */
 h2::before {
     content: '';
     display: block;
     width: 6px; /* Ancho de la barra */
-    height: 100%;
-    background: linear-gradient(180deg, #ff8a80, #e91e63); /* Degradado en la barra */
+    height: 100%; /* La barra ocupa toda la altura del h2 */
+    background: linear-gradient(180deg, #ff8a80, #e91e63); /* Degradado vertical en la barra */
     position: absolute;
     left: 0;
     top: 0;
-    border-radius: 3px;
+    border-radius: 3px; /* Bordes redondeados para la barra */
 }
 
-/* Subtítulos de subsección (ej. "Para gestionar tus solicitudes") */
+/* Subtítulos de subsección (ej. "Para gestionar tus solicitudes", "Transacciones comerciales") */
 h3 {
-    color: #c2185b; /* Rosa intermedio */
+    color: #c2185b; /* Rosa intermedio, un poco más suave que el h2 */
     margin-top: 35px;
     margin-bottom: 15px;
     font-size: 1.6em;
@@ -104,11 +106,11 @@ h3 {
 
 /* Párrafos de texto */
 p {
-    margin-bottom: 20px; /* Más espacio entre párrafos */
-    color: #5a5a5a;
-    text-align: justify;
-    font-size: 1.05em; /* Un poco más grande para mejor lectura */
-    line-height: 1.7; /* Mayor interlineado */
+    margin-bottom: 20px; /* Más espacio entre párrafos para mejor lectura */
+    color: #5a5a5a; /* Gris ligeramente más claro para el texto de contenido */
+    text-align: justify; /* Justifica el texto para una apariencia más formal y limpia */
+    font-size: 1.05em; /* Un poco más grande para mejor legibilidad en pantallas */
+    line-height: 1.7; /* Mayor interlineado para evitar que el texto se vea apelmazado */
 }
 
 /* Listas */
@@ -126,86 +128,142 @@ ul li {
     padding-left: 25px; /* Espacio para el ícono de la lista */
 }
 
+/* Ícono de lista personalizado (punto estilizado) */
 ul li::before {
-    content: '•'; /* Un punto estilizado como ícono de lista */
+    content: '•'; /* El carácter de punto como ícono */
     color: #e91e63; /* Color de acento para el punto */
-    font-size: 1.5em;
+    font-size: 1.5em; /* Tamaño del punto */
     position: absolute;
     left: 0;
     top: 0px; /* Ajusta la posición vertical del punto */
     line-height: 1.2;
 }
 
-
-/* Enlaces */
+/* Estilo para los enlaces */
 a {
     color: #d81b60; /* Mismo rosa vibrante que el H1 */
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
+    text-decoration: none; /* Sin subrayado por defecto */
+    font-weight: 600; /* Seminegrita para que destaquen */
+    transition: color 0.3s ease; /* Transición suave al pasar el ratón */
 }
 
 a:hover {
     color: #f06292; /* Un rosa más claro al pasar el ratón */
-    text-decoration: underline;
+    text-decoration: underline; /* Subrayado al pasar el ratón */
 }
 
-/* Información de contacto al final */
+/* Información de contacto al final de la página */
 .contact-info {
     margin-top: 50px;
     text-align: center;
     font-size: 1.1em;
-    color: #888;
+    color: #888; /* Gris medio para el texto de contacto */
     padding-top: 25px;
-    border-top: 1px solid #f8bbd0; /* Línea divisoria más suave */
+    border-top: 1px solid #f8bbd0; /* Línea divisoria suave antes del contacto */
     font-weight: 300;
 }
 
-/* Responsive design para pantallas más pequeñas */
+/* --- Estilo del Botón para Volver --- */
+.back-to-form-container {
+    text-align: center; /* Centra el botón */
+    margin-top: 50px; /* Espacio superior para separarlo del último párrafo */
+    padding-top: 30px; /* Espacio sobre el botón */
+    border-top: 1px solid #f8bbd0; /* Línea divisoria suave */
+}
+
+.btn-volver {
+    display: inline-block;
+    background: linear-gradient(90deg, #d81b60, #e91e63);
+    color: #ffffff;
+    padding: 15px 35px;
+    border-radius: 50px; /* Bordes tipo píldora */
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 8px 15px rgba(233, 30, 99, 0.3);
+    transition: all 0.3s ease-in-out;
+    border: none;
+}
+
+.btn-volver:hover {
+    transform: translateY(-3px); /* Efecto de levantar el botón */
+    box-shadow: 0 12px 25px rgba(233, 30, 99, 0.4);
+    background: linear-gradient(90deg, #e91e63, #d81b60);
+    text-decoration: none; /* Mantenemos sin subrayado al pasar el cursor */
+    color: #fff;
+}
+
+
+/* --- Responsive Design (Adaptación a diferentes tamaños de pantalla) --- */
+
+/* Para pantallas medianas (tabletas) */
 @media (max-width: 992px) {
     .container {
-        padding: 30px 40px;
-        width: 95%;
+        padding: 30px 40px; /* Reduce el padding */
+        width: 95%; /* Ocupa más ancho */
     }
     h1 {
-        font-size: 2.8em;
+        font-size: 2.8em; /* Reduce el tamaño del título principal */
     }
     h2 {
-        font-size: 2em;
+        font-size: 2em; /* Reduce el tamaño de los subtítulos de sección */
     }
 }
 
+/* Para pantallas pequeñas (móviles) */
 @media (max-width: 768px) {
     body {
-        padding: 15px;
+        padding: 15px; /* Reduce el padding general del body */
     }
     .container {
-        margin: 30px auto;
-        padding: 25px 30px;
+        margin: 30px auto; /* Ajusta los márgenes */
+        padding: 25px 30px; /* Reduce el padding interno */
     }
     h1 {
-        font-size: 2.4em;
+        font-size: 2.4em; /* Más pequeño para móviles */
+        padding-bottom: 10px; /* Ajusta espacio de la línea */
     }
-    h2 {
-        font-size: 1.8em;
+    h1::after {
+        width: 60px; /* Línea más corta */
+        height: 4px;
     }
-    h3 {
-        font-size: 1.4em;
-    }
-    p {
+    .last-updated {
+        margin-bottom: 30px; /* Menos espacio debajo de la fecha */
         font-size: 1em;
     }
+    h2 {
+        font-size: 1.8em; /* Más pequeño para móviles */
+        margin-top: 35px;
+        margin-bottom: 20px;
+        padding-left: 15px;
+    }
+    h2::before {
+        width: 5px;
+    }
+    h3 {
+        font-size: 1.4em; /* Más pequeño para móviles */
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+    p {
+        font-size: 1em; /* Ajusta el tamaño de los párrafos */
+    }
     ul {
-        padding-left: 20px;
+        padding-left: 20px; /* Ajusta la indentación de las listas */
     }
     ul li {
-        padding-left: 20px;
+        padding-left: 20px; /* Ajusta el padding del ítem de lista */
+    }
+    ul li::before {
+        font-size: 1.3em;
     }
 }
 
+/* Para pantallas muy pequeñas */
 @media (max-width: 480px) {
     .container {
-        padding: 20px 25px;
+        padding: 20px 25px; /* Aún más pequeño el padding */
     }
     h1 {
         font-size: 2em;
@@ -215,5 +273,8 @@ a:hover {
     }
     h3 {
         font-size: 1.2em;
+    }
+    p {
+        text-align: left; /* En pantallas muy pequeñas, a veces el justificado no luce bien */
     }
 }

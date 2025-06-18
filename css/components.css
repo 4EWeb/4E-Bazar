@@ -381,107 +381,111 @@ textarea.form-control {
 }
 
 /* =================================
-   ESTILOS PARA PÁGINA DE CONTACTO
+   ESTILOS PARA PÁGINA "SOBRE NOSOTROS"
    ================================= */
-
-.container-form {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 40px;
+.about-us-container {
     background: rgba(255, 255, 255, 0.9);
-    padding: 40px;
+    padding: 40px 50px;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
 }
 
-.info-form {
+.about-header {
+    text-align: center;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 30px;
+}
+
+.about-header h1 {
+    font-size: 2.8rem;
+    color: #e75480;
+    margin-bottom: 10px;
+}
+
+.about-header .subtitle {
+    font-size: 1.2rem;
+    color: #666;
+    font-style: italic;
+}
+
+.about-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.about-text h2 {
+    font-size: 1.8rem;
     color: #333;
+    margin-bottom: 15px;
 }
 
-.info-form h1 {
+.about-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.about-image img {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.values-section {
+    text-align: center;
+    padding-top: 40px;
+    border-top: 1px solid #eee;
+}
+
+.values-section h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.values-grid {
+    display: flex;
+    justify-content: space-around;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.value-item {
+    flex-basis: 280px;
+}
+
+.value-item i {
     font-size: 2.5rem;
     color: #e75480;
     margin-bottom: 15px;
 }
 
-.info-form > p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: #555;
-    margin-bottom: 30px;
-}
-
-.datos-contacto {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.dato-item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    text-decoration: none;
-    color: #333;
-    font-size: 1.1rem;
-    transition: color 0.2s;
-}
-
-.dato-item:hover {
-    color: #e75480;
-}
-
-.dato-item i {
-    font-size: 1.5rem;
-    color: #e75480;
-}
-
-.formulario-wrapper form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.formulario-wrapper h2 {
-    font-size: 1.8rem;
-    color: #333;
+.value-item h3 {
+    font-size: 1.3rem;
+    color: #444;
     margin-bottom: 10px;
 }
 
-.formulario-wrapper .campo,
-.formulario-wrapper textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1rem;
+.value-item p {
+    color: #666;
+    line-height: 1.6;
 }
 
-.formulario-wrapper textarea {
-    min-height: 120px;
-    resize: vertical;
+/* Hacerlo responsivo en móviles */
+@media (max-width: 768px) {
+    .about-content {
+        grid-template-columns: 1fr;
+    }
+    .about-image {
+        order: -1; /* Pone la imagen arriba del texto en móviles */
+        margin-bottom: 30px;
+    }
 }
-
-.btn-enviar {
-    background: #e75480;
-    color: white;
-    border: none;
-    padding: 15px;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.btn-enviar:hover {
-    background-color: #d14a6f;
-}
-
-/* Estilos para mensajes de envío */
-.mensaje { padding: 15px; margin-bottom: 20px; border-radius: 5px; text-align: center; font-weight: bold; }
-.mensaje.exito { background-color: #d4edda; color: #155724; }
-.mensaje.error { background-color: #f8d7da; color: #721c24; }
 
 /* =================================
    ESTILOS PARA PÁGINA "MI CUENTA"

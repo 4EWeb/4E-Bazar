@@ -89,6 +89,7 @@ if (finalizePurchaseBtn) {
         });
     }
     
+    
  function generarUrlWhatsAppYRedirigir() {
         const phoneNumber = '56976509490';
         let message = '¡Hola! Me gustaría hacer el siguiente pedido:\n\n';
@@ -228,6 +229,7 @@ if (finalizePurchaseBtn) {
       }
     }
     updateCartUI();
+    openCart();
   };
 
   // === EVENT LISTENERS (MANEJO DE INTERACCIONES) ===

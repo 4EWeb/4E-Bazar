@@ -62,7 +62,7 @@ session_start();
         
         <section class="about-hero">
             <h1>Nuestra Historia</h1>
-            <p class="subtitle">Todo por mis hijos.</p>
+            <p class="subtitle">"Todo por mis hijos"</p>
         </section>
 
         <div class="about-main-content">

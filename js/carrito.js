@@ -1,26 +1,10 @@
+// ===================================================================================
+// CARRITO.JS - GESTIÓN COMPLETA DEL CARRITO DE COMPRAS
+// ===================================================================================
+
+// Variable global para que las funciones onclick de los productos puedan acceder a ella.
 let agregarAlCarrito;
 
-function obtenerNombreImpresion(tipo) {
-  const nombres = {
-    bn: "Blanco y negro",
-    color: "Color",
-    foto: "Fotografía",
-    foto_papel: "Foto en papel fotográfico",
-  };
-  return nombres[tipo] || "No especificado";
-}
-
-function obtenerNombreTermolaminado(tipo) {
-  const nombres = {
-    media_carta: "Media carta",
-    oficio: "Oficio",
-    ninguno: "Ninguno",
-  };
-  return nombres[tipo] || "Ninguno";
-}
-
-
-// --- LÓGICA PRINCIPAL DEL CARRITO ---
 // Se ejecuta cuando todo el documento HTML ha sido cargado.
 document.addEventListener("DOMContentLoaded", () => {
   // === SELECCIÓN DE ELEMENTOS DEL DOM ===
@@ -34,77 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const emptyCartMsg = document.querySelector(".cart-empty-msg");
   const finalizePurchaseBtn = document.getElementById("btn-finalize-purchase");
 
-if (finalizePurchaseBtn) {
-        finalizePurchaseBtn.addEventListener('click', async () => {
-            if (cart.length === 0) {
-                alert('Tu carrito está vacío.');
-                return;
-            }
-
-            // Si el usuario no ha iniciado sesión, simplemente abre WhatsApp como antes.
-            if (!window.IS_LOGGED_IN) {
-                alert("Por favor, inicia sesión para que tu pedido quede guardado en tu cuenta antes de continuar.");
-                generarUrlWhatsAppYRedirigir(); // Simplemente abre WhatsApp
-                return;
-            }
-
-          const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-            try {
-                // Mostramos un estado de "guardando" en el botón
-                finalizePurchaseBtn.disabled = true;
-                finalizePurchaseBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
-
-                const response = await fetch('registrar-pedido.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ cart: cart, total: total }),
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    // Si se guardó con éxito, AHORA abrimos WhatsApp
-                    generarUrlWhatsAppYRedirigir();
-                    
-                    // Opcional: limpiar el carrito después de un pedido exitoso
-                    cart = [];
-                    saveCart();
-                    renderCartItems();
-                } else {
-                    // Si el servidor devolvió un error
-                    alert('Hubo un error al registrar tu pedido: ' + result.message);
-                }
-
-            } catch (error) {
-                console.error('Error de conexión:', error);
-                alert('Hubo un error de conexión. No se pudo registrar el pedido.');
-            } finally {
-                 // Restauramos el botón a su estado original
-                finalizePurchaseBtn.disabled = false;
-                finalizePurchaseBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Pedir por WhatsApp';
-            }
-        });
-    }
-    
-    
- function generarUrlWhatsAppYRedirigir() {
-        const phoneNumber = '56976509490';
-        let message = '¡Hola! Me gustaría hacer el siguiente pedido:\n\n';
-
-        cart.forEach(item => {
-            message += `*${item.quantity}x* - ${item.name}\n`;
-        });
-        
-        const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        message += `\n*Total: $${totalPrice.toLocaleString('es-CL')}*`;
-
-        const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-        window.open(whatsappURL, '_blank');
-    }
-
+  // === ESTADO DEL CARRITO ===
   // Carga el carrito desde la memoria local del navegador o lo inicia como un array vacío.
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -117,14 +31,14 @@ if (finalizePurchaseBtn) {
 
   /** Abre el panel lateral del carrito. */
   const openCart = () => {
-    cartSidebar.classList.add("active");
-    cartOverlay.classList.add("active");
+    if(cartSidebar) cartSidebar.classList.add("active");
+    if(cartOverlay) cartOverlay.classList.add("active");
   };
 
   /** Cierra el panel lateral del carrito. */
   const closeCart = () => {
-    cartSidebar.classList.remove("active");
-    cartOverlay.classList.remove("active");
+    if(cartSidebar) cartSidebar.classList.remove("active");
+    if(cartOverlay) cartOverlay.classList.remove("active");
   };
 
   /** Función central para actualizar toda la interfaz del carrito. */
@@ -141,7 +55,7 @@ if (finalizePurchaseBtn) {
     
     if (cartCounterSpan) cartCounterSpan.textContent = totalItems;
     if (cartTotalPriceEl) {
-      cartTotalPriceEl.textContent = `$${totalPrice.toLocaleString("es-CL", { minimumFractionDigits: 0 })}`;
+      cartTotalPriceEl.textContent = `$${totalPrice.toLocaleString("es-CL")}`;
     }
   };
 
@@ -153,7 +67,7 @@ if (finalizePurchaseBtn) {
     const hasItems = cart.length > 0;
 
     emptyCartMsg.style.display = hasItems ? "none" : "block";
-    finalizePurchaseBtn.disabled = !hasItems;
+    if(finalizePurchaseBtn) finalizePurchaseBtn.disabled = !hasItems;
 
     if (!hasItems) {
       cartBody.appendChild(emptyCartMsg);
@@ -165,30 +79,8 @@ if (finalizePurchaseBtn) {
       cartItemDiv.dataset.id = item.id;
       cartItemDiv.className = "cart-item";
 
-      // Lógica para renderizar un SERVICIO
-      if (item.tipo === "servicio") {
-        const servicio = item.detalles;
-        cartItemDiv.classList.add("servicio");
-        cartItemDiv.innerHTML = `
-          <div class="cart-item-info">
-              <p class="cart-item-title">${item.name}</p>
-              <p class="cart-item-price">$${item.price.toLocaleString("es-CL")}</p>
-              <div class="servicio-details">
-                <p><strong>Cantidad:</strong> ${servicio.cantidad} hojas</p>
-                <p><strong>Tipo:</strong> ${obtenerNombreImpresion(servicio.tipoImpresion)}</p>
-                <p><strong>Termolaminado:</strong> ${obtenerNombreTermolaminado(servicio.termolaminado)}</p>
-                <p><strong>Anillado:</strong> ${servicio.anillado ? "Sí" : "No"}</p>
-                <p><strong>Doble cara:</strong> ${servicio.dobleCara ? "Sí" : "No"}</p>
-                ${servicio.comentarios ? `<p><strong>Notas:</strong> ${servicio.comentarios}</p>`: ""}
-              </div>
-          </div>
-          <button class="remove-item-btn" title="Eliminar servicio">
-            <i class="fas fa-trash-alt"></i>
-          </button>
-        `;
-      } 
-      // Lógica para renderizar un PRODUCTO
-      else {
+      // Si es un producto normal (no un servicio)
+      if (!item.name.includes('Impresión')) { // Una forma simple de diferenciar
         const itemTotalPrice = (item.price * item.quantity).toLocaleString("es-CL");
         cartItemDiv.innerHTML = `
           <img src="${item.image}" alt="${item.name}" class="cart-item-img">
@@ -207,6 +99,17 @@ if (finalizePurchaseBtn) {
             </div>
           </div>
         `;
+      } else {
+        // Si es un servicio personalizado
+        cartItemDiv.innerHTML = `
+          <div class="cart-item-info">
+              <p class="cart-item-title">${item.name}</p>
+              <p class="cart-item-price">$${item.price.toLocaleString("es-CL")}</p>
+          </div>
+          <button class="remove-item-btn" title="Eliminar servicio">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        `;
       }
       cartBody.appendChild(cartItemDiv);
     });
@@ -214,34 +117,33 @@ if (finalizePurchaseBtn) {
 
   /** Función global para agregar cualquier item al carrito. */
   agregarAlCarrito = (item) => {
-    // Si es un servicio, siempre se agrega como un nuevo ítem único.
-    if (item.tipo === "servicio") {
-      cart.push(item);
-    } else {
-      // Si es un producto, se busca si ya existe para aumentar la cantidad.
-      const existingItem = cart.find(
-        (i) => i.id === item.id && i.tipo !== "servicio"
-      );
-      if (existingItem) {
-        existingItem.quantity++;
-      } else {
-        cart.push({ ...item, quantity: 1 });
-      }
+    // Si el item ya tiene 'quantity', es un producto normal.
+    // Si no, es un servicio y se le asigna quantity = 1.
+    if (!item.quantity) {
+        item.quantity = 1;
     }
+    
+    const existingItem = cart.find((i) => i.id === item.id);
+    
+    if (existingItem && !item.name.includes('Impresión')) { // Solo agrupa si es un producto
+        existingItem.quantity += item.quantity;
+    } else {
+        // Si es un servicio o un producto nuevo, lo añade.
+        cart.push(item);
+    }
+    
     updateCartUI();
     openCart();
   };
 
   // === EVENT LISTENERS (MANEJO DE INTERACCIONES) ===
 
-  // Abrir y cerrar el carrito
   if (cartIconBtn) {
     cartIconBtn.addEventListener("click", openCart);
     cartCloseBtn.addEventListener("click", closeCart);
     cartOverlay.addEventListener("click", closeCart);
   }
 
-  // Manejar clics dentro del cuerpo del carrito (eliminar, +/- cantidad)
   if (cartBody) {
     cartBody.addEventListener("click", (e) => {
       const removeButton = e.target.closest(".remove-item-btn");
@@ -274,47 +176,80 @@ if (finalizePurchaseBtn) {
       updateCartUI();
     });
   }
+  
+  /** Función auxiliar para generar y abrir el enlace de WhatsApp */
+  function generarUrlWhatsAppYRedirigir() {
+    const phoneNumber = '56976509490';
+    let message = '¡Hola! Me gustaría hacer el siguiente pedido:\n\n';
 
-  // Manejar el botón final para enviar el pedido
+    cart.forEach(item => {
+        message += `*${item.quantity}x* - ${item.name}\n`;
+    });
+    
+    const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    message += `\n*Total Estimado: $${totalPrice.toLocaleString('es-CL')}*`;
+
+    // Añade la dirección del usuario si está logueado y la dirección existe
+    if (window.IS_LOGGED_IN && window.USER_ADDRESS) {
+        message += `\n\n*Dirección de Envío Registrada:*\n${window.USER_ADDRESS}`;
+    }
+
+    message += `\n\nPor favor, confírmame la disponibilidad y el valor final. ¡Gracias!`;
+
+    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappURL, '_blank');
+  }
+
+  // Lógica para el botón final de "Pedir por WhatsApp"
   if (finalizePurchaseBtn) {
-    finalizePurchaseBtn.addEventListener("click", () => {
-      if (cart.length === 0) return;
-      
-      const phoneNumber = "56976509490";
-      let message = "¡Hola! Me gustaría cotizar lo siguiente:\n\n";
+    finalizePurchaseBtn.addEventListener('click', async () => {
+        if (cart.length === 0) {
+            alert('Tu carrito está vacío.');
+            return;
+        }
 
-      // Mensaje para PRODUCTOS
-      const productos = cart.filter((item) => item.tipo !== "servicio");
-      if (productos.length > 0) {
-        message += "*PRODUCTOS:*\n";
-        productos.forEach((item) => {
-          message += `- ${item.quantity}x ${item.name} ($${item.price.toLocaleString("es-CL")} c/u)\n`;
-        });
-        message += "\n";
-      }
+        // Si el usuario no ha iniciado sesión, le pedimos que lo haga para poder guardar su pedido.
+        if (!window.IS_LOGGED_IN) {
+            alert("Por favor, inicia sesión para que tu pedido quede guardado en tu cuenta antes de continuar.");
+            window.location.href = 'login.php'; // Opcional: Redirigir al login
+            return;
+        }
 
-      // Mensaje para SERVICIOS
-      const servicios = cart.filter((item) => item.tipo === "servicio");
-      if (servicios.length > 0) {
-        message += "*SERVICIOS PERSONALIZADOS:*\n";
-        servicios.forEach((item) => {
-          message += `- ${item.name} | Total: $${item.price.toLocaleString("es-CL")}\n`;
-        });
-      }
+        // Si el usuario SÍ ha iniciado sesión, intentamos guardar el pedido.
+        const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-      // Total General
-      const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      message += `\n*TOTAL ESTIMADO: $${totalPrice.toLocaleString("es-CL")}*`;
-      message += `\n\nPor favor, confírmame la disponibilidad y el valor final. ¡Gracias!`;
+        try {
+            finalizePurchaseBtn.disabled = true;
+            finalizePurchaseBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
 
-      // Redirección a WhatsApp
-      const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-      window.open(whatsappURL, "_blank");
+            const response = await fetch('registrar-pedido.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cart: cart, total: total }),
+            });
 
-      // Vaciar carrito después de enviar
-      cart = [];
-      updateCartUI();
-      closeCart();
+            const result = await response.json();
+
+            if (result.success) {
+                // Si se guardó con éxito, AHORA abrimos WhatsApp
+                generarUrlWhatsAppYRedirigir();
+                
+                // Limpiar el carrito después de un pedido exitoso
+                cart = [];
+                updateCartUI();
+                closeCart();
+            } else {
+                alert('Hubo un error al registrar tu pedido: ' + (result.message || 'Error desconocido.'));
+            }
+
+        } catch (error) {
+            console.error('Error de conexión:', error);
+            alert('Hubo un error de conexión. No se pudo registrar el pedido.');
+        } finally {
+             // Restauramos el botón a su estado original
+            finalizePurchaseBtn.disabled = false;
+            finalizePurchaseBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Pedir por WhatsApp';
+        }
     });
   }
 

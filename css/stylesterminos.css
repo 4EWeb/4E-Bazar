@@ -1,0 +1,133 @@
+/* Generales para el body y la fuente */
+body {
+    font-family: Arial, sans-serif; /* Puedes ajustar la fuente para que coincida con tu index.php */
+    line-height: 1.6;
+    color: #333;
+    background-color: #fce4ec; /* Un rosa muy claro, similar al fondo de tu index */
+    margin: 0;
+    padding: 20px; /* Un poco de padding general para que el contenido no pegue a los bordes */
+    display: flex; /* Para centrar el contenedor principal */
+    justify-content: center; /* Centra horizontalmente */
+    align-items: flex-start; /* Alinea al inicio verticalmente (arriba) */
+    min-height: 100vh; /* Asegura que el body ocupe al menos la altura completa de la ventana */
+}
+
+/* Contenedor principal de la política */
+.container {
+    background-color: #ffffff; /* Fondo blanco para el recuadro principal */
+    border-radius: 15px; /* Bordes redondeados, similar a tu index */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra suave para un efecto flotante */
+    padding: 30px 40px; /* Espaciado interno generoso */
+    max-width: 900px; /* Ancho máximo para el contenido */
+    width: 100%; /* Ocupa todo el ancho disponible hasta el max-width */
+    margin-top: 50px; /* Margen superior para separarlo de un posible encabezado */
+    margin-bottom: 50px; /* Margen inferior */
+}
+
+/* Títulos principales */
+h1 {
+    color: #e91e63; /* Un rosa fuerte, similar a los acentos en tu index */
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5em; /* Tamaño de fuente más grande para el título principal */
+    font-weight: bold;
+}
+
+/* Subtítulos */
+h2 {
+    color: #c2185b; /* Un rosa un poco más oscuro que el h1 */
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+    border-bottom: 2px solid #f8bbd0; /* Línea suave debajo del título */
+    padding-bottom: 5px;
+}
+
+h3 {
+    color: #ad1457; /* Otro tono de rosa para subtítulos más pequeños */
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.3em;
+}
+
+/* Párrafos de texto */
+p {
+    margin-bottom: 15px;
+    color: #555;
+    text-align: justify; /* Justifica el texto para una lectura más formal */
+}
+
+/* Listas */
+ul {
+    list-style-type: disc; /* Puntos de disco para las listas */
+    margin-left: 25px; /* Indentación para las listas */
+    margin-bottom: 15px;
+    color: #555;
+}
+
+ul li {
+    margin-bottom: 8px;
+}
+
+/* Enlaces (si hubiera) */
+a {
+    color: #e91e63; /* Mismo color de acento que el h1 */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline; /* Subrayado al pasar el ratón */
+}
+
+/* Fecha de actualización */
+p:first-of-type { /* Asumiendo que la fecha de actualización es el primer párrafo después del H1 */
+    text-align: center;
+    font-style: italic;
+    color: #888;
+    margin-bottom: 40px; /* Un poco más de espacio debajo de la fecha */
+}
+
+/* Para el pie de página de contacto */
+.contact-info {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #777;
+    padding-top: 20px;
+    border-top: 1px solid #eee; /* Línea divisoria suave */
+}
+
+/* Responsive design para pantallas más pequeñas */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+
+    .container {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        padding: 20px 25px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    h3 {
+        font-size: 1.1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px 20px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+}

@@ -18,6 +18,57 @@ try {
     echo "Error al cargar productos destacados: " . $e->getMessage();
     $productos_destacados = [];
 }
+$kits_definidos = [
+    [
+        'nombre' => 'Kit Escolar Básico',
+        'producto_ids' => [1, 13, 14]
+    ],
+    [
+        'nombre' => 'Kit de Oficina',
+        'producto_ids' => [15, 12]
+    ]
+];
+$todos_los_ids_de_kits = [];
+foreach ($kits_definidos as $kit) {
+    $todos_los_ids_de_kits = array_merge($todos_los_ids_de_kits, $kit['producto_ids']);
+}
+$ids_unicos = array_unique($todos_los_ids_de_kits);
+$productos_para_kits_data = [];
+if (!empty($ids_unicos)) {
+    try {
+        $placeholders = implode(',', array_fill(0, count($ids_unicos), '?'));
+        $stmt_kits = $pdo->prepare("SELECT id, nombre, precio, descuento FROM productos WHERE id IN ($placeholders)");
+        $stmt_kits->execute($ids_unicos);
+        $productos_raw = $stmt_kits->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($productos_raw as $p) {
+            $productos_para_kits_data[$p['id']] = $p;
+        }
+    } catch (Exception $e) { $productos_para_kits_data = []; }
+}
+$kits_procesados = [];
+foreach ($kits_definidos as $kit_def) {
+    $precio_total_kit = 0;
+    $nombres_productos_kit = [];
+    $productos_validos = true;
+    foreach ($kit_def['producto_ids'] as $producto_id) {
+        if (isset($productos_para_kits_data[$producto_id])) {
+            $producto = $productos_para_kits_data[$producto_id];
+            $precio_final_producto = $producto['precio'] * (1 - $producto['descuento'] / 100);
+            $precio_total_kit += $precio_final_producto;
+            $nombres_productos_kit[] = $producto['nombre'];
+        } else {
+            $productos_validos = false;
+            break;
+        }
+    }
+    if ($productos_validos) {
+        $kits_procesados[] = [
+            'nombre' => $kit_def['nombre'],
+            'precio_total' => $precio_total_kit,
+            'nombres_productos' => $nombres_productos_kit
+        ];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -31,6 +82,7 @@ try {
     <link rel="stylesheet" href="css/components.css"> 
     <link rel="stylesheet" href="css/cart.css">       
     <link rel="stylesheet" href="css/responsive.css">  
+    <link rel="stylesheet" href="css/kits.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
     
@@ -66,10 +118,10 @@ try {
           <div style="background-image: url('Imagenes/oferta3.png')"></div>
           <div style="background-image: url('Imagenes/oferta4.png')"></div>
         </div>
+        
       </section>
-
-      <section class="productos-destacados">
-        <h2 class="productos-title">Productos Destacados</h2>
+      <section class="ofertas-box">
+        <h1 class="ofertas-title">Productos Destacados</h1>
         <div class="productos-container">
             <?php if (count($productos_destacados) > 0): ?>
                 <?php foreach ($productos_destacados as $producto): ?>
@@ -98,6 +150,33 @@ try {
                 <p>No hay productos destacados disponibles en este momento.</p>
             <?php endif; ?>
         </div>
+      </section>
+
+      <section class="kits-section">
+            <h2 class="productos-title">Nuestros Kits Ahorro</h2>
+            <div class="kits-container">
+                <?php if (count($kits_procesados) > 0): ?>
+                    <?php foreach ($kits_procesados as $kit): ?>
+                        <div class="kit-box">
+                            <h3><?= htmlspecialchars($kit['nombre']) ?></h3>
+                            <ul class="product-list">
+                                <?php foreach ($kit['nombres_productos'] as $nombre_producto): ?>
+                                    <li><?= htmlspecialchars($nombre_producto) ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                            <div class="kit-footer">
+                                <div class="kit-price">
+                                    <span class="kit-price-label">Precio Total del Kit</span>
+                                    $<?= number_format($kit['precio_total'], 0, ',', '.') ?>
+                                </div>
+                                <button class="btn-add-kit-to-cart" disabled title="Próximamente">Agregar Kit al Carrito</button>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>No hay kits disponibles en este momento.</p>
+                <?php endif; ?>
+            </div>
       </section>
 
       

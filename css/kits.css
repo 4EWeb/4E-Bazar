@@ -1,0 +1,108 @@
+/* === ESTILOS PARA LA SECCIÓN DE KITS (Versión integrada) === */
+
+/* El fondo de la sección se elimina para que coincida con el resto de la página */
+.kits-section {
+    padding: 50px 20px;
+}
+
+.kits-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+/*
+ * La caja del kit ahora imita el estilo de una caja de producto normal:
+ * fondo blanco, borde sutil y una sombra ligera.
+*/
+.kit-box {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.3s ease;
+}
+
+.kit-box:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.kit-box h3 {
+    font-size: 1.6rem;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.kit-box .product-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 10px 0;
+    flex-grow: 1;
+}
+
+.kit-box .product-list li {
+    /* El ícono de check se mantiene por ser informativo */
+    background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2328a745"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>') no-repeat left center;
+    background-size: 20px;
+    padding: 8px 0 8px 30px;
+    font-size: 1rem;
+    color: #555;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.kit-box .product-list li:last-child {
+    border-bottom: none;
+}
+
+.kit-footer {
+    margin-top: 20px;
+    text-align: center;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+/* El precio del kit ahora usa el color principal de la marca (#e75480) */
+.kit-footer .kit-price {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #e75480; 
+    margin-bottom: 15px;
+}
+
+.kit-footer .kit-price-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: normal;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+/* * El botón del kit ahora usa el mismo estilo y color rosado
+ * que el botón "Agregar al carrito" del resto del sitio.
+*/
+.kit-footer .btn-add-kit-to-cart {
+    background-color: #e75480;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.kit-footer .btn-add-kit-to-cart:hover {
+    background-color: rgb(238, 128, 161);
+}
+
+.kit-footer .btn-add-kit-to-cart:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}

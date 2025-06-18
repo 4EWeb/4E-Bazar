@@ -107,7 +107,7 @@ echo '        <p>Por correo electrónico: 4e.website.manager@gmail.com</p>';
 
 // --- Botón para volver al formulario ---
 echo '        <div class="back-to-form-container">';
-echo '            <a href="formulario.php" class="btn-volver">Volver al Formulario</a>';
+echo '            <a href="formulario.php" class="btn-volver">Volver al Registro</a>';
 echo '        </div>';
 
 echo '    </div>'; // Cierre del div .container

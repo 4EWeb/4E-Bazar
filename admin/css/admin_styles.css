@@ -1,0 +1,59 @@
+/* admin/css/admin_styles.css */
+
+/* --- Estructura Principal del Layout --- */
+body {
+  /* Permitimos que el body tenga overflow si es necesario,
+       pero la idea es que nuestro .main-container gestione el scroll. */
+}
+
+.main-container {
+  display: flex;
+  /* Usamos vh (viewport height) para la altura. 
+       Restamos 85px para dar espacio a un posible header/navbar y al título H1.
+       Ajusta este valor si tu header o los márgenes superiores son diferentes. */
+  height: calc(100vh - 85px);
+}
+
+/* --- Columna del Editor (Izquierda) --- */
+.editor-column {
+  /* Define un ancho base del 40%, pero no le permitimos crecer ni encogerse. */
+  flex: 0 0 40%;
+
+  /* Padding para que el contenido no pegue con el borde. */
+  padding-right: 20px;
+
+  /* Si el formulario del editor es muy largo, esta columna tendrá su propio scroll. */
+  overflow-y: auto;
+}
+
+/* --- Columna de la Lista de Productos (Derecha) --- */
+.products-column {
+  /* Ocupa el espacio restante del contenedor. */
+  flex: 1;
+
+  /* ESTA es la columna que tendrá el scroll principal para la lista de productos. */
+  overflow-y: auto;
+
+  /* Padding para separar el contenido de la línea divisoria. */
+  padding-left: 20px;
+
+  /* Línea vertical para separar visualmente las dos columnas. */
+  border-left: 1px solid #dee2e6;
+}
+
+/* --- Mejoras visuales menores --- */
+.card#product-editor {
+  /* Fondo ligeramente diferente para destacar el panel del editor. */
+  background-color: #fcfcfc;
+  border: 1px solid #e9ecef;
+}
+
+.accordion-header .accordion-button {
+  /* Asegura que el contenido dentro del botón del acordeón no se envuelva. */
+  white-space: nowrap;
+}
+
+.accordion-header .d-flex.w-100 {
+  /* Espaciado entre el título del producto y el botón de estado. */
+  gap: 1rem;
+}

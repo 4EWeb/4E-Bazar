@@ -155,3 +155,40 @@ input[type="submit"]:hover {
     color: #721c24;
     border-color: #f5c6cb;
 }
+
+/*
+============================================================
+   CÓDIGO FINAL - Para que el botón se vea IDÉNTICO
+============================================================
+*/
+
+/* Contenedor para darle espacio al nuevo botón */
+.formulario .volver-inicio {
+    margin-top: 15px;
+}
+
+/* Estilos para que .boton-volver sea IDÉNTICO a .iniciar */
+.formulario .boton-volver {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #e75480; /* Color de fondo rosa */
+    border-radius: 50px;       /* Bordes redondeados para forma de píldora */
+    border: none;              /* Sin borde */
+    text-align: center;
+    
+    /* --- ESTO ES LO QUE PIDES --- */
+    color: #ffffff;            /* <<< LETRAS BLANCAS */
+    text-decoration: none;     /* <<< SIN SUBRAYADO */
+    /* -------------------------- */
+    
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Efecto al pasar el ratón */
+.formulario .boton-volver:hover {
+    background-color: #c24b78; /* Rosa un poco más oscuro */
+}

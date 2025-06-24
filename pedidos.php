@@ -14,7 +14,7 @@ $usuario_id = $_SESSION['usuario_id'];
 $pedidos = [];
 
 try {
-    // Preparamos la consulta para obtener todos los pedidos del usuario, del más reciente al más antiguo.
+    // Usamos el nombre de columna correcto 'usuario_id' que tienes en tu tabla
     $stmt = $pdo->prepare("SELECT * FROM pedidos WHERE usuario_id = ? ORDER BY fecha_pedido DESC");
     $stmt->execute([$usuario_id]);
     $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -29,11 +29,11 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pedidos - 4E Bazar</title>
     
-    <link rel="stylesheet" href="css/styles.css">     
-    <link rel="stylesheet" href="css/layout.css">     
-    <link rel="stylesheet" href="css/components.css"> 
-    <link rel="stylesheet" href="css/cart.css">       
-    <link rel="stylesheet" href="css/responsive.css">  
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 </head>
 <body>
@@ -61,7 +61,7 @@ try {
                         <tbody>
                             <?php foreach ($pedidos as $pedido): ?>
                                 <tr>
-                                    <td data-label="ID Pedido">#<?= htmlspecialchars($pedido['id']) ?></td>
+                                    <td data-label="ID Pedido">#<?= htmlspecialchars($pedido['id_pedido']) ?></td>
                                     <td data-label="Fecha"><?= date("d/m/Y", strtotime($pedido['fecha_pedido'])) ?></td>
                                     <td data-label="Monto Total">$<?= number_format($pedido['monto_total'], 0, ',', '.') ?></td>
                                     <td data-label="Estado"><span class="status-badge status-<?= strtolower(htmlspecialchars($pedido['estado'])) ?>"><?= htmlspecialchars($pedido['estado']) ?></span></td>

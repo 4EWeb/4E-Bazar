@@ -136,66 +136,105 @@ textarea.form-control {
 }
 
 /* --- Tarjetas de Producto --- */
-.productos-destacados {
-  max-width: 1100px;
+.productos-destacados, .productos-container {
+  max-width: 1200px;
   margin: 40px auto;
-  padding: 20px 0;
+  padding: 20px;
   text-align: center;
 }
 
 .productos-title {
-  font-size: clamp(1.2rem, 3vw, 2rem);
-  margin-bottom: 1.5rem;
-  color: #e75480;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  margin-bottom: 2rem;
+  color: #fff;
   font-weight: bold;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.15);
 }
 
 .productos-container {
-  padding-top: 3%;
   display: flex;
   justify-content: center;
   gap: 2rem;
   flex-wrap: wrap;
+  padding: 0;
+  margin-top: 0;
 }
 
+/* El enlace que envuelve la tarjeta */
+.producto-box-wrapper {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* La tarjeta del producto */
 .producto-box {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
   border-radius: 20px;
-  padding: 25px 20px 30px;
-  width: 280px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 300px;
   text-align: center;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .producto-box:hover {
-  transform: translateY(-15px) scale(1.05);
+  transform: translateY(-12px);
+  box-shadow: 0 20px 40px rgba(231, 84, 128, 0.2);
 }
 
 .producto-box img {
-  width: 140px;
-  height: 140px;
-  object-fit: contain;
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 15px;
   margin-bottom: 15px;
   transition: transform 0.3s ease;
 }
 
 .producto-box:hover img {
-  transform: scale(1.1) rotate(3deg);
+  transform: scale(1.05);
 }
 
 .producto-box h3 {
   color: #e75480;
-  margin: 10px 0 6px;
-  font-size: 1.2rem;
+  margin: 10px 0;
+  font-size: 1.3rem;
+  font-weight: 700;
 }
 
-.producto-box p {
-  color: #555;
-  margin-bottom: 15px;
-  line-height: 1.4;
-  flex-grow: 1; /* Para que la descripción ocupe espacio */
+.producto-box .producto-precio {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0 20px 0;
+    flex-grow: 1; /* Empuja el botón hacia abajo si las descripciones varían */
+}
+
+/* Botón de la tarjeta */
+.producto-box .btn-add-to-cart {
+  display: inline-block;
+  background: linear-gradient(135deg, #e75480, #ff6b9d);
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 12px 25px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(231, 84, 128, 0.3);
+}
+
+.producto-box .btn-add-to-cart:hover {
+  background: linear-gradient(135deg, #ff6b9d, #e75480);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 84, 128, 0.4);
 }
 
 /* --- Sección de Servicios (Index) --- */

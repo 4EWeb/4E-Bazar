@@ -1,71 +1,95 @@
 <?php
 session_start();
-
 require __DIR__ . '/db.php';
 
+// --- LÓGICA CORREGIDA PARA PRODUCTOS DESTACADOS ---
+$productos_destacados = [];
 try {
+    // Esta consulta ahora une 'productos' y 'variantes_producto' para obtener toda la información correcta.
+    // Muestra las variantes que han sido marcadas como 'destacado = 1'.
     $stmt = $pdo->query("
-        SELECT p.*, c.nombreCategoria 
-        FROM productos p
-        LEFT JOIN categorias c ON p.categoriaID = c.id
-        ORDER BY p.id DESC 
+        SELECT
+            p.id AS id_producto_base,
+            p.nombre,
+            v.id_variante,
+            v.precio,
+            v.descuento,
+            COALESCE(v.imagen, p.imagen_principal) AS imagen_a_mostrar
+        FROM variantes_producto v
+        JOIN productos p ON v.id_producto = p.id
+        WHERE v.destacado = 1
         LIMIT 3
     ");
-    
-    $productos_destacados = $stmt->fetchAll();
+    $productos_destacados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (Exception $e) {
     echo "Error al cargar productos destacados: " . $e->getMessage();
-    $productos_destacados = [];
 }
+
+// --- LÓGICA PARA KITS AHORRO ---
 $kits_definidos = [
     [
         'nombre' => 'Kit Escolar Básico',
-        'producto_ids' => [1, 13, 14]
+        'producto_ids' => [1, 13, 14] // IDs de la tabla 'productos'
     ],
     [
         'nombre' => 'Kit de Oficina',
         'producto_ids' => [15, 12]
     ]
 ];
-$todos_los_ids_de_kits = [];
-foreach ($kits_definidos as $kit) {
-    $todos_los_ids_de_kits = array_merge($todos_los_ids_de_kits, $kit['producto_ids']);
-}
-$ids_unicos = array_unique($todos_los_ids_de_kits);
+
+$kits_procesados = [];
+// Obtener todos los IDs de productos necesarios para todos los kits
+$todos_los_ids_de_kits = array_unique(array_merge(...array_column($kits_definidos, 'producto_ids')));
+
 $productos_para_kits_data = [];
-if (!empty($ids_unicos)) {
+if (!empty($todos_los_ids_de_kits)) {
     try {
-        $placeholders = implode(',', array_fill(0, count($ids_unicos), '?'));
-        $stmt_kits = $pdo->prepare("SELECT id, nombre, precio, descuento FROM productos WHERE id IN ($placeholders)");
-        $stmt_kits->execute($ids_unicos);
+        $placeholders = implode(',', array_fill(0, count($todos_los_ids_de_kits), '?'));
+
+        // Se busca el nombre del producto y el PRECIO MÍNIMO de sus variantes
+        $stmt_kits = $pdo->prepare("
+            SELECT p.id, p.nombre, MIN(v.precio) as precio_minimo
+            FROM productos p
+            JOIN variantes_producto v ON p.id = v.id_producto
+            WHERE p.id IN ($placeholders) AND v.stock > 0
+            GROUP BY p.id, p.nombre
+        ");
+        $stmt_kits->execute(array_values($todos_los_ids_de_kits));
+        
         $productos_raw = $stmt_kits->fetchAll(PDO::FETCH_ASSOC);
         foreach ($productos_raw as $p) {
             $productos_para_kits_data[$p['id']] = $p;
         }
-    } catch (Exception $e) { $productos_para_kits_data = []; }
+    } catch (Exception $e) {
+        // No hacer nada si falla, la sección simplemente no mostrará kits
+    }
 }
-$kits_procesados = [];
+
+// Ahora procesamos cada kit con la información correcta
 foreach ($kits_definidos as $kit_def) {
     $precio_total_kit = 0;
     $nombres_productos_kit = [];
-    $productos_validos = true;
+    $kit_es_valido = true;
+
     foreach ($kit_def['producto_ids'] as $producto_id) {
         if (isset($productos_para_kits_data[$producto_id])) {
             $producto = $productos_para_kits_data[$producto_id];
-            $precio_final_producto = $producto['precio'] * (1 - $producto['descuento'] / 100);
-            $precio_total_kit += $precio_final_producto;
+            $precio_total_kit += $producto['precio_minimo']; // Usamos el precio mínimo de la variante
             $nombres_productos_kit[] = $producto['nombre'];
         } else {
-            $productos_validos = false;
+            $kit_es_valido = false;
             break;
         }
     }
-    if ($productos_validos) {
+
+    if ($kit_es_valido) {
         $kits_procesados[] = [
             'nombre' => $kit_def['nombre'],
             'precio_total' => $precio_total_kit,
-            'nombres_productos' => $nombres_productos_kit
+            'nombres_productos' => $nombres_productos_kit,
+            // Guardamos los IDs originales para el botón del carrito
+            'producto_ids_originales' => $kit_def['producto_ids'] 
         ];
     }
 }
@@ -120,28 +144,40 @@ foreach ($kits_definidos as $kit_def) {
         </div>
         
       </section>
-      <section class="ofertas-box">
-        <h1 class="ofertas-title">Productos Destacados</h1>
+            <section class="ofertas-box">
+        <h2 class="ofertas-title">Productos Destacados</h2>
         <div class="productos-container">
             <?php if (count($productos_destacados) > 0): ?>
                 <?php foreach ($productos_destacados as $producto): ?>
                     <div class="producto-box">
-                        <img src="<?= htmlspecialchars($producto['imagen']) ?>" alt="<?= htmlspecialchars($producto['nombre']) ?>" />
+                        <a href="productos.php?id=<?= $producto['id_producto_base'] ?>">
+                            <img src="<?= htmlspecialchars($producto['imagen_a_mostrar'] ?: 'Imagenes/placeholder.png') ?>" alt="<?= htmlspecialchars($producto['nombre']) ?>" />
+                        </a>
+                        
                         <h3><?= htmlspecialchars($producto['nombre']) ?></h3>
+                        
                         <?php
-                            $precio_final_js = $producto['precio'];
+                            // El precio y descuento ahora vienen de la consulta y no necesitan cálculo aquí
+                            $precio_final = $producto['precio'];
                             if (!empty($producto['descuento']) && $producto['descuento'] > 0) {
-                                $precio_final_js = $producto['precio'] * (1 - $producto['descuento'] / 100);
+                                $precio_final = $producto['precio'] * (1 - $producto['descuento'] / 100);
                             }
                         ?>
                         <div class="price-info">
-                            <p>$<?= number_format($precio_final_js, 0, ',', '.') ?>
-                                <?php if ($precio_final_js != $producto['precio']): ?>
+                            <p>$<?= number_format($precio_final, 0, ',', '.') ?>
+                                <?php if ($precio_final != $producto['precio']): ?>
                                     <span class="price-old">$<?= number_format($producto['precio'], 0, ',', '.') ?></span>
                                 <?php endif; ?>
                             </p>
                         </div>
-                        <button class="btn-add-to-cart" onclick="agregarAlCarrito({id: <?= $producto['id'] ?>, name: '<?= htmlspecialchars(addslashes($producto['nombre'])) ?>', price: <?= $precio_final_js ?>, image: '<?= htmlspecialchars($producto['imagen']) ?>'})">
+                        
+                        <button class="btn-add-to-cart" 
+                                onclick="agregarAlCarrito({
+                                    id: <?= $producto['id_variante'] ?>, 
+                                    name: '<?= htmlspecialchars(addslashes($producto['nombre'])) ?>', 
+                                    price: <?= $precio_final ?>, 
+                                    image: '<?= htmlspecialchars($producto['imagen_a_mostrar'] ?: 'Imagenes/placeholder.png') ?>'
+                                })">
                           Agregar al carrito
                         </button>
                     </div>
@@ -169,7 +205,16 @@ foreach ($kits_definidos as $kit_def) {
                                     <span class="kit-price-label">Precio Total del Kit</span>
                                     $<?= number_format($kit['precio_total'], 0, ',', '.') ?>
                                 </div>
-                                <button class="btn-add-kit-to-cart" disabled title="Próximamente">Agregar Kit al Carrito</button>
+                                <button class="btn-add-kit-to-cart" 
+                                        onclick="agregarAlCarrito({
+                                            id: 'kit-<?= str_replace(' ', '-', strtolower($kit['nombre'])) ?>',
+                                            name: '<?= htmlspecialchars(addslashes($kit['nombre'])) ?>',
+                                            price: <?= $kit['precio_total'] ?>,
+                                            image: 'Imagenes/4e logo actualizado.png',
+                                            tipo: 'kit'
+                                        })">
+                                    Agregar Kit al Carrito
+                                </button>
                             </div>
                         </div>
                     <?php endforeach; ?>

@@ -1,20 +1,14 @@
 <?php
-// Iniciar sesión y la conexión a la base de datos
 session_start();
 require __DIR__ . '/db.php';
-
-// Definir la cabecera como JSON para la respuesta
 header('Content-Type: application/json');
 
-// 1. Seguridad: Verificar si el usuario ha iniciado sesión
 if (!isset($_SESSION['usuario_id'])) {
     echo json_encode(['success' => false, 'message' => 'Usuario no autenticado.']);
     exit;
 }
 
-// 2. Obtener los datos del carrito enviados desde JavaScript
 $data = json_decode(file_get_contents('php://input'), true);
-
 if (empty($data['cart']) || !isset($data['total'])) {
     echo json_encode(['success' => false, 'message' => 'No hay datos del carrito para procesar.']);
     exit;
@@ -24,42 +18,54 @@ $usuario_id = $_SESSION['usuario_id'];
 $cart_items = $data['cart'];
 $monto_total = $data['total'];
 
-// 3. Usar una transacción para asegurar la integridad de los datos
-// Si algo falla, nada se guarda.
 try {
     $pdo->beginTransaction();
 
-    // 3.1. Insertar el pedido principal en la tabla `pedidos`
+    // Insertar el pedido principal en la tabla `pedidos` (usando el nombre de columna correcto `usuario_id`)
     $sql_pedido = "INSERT INTO pedidos (usuario_id, monto_total, estado) VALUES (?, ?, ?)";
     $stmt_pedido = $pdo->prepare($sql_pedido);
     $stmt_pedido->execute([$usuario_id, $monto_total, 'Pendiente']);
-    
-    // Obtener el ID del pedido que acabamos de crear
     $pedido_id = $pdo->lastInsertId();
 
-    // 3.2. Insertar cada item del carrito en la tabla `pedidos_items`
-    $sql_item = "INSERT INTO pedidos_items (pedido_id, producto_nombre, cantidad, precio_unitario) VALUES (?, ?, ?, ?)";
-    $stmt_item = $pdo->prepare($sql_item);
+    // Preparar las dos consultas, una para cada tabla de detalles
+    $sql_item_producto = "INSERT INTO pedidos_items (pedido_id, variante_id, cantidad, precio_unitario) VALUES (?, ?, ?, ?)";
+    $stmt_item_producto = $pdo->prepare($sql_item_producto);
 
+    $sql_item_servicio = "INSERT INTO detalles_servicio (pedido_id, nombre_servicio, cantidad, precio_unitario) VALUES (?, ?, ?, ?)";
+    $stmt_item_servicio = $pdo->prepare($sql_item_servicio);
+
+    // Recorrer el carrito y decidir dónde guardar cada ítem
     foreach ($cart_items as $item) {
-        $stmt_item->execute([
-            $pedido_id,
-            $item['name'],
-            $item['quantity'],
-            $item['price']
-        ]);
+        
+        // ====================================================================================
+        // LÓGICA MEJORADA: Verificamos si el ID es un texto que empieza con "servicio-"
+        // ====================================================================================
+        if (is_string($item['id']) && strpos($item['id'], 'servicio-') === 0) {
+            
+            // Es un servicio, lo guardamos en la tabla 'detalles_servicio'
+            $stmt_item_servicio->execute([
+                $pedido_id,
+                $item['name'],
+                $item['quantity'],
+                $item['price']
+            ]);
+
+        } else {
+            // Es un producto, lo guardamos en la tabla 'pedidos_items'
+            $stmt_item_producto->execute([
+                $pedido_id,
+                $item['id'],
+                $item['quantity'],
+                $item['price']
+            ]);
+        }
     }
 
-    // Si todo salió bien, confirmamos los cambios en la base de datos
     $pdo->commit();
-
-    // 4. Enviar una respuesta de éxito a JavaScript
     echo json_encode(['success' => true, 'message' => 'Pedido registrado con éxito.']);
 
 } catch (Exception $e) {
-    // Si algo falló, revertimos todos los cambios
     $pdo->rollBack();
-    // Y enviamos una respuesta de error
     echo json_encode(['success' => false, 'message' => 'Error al guardar el pedido: ' . $e->getMessage()]);
 }
 ?>

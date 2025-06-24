@@ -236,16 +236,27 @@ try {
             return total;
         }
 
-        function agregarServicioAlCarrito() {
-            const total = calcularTotal();
-            if (total <= 0 || (parseInt(cantidadInput.value) || 0) <= 0) {
-                alert("Por favor, selecciona una cantidad válida y opciones de impresión.");
+        function agregarServicioAlCarrito(event) {
+            event.preventDefault();
+            const total = parseInt(document.getElementById('precio-total').textContent.replace(/\./g, '')) || 0;
+
+            if (total <= 0) {
+                alert("Por favor, selecciona una cantidad válida.");
                 return;
             }
 
-            let nombreServicio = `${cantidadInput.value}x Impresión ${tipoImpresionSelect.options[tipoImpresionSelect.selectedIndex].text.split('(')[0].trim()}`;
-            if (anilladoCheckbox.checked) nombreServicio += " + Anillado";
-            if (termolaminadoSelect.value !== "ninguno") nombreServicio += " + Termolaminado";
+           const cantidad = document.getElementById('cantidad').value;
+            const tipoImpresionTexto = document.getElementById('tipo_impresion').options[document.getElementById('tipo_impresion').selectedIndex].text.split('(')[0].trim();
+            let nombreServicio = `${cantidad}x Impresión ${tipoImpresionTexto}`;
+            if (anilladoCheckbox.checked) {
+                const anilladoTexto = cantidad <= 25 ? "Anillado Mínimo" : cantidad <= 50 ? "Anillado Medio" : "Anillado Máximo";
+                nombreServicio += `, ${anilladoTexto}`;
+            }
+            if (termolaminadoSelect.value !== "ninguno") {
+                const termolaminadoTexto = termolaminadoSelect.options[termolaminadoSelect.selectedIndex].text;
+                nombreServicio += `, ${termolaminadoTexto}`;
+            }
+            nombreServicio += ` - Total: $${total.toLocaleString('es-CL')}`;
             
             const servicio = {
                 id: `servicio-${Date.now()}`,
@@ -253,6 +264,7 @@ try {
                 price: total,
                 image: "Imagenes/4e logo actualizado.png",
                 quantity: 1,
+                tipo: 'servicio' 
             };
 
             if (typeof agregarAlCarrito === "function") {

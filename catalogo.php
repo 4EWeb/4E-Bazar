@@ -60,8 +60,17 @@ try {
         
         /* Aseguramos que el fondo degradado del body se vea siempre */
         body {
-            background: linear-gradient(135deg, #ffc0cb, #ffb6c1, #ffa0b4);
+        font-family: Arial, sans-serif;
+        background-color: #fccfde;
+        background-image:
+            repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(231, 84, 128, 0.09) 15px, rgba(231, 84, 128, 0.09) 30px),
+            repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(231, 84, 128, 0.09) 15px, rgba(231, 84, 128, 0.09) 30px);
+        background-size: 42px 42px;
+        background-attachment: fixed;
+        min-height: 100vh;
+        overflow-x: hidden;
         }
+
 
         .page-container {
             max-width: 1200px;

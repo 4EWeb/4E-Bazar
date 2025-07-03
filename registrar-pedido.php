@@ -36,30 +36,27 @@ try {
 
     // Recorrer el carrito y decidir dónde guardar cada ítem
     foreach ($cart_items as $item) {
-        
-        // ====================================================================================
-        // LÓGICA MEJORADA: Verificamos si el ID es un texto que empieza con "servicio-"
-        // ====================================================================================
-        if (is_string($item['id']) && strpos($item['id'], 'servicio-') === 0) {
-            
-            // Es un servicio, lo guardamos en la tabla 'detalles_servicio'
-            $stmt_item_servicio->execute([
-                $pedido_id,
-                $item['name'],
-                $item['quantity'],
-                $item['price']
-            ]);
 
-        } else {
-            // Es un producto, lo guardamos en la tabla 'pedidos_items'
-            $stmt_item_producto->execute([
-                $pedido_id,
-                $item['id'],
-                $item['quantity'],
-                $item['price']
-            ]);
+        if ((is_string($item['id']) && strpos($item['id'], 'servicio-') === 0) || 
+                (is_string($item['id']) && strpos($item['id'], 'promo-') === 0)) {
+
+                $stmt_item_servicio->execute([
+                    $pedido_id,
+                    $item['name'],
+                    $item['quantity'],
+                    $item['price']
+                ]);
+
+            } else {
+                // Es un producto, lo guardamos en la tabla 'pedidos_items'
+                $stmt_item_producto->execute([
+                    $pedido_id,
+                    $item['id'],
+                    $item['quantity'],
+                    $item['price']
+                ]);
+            }
         }
-    }
 
     $pdo->commit();
     echo json_encode(['success' => true, 'message' => 'Pedido registrado con éxito.']);

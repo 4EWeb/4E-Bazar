@@ -26,73 +26,8 @@ try {
     echo "Error al cargar productos destacados: " . $e->getMessage();
 }
 
-// --- LÓGICA PARA KITS AHORRO ---
-$kits_definidos = [
-    [
-        'nombre' => 'Kit Escolar Básico',
-        'producto_ids' => [1, 13, 14] // IDs de la tabla 'productos'
-    ],
-    [
-        'nombre' => 'Kit de Oficina',
-        'producto_ids' => [15, 12]
-    ]
-];
+require __DIR__ . '/kits.php'; // Incluimos la lógica de kits después de cargar los productos destacados
 
-$kits_procesados = [];
-// Obtener todos los IDs de productos necesarios para todos los kits
-$todos_los_ids_de_kits = array_unique(array_merge(...array_column($kits_definidos, 'producto_ids')));
-
-$productos_para_kits_data = [];
-if (!empty($todos_los_ids_de_kits)) {
-    try {
-        $placeholders = implode(',', array_fill(0, count($todos_los_ids_de_kits), '?'));
-
-        // Se busca el nombre del producto y el PRECIO MÍNIMO de sus variantes
-        $stmt_kits = $pdo->prepare("
-            SELECT p.id, p.nombre, MIN(v.precio) as precio_minimo
-            FROM productos p
-            JOIN variantes_producto v ON p.id = v.id_producto
-            WHERE p.id IN ($placeholders) AND v.stock > 0
-            GROUP BY p.id, p.nombre
-        ");
-        $stmt_kits->execute(array_values($todos_los_ids_de_kits));
-        
-        $productos_raw = $stmt_kits->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($productos_raw as $p) {
-            $productos_para_kits_data[$p['id']] = $p;
-        }
-    } catch (Exception $e) {
-        // No hacer nada si falla, la sección simplemente no mostrará kits
-    }
-}
-
-// Ahora procesamos cada kit con la información correcta
-foreach ($kits_definidos as $kit_def) {
-    $precio_total_kit = 0;
-    $nombres_productos_kit = [];
-    $kit_es_valido = true;
-
-    foreach ($kit_def['producto_ids'] as $producto_id) {
-        if (isset($productos_para_kits_data[$producto_id])) {
-            $producto = $productos_para_kits_data[$producto_id];
-            $precio_total_kit += $producto['precio_minimo']; // Usamos el precio mínimo de la variante
-            $nombres_productos_kit[] = $producto['nombre'];
-        } else {
-            $kit_es_valido = false;
-            break;
-        }
-    }
-
-    if ($kit_es_valido) {
-        $kits_procesados[] = [
-            'nombre' => $kit_def['nombre'],
-            'precio_total' => $precio_total_kit,
-            'nombres_productos' => $nombres_productos_kit,
-            // Guardamos los IDs originales para el botón del carrito
-            'producto_ids_originales' => $kit_def['producto_ids'] 
-        ];
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -196,8 +131,10 @@ foreach ($kits_definidos as $kit_def) {
                         <div class="kit-box">
                             <h3><?= htmlspecialchars($kit['nombre']) ?></h3>
                             <ul class="product-list">
-                                <?php foreach ($kit['nombres_productos'] as $nombre_producto): ?>
-                                    <li><?= htmlspecialchars($nombre_producto) ?></li>
+                                <?php foreach ($kit['nombres_productos'] as $item): ?>
+                                    <li>
+                                        <?= htmlspecialchars($item['nombre_producto']) ?> (x<?= htmlspecialchars($item['cantidad']) ?>)
+                                    </li>
                                 <?php endforeach; ?>
                             </ul>
                             <div class="kit-footer">
@@ -205,13 +142,19 @@ foreach ($kits_definidos as $kit_def) {
                                     <span class="kit-price-label">Precio Total del Kit</span>
                                     $<?= number_format($kit['precio_total'], 0, ',', '.') ?>
                                 </div>
+                                <div class="kit-price">
+                                    <span class="price-old" style="font-size: 1rem; color: #888;">
+                                        Valor real: $<?= number_format($kit['valor_real'], 0, ',', '.') ?>
+                                    </span>
+                                    $<?= number_format($kit['precio_total'], 0, ',', '.') ?>
+                                </div>
                                 <button class="btn-add-kit-to-cart" 
                                         onclick="agregarAlCarrito({
-                                            id: 'kit-<?= str_replace(' ', '-', strtolower($kit['nombre'])) ?>',
+                                            id: 'promo-<?= $kit['id_promo'] ?>',
                                             name: '<?= htmlspecialchars(addslashes($kit['nombre'])) ?>',
                                             price: <?= $kit['precio_total'] ?>,
                                             image: 'Imagenes/4e logo actualizado.png',
-                                            tipo: 'kit'
+                                            tipo: 'promo'
                                         })">
                                     Agregar Kit al Carrito
                                 </button>

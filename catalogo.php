@@ -61,7 +61,7 @@ try {
         /* Aseguramos que el fondo degradado del body se vea siempre */
         body {
         font-family: Arial, sans-serif;
-        background-color: #fccfde;
+        background-color: #ffabc7;
         background-image:
             repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(231, 84, 128, 0.09) 15px, rgba(231, 84, 128, 0.09) 30px),
             repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(231, 84, 128, 0.09) 15px, rgba(231, 84, 128, 0.09) 30px);
@@ -69,7 +69,7 @@ try {
         background-attachment: fixed;
         min-height: 100vh;
         overflow-x: hidden;
-        }
+    }
 
 
         .page-container {

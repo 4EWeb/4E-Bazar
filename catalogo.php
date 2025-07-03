@@ -19,7 +19,7 @@ try {
         FROM productos p
         JOIN categorias c ON p.categoriaID = c.id_categoria
         LEFT JOIN variantes_producto v ON p.id = v.id_producto
-        WHERE v.stock > 0
+        WHERE v.stock > 0 AND p.activo = 1
         GROUP BY p.id, p.nombre, p.imagen_principal, c.nombre_categoria
         ORDER BY p.nombre ASC
     ");
@@ -86,9 +86,10 @@ try {
         /* Estilos para la Barra de Filtro */
         .filtro-barra {
             display: flex;
+            flex-wrap: wrap; /* Para responsividad en móviles */
             justify-content: center;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
             margin: 2rem auto;
             padding: 15px 25px;
             background: rgba(255, 255, 255, 0.2);
@@ -97,24 +98,34 @@ try {
             width: fit-content;
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
+        .filtro-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
         .filtro-barra label {
             font-weight: 600;
             font-size: 1rem;
             color: #444;
         }
         .filtro-select-wrapper { position: relative; }
-        .filtro-select {
+        .filtro-select, .search-input {
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
             background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 8px;
-            padding: 10px 40px 10px 15px;
+            padding: 10px 15px;
             font-size: 1rem;
             color: #e75480;
             font-weight: bold;
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .search-input {
+            padding-left: 35px; /* Espacio para el ícono */
+            cursor: text;
         }
         .filtro-select-wrapper::after {
             content: '▼';
@@ -125,6 +136,16 @@ try {
             top: 50%;
             transform: translateY(-50%);
             pointer-events: none;
+        }
+        .search-wrapper {
+            position: relative;
+        }
+        .search-wrapper .fa-search {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
         }
     </style>
 </head>
@@ -139,14 +160,20 @@ try {
         </div>
 
         <div class="filtro-barra">
-            <label for="filtro-categorias">Filtrar por categoría:</label>
-            <div class="filtro-select-wrapper">
-                <select id="filtro-categorias" class="filtro-select" onchange="filtrarCategoria(this.value)">
-                    <option value="todos">Todos</option>
-                    <?php foreach ($categorias_disponibles as $slug => $nombre_real): ?>
-                      <option value="<?= $slug ?>"><?= ucfirst($nombre_real) ?></option>
-                    <?php endforeach; ?>
-                </select>
+            <div class="filtro-item search-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-input" class="search-input" onkeyup="aplicarFiltros()" placeholder="Buscar producto...">
+            </div>
+            <div class="filtro-item">
+                <label for="filtro-categorias">Categoría:</label>
+                <div class="filtro-select-wrapper">
+                    <select id="filtro-categorias" class="filtro-select" onchange="aplicarFiltros()">
+                        <option value="todos">Todos</option>
+                        <?php foreach ($categorias_disponibles as $slug => $nombre_real): ?>
+                          <option value="<?= $slug ?>"><?= ucfirst($nombre_real) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
             </div>
         </div>
 
@@ -154,7 +181,7 @@ try {
         <?php if (count($productos_catalogo) > 0): ?>
           <?php foreach ($productos_catalogo as $producto): ?>
             <?php $categoria_clase = str_replace(' ', '-', strtolower($producto['nombre_categoria'])); ?>
-            <div class="producto-box-wrapper <?= htmlspecialchars($categoria_clase) ?>">
+            <div class="producto-box-wrapper" data-categoria="<?= htmlspecialchars($categoria_clase) ?>">
                 <div class="producto-box">
                     <a href="productos.php?id=<?= $producto['id'] ?>">
                         <img src="<?= htmlspecialchars($producto['imagen_principal'] ?: 'Imagenes/placeholder.png') ?>" alt="<?= htmlspecialchars($producto['nombre']) ?>">
@@ -168,6 +195,7 @@ try {
         <?php else: ?>
           <p style="text-align:center; width:100%;">No hay productos disponibles para mostrar.</p>
         <?php endif; ?>
+        <p id="no-results-message" style="display:none; text-align:center; width:100%; font-size: 1.2rem; color: #555;">No se encontraron productos que coincidan con tu búsqueda.</p>
       </div>
     </main>
 
@@ -188,14 +216,38 @@ try {
     <script src="js/carrito.js"></script>
     <script src="js/nav-responsive.js"></script>
     <script>
-      function filtrarCategoria(categoriaSeleccionada) {
-        document.querySelectorAll('.producto-box-wrapper').forEach(wrapper => {
-            if (categoriaSeleccionada === 'todos' || wrapper.classList.contains(categoriaSeleccionada)) {
-                wrapper.style.display = 'block';
-            } else {
-                wrapper.style.display = 'none';
-            }
-        });
+      function aplicarFiltros() {
+          const terminoBusqueda = document.getElementById('search-input').value.toLowerCase();
+          const categoriaSeleccionada = document.getElementById('filtro-categorias').value;
+          const wrappers = document.querySelectorAll('.producto-box-wrapper');
+          let resultadosVisibles = 0;
+
+          wrappers.forEach(wrapper => {
+              const nombreProducto = wrapper.querySelector('h3').textContent.toLowerCase();
+              const categoriaProducto = wrapper.dataset.categoria;
+
+              // Condición 1: El producto coincide con la categoría seleccionada?
+              const categoriaCoincide = (categoriaSeleccionada === 'todos' || categoriaProducto === categoriaSeleccionada);
+              
+              // Condición 2: El producto coincide con el término de búsqueda?
+              const busquedaCoincide = nombreProducto.includes(terminoBusqueda);
+
+              // El producto se muestra solo si ambas condiciones son verdaderas
+              if (categoriaCoincide && busquedaCoincide) {
+                  wrapper.style.display = 'block';
+                  resultadosVisibles++;
+              } else {
+                  wrapper.style.display = 'none';
+              }
+          });
+          
+          // Mostrar mensaje si no hay resultados
+          const mensajeSinResultados = document.getElementById('no-results-message');
+          if (resultadosVisibles === 0) {
+              mensajeSinResultados.style.display = 'block';
+          } else {
+              mensajeSinResultados.style.display = 'none';
+          }
       }
     </script>
 </body>

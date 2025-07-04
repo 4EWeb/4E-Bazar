@@ -1,15 +1,12 @@
 <?php
 // admin/ver_detalle_pedido.php
-// require 'verificar_sesion.php'; // Agregaremos esto después
-require '../db.php'; // Asegúrate de que la ruta sea correcta
+require 'admin_functions.php';
 
-// Validar que el ID sea un número
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die("ID de pedido no válido.");
 }
 $pedido_id = $_GET['id'];
 
-// Obtener detalles del pedido y los ítems
 $stmt = $pdo->prepare("SELECT * FROM pedidos_items WHERE pedido_id = ?");
 $stmt->execute([$pedido_id]);
 $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -17,8 +14,11 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 include 'header.php';
 ?>
 
-<h1>Detalle del Pedido #<?php echo $pedido_id; ?></h1>
+<div class="page-header">
+    <h1>Detalle del Pedido #<?php echo $pedido_id; ?></h1>
+</div>
 <hr>
+
 <table class="table table-bordered">
     <thead class="table-dark">
         <tr>
@@ -44,7 +44,7 @@ include 'header.php';
         <?php endforeach; ?>
     </tbody>
     <tfoot>
-        <tr class="table-active">
+        <tr style="background-color: #f8f9fa;">
             <td colspan="3" class="text-end"><strong>Total del Pedido:</strong></td>
             <td><strong>$<?php echo number_format($total_pedido, 0, ',', '.'); ?></strong></td>
         </tr>

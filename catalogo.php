@@ -61,15 +61,14 @@ try {
         /* Aseguramos que el fondo degradado del body se vea siempre */
         body {
         font-family: Arial, sans-serif;
-        background-color: #ffabc7;
-        background-image:
-            repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(231, 84, 128, 0.09) 15px, rgba(231, 84, 128, 0.09) 30px),
-            repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(231, 84, 128, 0.09) 15px, rgba(231, 84, 128, 0.09) 30px);
-        background-size: 42px 42px;
+        background-color: #f8cbda;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 100 100'%3E%3Cpath d='M50 85 C-20 40, 25 20, 50 45 C75 20, 120 40, 50 85 Z' fill='rgba(231, 84, 128, 0.1)'/%3E%3C/svg%3E");
+        background-size: 40px 40px;
+        background-repeat: repeat;
         background-attachment: fixed;
         min-height: 100vh;
         overflow-x: hidden;
-    }
+        }
 
 
         .page-container {

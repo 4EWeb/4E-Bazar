@@ -862,3 +862,55 @@ textarea.form-control {
   width: 280px; /* Un ancho fijo para las tarjetas de recomendación */
   flex-shrink: 0; /* Evita que las tarjetas se encojan */
 }
+    color: #666;
+    line-height: 1.6;
+}
+
+/* ============================================= */
+/* ESTILOS PARA EL CARRUSEL DE PRODUCTOS         */
+/* ============================================= */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    padding: 0 45px; /* Espacio para los botones */
+}
+.carousel-viewport {
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+}
+.carousel-viewport::-webkit-scrollbar { display: none; }
+.carousel-track {
+    display: flex;
+    gap: 1.5rem; /* 24px */
+    padding-block: 1rem;
+}
+.carousel-track .producto-box {
+    flex: 0 0 280px; /* Ancho fijo para cada producto */
+    scroll-snap-align: start;
+}
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #e75480;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+    display: block;
+}
+.carousel-btn:hover {
+    background-color: #fff;
+    transform: translateY(-50%) scale(1.1);
+}
+.carousel-btn.prev { left: 0; }
+.carousel-btn.next { right: 0; }

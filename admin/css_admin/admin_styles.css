@@ -1,5 +1,5 @@
 /* ======================================================= */
-/* ADMIN_STYLES.CSS - DISEÑO FINAL, LEGIBLE Y AMIGABLE     */
+/* ADMIN_STYLES.CSS - DISEÑO FINAL Y COMPLETO              */
 /* ======================================================= */
 :root {
   --sidebar-bg: #2c3e50; --sidebar-text: #ecf0f1; --sidebar-hover-bg: #34495e; --sidebar-active-bg: #46627f;
@@ -36,7 +36,7 @@ h1, h4 { font-weight: 700; margin-bottom: 0.5rem; }
 .main-content p { color: #6c757d; }
 .card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; box-shadow: 0 1px 3px var(--shadow-color); margin-bottom: 1.5rem; }
 .card-header { padding: 1rem 1.25rem; background-color: #f8f9fa; border-bottom: 1px solid var(--border-color); font-weight: 600; }
-.card-body { padding: 1.25rem; }
+.card-body { padding: 1.25rem; } h3 { color: black; font-size: 1.4rem; margin-bottom: 1rem; }
 .table { width: 100%; border-collapse: collapse; background-color: var(--card-bg); }
 .table th, .table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
 .table thead th { background-color: #f8f9fa; font-weight: 600; }
@@ -58,185 +58,187 @@ h1, h4 { font-weight: 700; margin-bottom: 0.5rem; }
 .btn-warning { color: #000; background-color: #ffc107; border-color: #ffc107; }
 .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.875rem; }
 
+
 /* ======================================================= */
-/* ESTILOS ADICIONALES PARA LA PÁGINA DE PEDIDOS           */
+/* ESTILOS PARA LOS ACORDEONES (Productos y Pedidos)       */
 /* ======================================================= */
+
+/* Contenedor de cada item del acordeón */
+.accordion-item {
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* Botón principal que se ve cuando está colapsado */
+.accordion-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1.25rem;
+  font-size: 0.9rem;
+  text-align: left;
+  background-color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  position: relative;
+}
+
+.accordion-button:hover {
+  background-color: #f8f9fa;
+}
+
+/* Icono de flecha para indicar que es desplegable */
+.accordion-button::after {
+  content: '▼';
+  position: absolute;
+  right: 1.25rem;
+  font-size: 0.8rem;
+  color: #6c757d;
+  transition: transform 0.3s ease;
+}
+
+/* Rotación de la flecha cuando está activo */
+.accordion-button.active::after {
+  transform: rotate(-180deg);
+}
+
+/* Contenido que se despliega */
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  background-color: #fcfdff;
+}
+
+.accordion-content-inner {
+  padding: 1.5rem 1.25rem;
+  border-top: 1px solid var(--border-color);
+}
+
+/* === Estilos para Contenido Desplegado de PEDIDOS === */
 
 .order-summary {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    gap: 1rem;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
 }
-
-.order-summary > span {
-    flex-shrink: 0;
-}
-
-.order-id {
-    font-weight: 700;
-    flex-basis: 10%;
-}
-
+.order-id, .order-total { font-weight: 700; }
+.order-date { color: #6c757d; }
 .order-customer {
-    flex-basis: 30%;
-}
-
-.order-date {
-    flex-basis: 25%;
-    font-size: 0.9em;
-    color: #6c757d;
-}
-
-.order-total {
-    flex-basis: 15%;
-    font-weight: 700;
-    text-align: right;
-}
-
-.status-badge {
-    flex-basis: 20%;
-    text-align: center;
-    padding: 0.25rem 0.6rem;
-    border-radius: 1rem;
-    font-size: 0.8em;
-    font-weight: 700;
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-/* Colores para los estados de los pedidos */
-.status-pendiente { background-color: #ffc107; color: #000; }
-.status-en-preparacion { background-color: #0dcaf0; color: #000; }
-.status-enviado { background-color: #0d6efd; }
-.status-completado { background-color: #198754; }
-.status-cancelado { background-color: #dc3545; }
-
-
-.order-details-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.item-list {
-    list-style: none;
-    padding: 0;
-    margin: 1rem 0;
-}
-
-.item-list li {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #f1f1f1;
-}
-.item-list li:last-child {
-    border-bottom: none;
-}
-
-.update-status-form {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 1rem;
-    padding: 1rem;
-    background-color: #f8f9fa;
-    border-radius: 0.375rem;
-}
-
-.update-status-form .form-select {
     flex-grow: 1;
+    min-width: 100px;
 }
-/* ======================================================= */
-/* ESTILOS ADICIONALES PARA LA PÁGINA DE PEDIDOS           */
-/* ======================================================= */
-
-/* --- Estilos para el Resumen del Pedido en el Botón del Acordeón --- */
-.order-summary {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    gap: 1rem;
-    font-size: 0.9rem; /* Un poco más pequeño para que quepa todo */
-}
-
-.order-summary > span {
-    white-space: nowrap; /* Evita que el texto se parta en dos líneas */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Añade "..." si el texto es muy largo */
-}
-
-.order-id       { flex: 0 0 8%; font-weight: 700; }
-.order-customer { flex: 1 1 30%; }
-.order-date     { flex: 0 0 22%; color: #6c757d; }
-.order-total    { flex: 0 0 15%; font-weight: 700; text-align: right; }
-
 .status-badge {
-    flex: 0 0 120px; /* Ancho fijo para el estado */
-    text-align: center;
-    padding: 0.25rem 0.6rem;
+    padding: 0.3rem 0.8rem;
     border-radius: 20px;
     font-size: 0.75rem;
     font-weight: 700;
     color: #fff;
     text-transform: uppercase;
+    white-space: nowrap;
 }
-
-/* Colores para los estados de los pedidos */
 .status-pendiente { background-color: #ffc107; color: #000; }
-.status-en-preparacion { background-color: #0dcaf0; color: #000; }
+.status-en-preparacion, .status-en-camino { background-color: #0dcaf0; color: #000; }
 .status-enviado { background-color: #0d6efd; }
 .status-completado { background-color: #198754; }
 .status-cancelado { background-color: #dc3545; }
 
-/* --- Estilos para el Contenido Desplegado --- */
 .order-details-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Dos columnas iguales */
-    gap: 0.5rem 1.5rem; /* Espaciado vertical y horizontal */
-    margin: 1rem 0;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
     font-size: 0.9rem;
 }
 
 .order-details-grid div {
-    padding: 0.5rem;
-    background-color: #f8f9fa;
-    border-left: 3px solid var(--border-color);
+    background-color: #fff;
+    padding: 0.75rem;
+    border: 1px solid #e9ecef;
+    border-left: 4px solid var(--brand-color);
+    border-radius: 0.25rem;
 }
-
-.item-list {
-    list-style: none;
-    padding: 0;
-    margin: 1rem 0;
-    border-top: 1px solid var(--border-color);
-}
-
-.item-list li {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.6rem 0.5rem;
-    border-bottom: 1px solid #f1f1f1;
-}
-
-.item-list li:nth-child(even) {
-    background-color: #f8f9fa;
-}
-
 .update-status-form {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #e9f5ff;
+    border: 1px solid #bde0ff;
+    border-radius: 0.375rem;
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-top: 1.5rem;
-    padding: 1rem;
-    background-color: #f0f5fa;
-    border-radius: 0.375rem;
 }
 
-.update-status-form .form-select {
-    max-width: 200px;
+/* === Estilos para Contenido Desplegado de PRODUCTOS === */
+
+.accordion-content-inner .text-muted {
+  font-size: 0.9rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.accordion-content-inner h6 {
+  font-weight: 600;
+  color: var(--sidebar-bg);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.accordion-content-inner .table-sm th {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #6c757d;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.accordion-content-inner .table-sm td {
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+.accordion-content-inner .table-hover tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.accordion-content-inner .btn {
+  margin-right: 0.5rem;
+  text-decoration: none;
+}
+
+/* ========================================================== */
+/* AÑADIDO: ESTILOS PARA EL BOTÓN ACTIVO/INACTIVO DE PRODUCTOS */
+/* ========================================================== */
+
+.accordion-button form {
+    margin-left: auto; /* Mantiene el formulario (y el botón) a la derecha */
+}
+
+.accordion-button .btn-sm {
+    border-radius: 20px; /* Forma de píldora */
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    color: #fff;
+    border: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    line-height: 1;
+}
+
+.accordion-button .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.accordion-button .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
 }

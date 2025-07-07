@@ -1,5 +1,5 @@
 <?php
-// admin/gestionar_pedidos.php (Versión Final)
+// admin/gestionar_pedidos.php (Versión Final con nuevo diseño)
 
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require '../db.php';
@@ -45,7 +45,7 @@ include 'header.php';
     <div class="card-header">
         <h4>Lista de Pedidos</h4>
     </div>
-    <div class="card-body" style="padding: 0.5rem;">
+    <div class="card-body" style="padding: 0;">
         <?php if (empty($pedidos)): ?>
             <p class="p-3">No hay pedidos para mostrar.</p>
         <?php else: ?>
@@ -63,17 +63,26 @@ include 'header.php';
                         </button>
                         <div class="accordion-content">
                             <div class="accordion-content-inner">
-                                <h5>Detalles del Pedido</h5>
+                                <h5>Detalles del Cliente</h5>
                                 <div class="order-details-grid">
                                     <div><strong>Cliente:</strong> <?php echo htmlspecialchars($pedido['nombre_usuario']); ?></div>
                                     <div><strong>Email:</strong> <?php echo htmlspecialchars($pedido['correo_usuario']); ?></div>
                                     <div><strong>Teléfono:</strong> <?php echo htmlspecialchars($pedido['telefono_usuario']); ?></div>
                                     <div><strong>Dirección:</strong> <?php echo htmlspecialchars($pedido['direccion_usuario']); ?></div>
                                 </div>
-                                <hr>
-                                <h6>Productos y Servicios del Pedido:</h6>
+                                
+                                <h6>Productos y Servicios del Pedido</h6>
                                 <?php
-                                $stmt_items = $pdo->prepare("SELECT pi.*, vp.sku, p.nombre FROM pedidos_items pi JOIN variantes_producto vp ON pi.variante_id = vp.id_variante JOIN productos p ON vp.id_producto = p.id WHERE pi.pedido_id = ?");
+                                $stmt_items = $pdo->prepare("
+                                    SELECT 
+                                        pi.*, 
+                                        vp.sku, 
+                                        p.nombre
+                                    FROM pedidos_items pi 
+                                    JOIN variantes_producto vp ON pi.variante_id = vp.id_variante 
+                                    JOIN productos p ON vp.id_producto = p.id 
+                                    WHERE pi.pedido_id = ?
+                                ");
                                 $stmt_items->execute([$pedido['id_pedido']]);
                                 $items = $stmt_items->fetchAll(PDO::FETCH_ASSOC);
 
@@ -81,21 +90,41 @@ include 'header.php';
                                 $stmt_servicios->execute([$pedido['id_pedido']]);
                                 $servicios = $stmt_servicios->fetchAll(PDO::FETCH_ASSOC);
                                 ?>
-                                <ul class="item-list">
+                                <div class="item-list">
+                                    <div class="item-list-header">
+                                        <div class="item-product">Producto</div>
+                                        <div class="item-quantity">Cant.</div>
+                                        <div class="item-price">P. Unitario</div>
+                                        <div class="item-subtotal">Subtotal</div>
+                                    </div>
                                     <?php foreach ($items as $item): ?>
-                                        <li>
-                                            <span>(<?php echo $item['cantidad']; ?>x) <?php echo htmlspecialchars($item['nombre']); ?> (SKU: <?php echo htmlspecialchars($item['sku']); ?>)</span>
-                                            <span>$<?php echo number_format($item['precio_unitario'] * $item['cantidad'], 0, ',', '.'); ?></span>
-                                        </li>
+                                        <div class="item-list-row">
+                                            <div class="item-product">
+                                                <div class="item-details">
+                                                    <span><?php echo htmlspecialchars($item['nombre']); ?></span>
+                                                    <small>SKU: <?php echo htmlspecialchars($item['sku']); ?></small>
+                                                </div>
+                                            </div>
+                                            <div class="item-quantity"><?php echo $item['cantidad']; ?></div>
+                                            <div class="item-price">$<?php echo number_format($item['precio_unitario'], 0, ',', '.'); ?></div>
+                                            <div class="item-subtotal">$<?php echo number_format($item['precio_unitario'] * $item['cantidad'], 0, ',', '.'); ?></div>
+                                        </div>
                                     <?php endforeach; ?>
                                     <?php foreach ($servicios as $servicio): ?>
-                                        <li>
-                                            <span>(<?php echo $servicio['cantidad']; ?>x) <?php echo htmlspecialchars($servicio['nombre_servicio']); ?></span>
-                                            <span>$<?php echo number_format($servicio['precio_unitario'] * $servicio['cantidad'], 0, ',', '.'); ?></span>
-                                        </li>
+                                         <div class="item-list-row">
+                                            <div class="item-product">
+                                                <div class="item-details">
+                                                    <span><?php echo htmlspecialchars($servicio['nombre_servicio']); ?></span>
+                                                    <small>Servicio/Promo</small>
+                                                </div>
+                                            </div>
+                                            <div class="item-quantity"><?php echo $servicio['cantidad']; ?></div>
+                                            <div class="item-price">$<?php echo number_format($servicio['precio_unitario'], 0, ',', '.'); ?></div>
+                                            <div class="item-subtotal">$<?php echo number_format($servicio['precio_unitario'] * $servicio['cantidad'], 0, ',', '.'); ?></div>
+                                        </div>
                                     <?php endforeach; ?>
-                                </ul>
-                                <hr>
+                                </div>
+
                                 <form action="gestionar_pedidos.php" method="POST" class="update-status-form">
                                     <input type="hidden" name="pedido_id" value="<?php echo $pedido['id_pedido']; ?>">
                                     <label for="estado-<?php echo $pedido['id_pedido']; ?>"><strong>Actualizar Estado:</strong></label>

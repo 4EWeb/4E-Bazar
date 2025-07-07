@@ -1044,3 +1044,57 @@ h3 {
   text-align: center;
   padding: 1rem;
 }
+/* ... (todo tu CSS existente) ... */
+
+/* === AÑADIDO: Estilos para el recuadro de Proveedores === */
+
+.supplier-list li {
+  align-items: flex-start; /* Alinea los items al inicio */
+}
+
+.supplier-info {
+  display: flex;
+  flex-direction: column; /* Pone el nombre arriba y los datos abajo */
+  flex-grow: 1; /* Ocupa el espacio disponible */
+}
+.supplier-info small {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.supplier-list form {
+  margin-left: 1rem; /* Separa el botón de la información */
+}
+.supplier-list .btn-outline-danger {
+  border: none;
+}
+
+.supplier-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+.supplier-form .form-control {
+  font-size: 0.9rem;
+}
+
+@media (min-width: 768px) {
+  .supplier-form {
+    grid-template-columns: 1fr 1fr;
+  }
+  .supplier-form input[name="nombre"] {
+    grid-column: 1 / -1; /* Ocupa toda la primera fila */
+  }
+  .supplier-form button {
+    grid-column: 1 / -1; /* Ocupa toda la última fila */
+  }
+}
+.text-warning {
+  color: #ffc107 !important;
+}
+.bg-warning {
+  background-color: #ffc107 !important;
+}
+.text-dark {
+  color: #212529 !important;
+}

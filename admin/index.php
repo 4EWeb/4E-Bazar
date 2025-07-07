@@ -2,22 +2,64 @@
 require 'admin_functions.php';
 include 'header.php';
 
+// --- LÓGICA CORREGIDA PARA MANEJAR PROVEEDORES ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Añadir/Actualizar nuevo proveedor
+    if (isset($_POST['add_supplier'])) {
+        // Recoger datos del formulario de forma segura
+        $nombre = $_POST['nombre'] ?? '';
+        $telefono = $_POST['telefono'] ?? '';
+        $correo = $_POST['correo'] ?? '';
+
+        if (!empty($nombre)) {
+            try {
+                $stmt = $pdo->prepare("INSERT INTO proveedores (nombre, telefono, correo) VALUES (?, ?, ?)");
+                $stmt->execute([$nombre, $telefono, $correo]);
+                $_SESSION['message'] = 'Proveedor añadido correctamente.';
+            } catch (PDOException $e) {
+                // Si hay un error de base de datos, lo mostramos
+                $_SESSION['error_message'] = 'Error al añadir el proveedor: ' . $e->getMessage();
+            }
+        } else {
+            $_SESSION['error_message'] = 'El nombre del proveedor no puede estar vacío.';
+        }
+        header("Location: index.php");
+        exit();
+    }
+
+    // Eliminar proveedor (esta parte ya estaba bien, pero la incluyo por completitud)
+    if (isset($_POST['delete_supplier'])) {
+        try {
+            $stmt = $pdo->prepare("DELETE FROM proveedores WHERE id = ?");
+            $stmt->execute([$_POST['id_proveedor']]);
+            $_SESSION['message'] = 'Proveedor eliminado.';
+        } catch (PDOException $e) {
+            $_SESSION['error_message'] = 'Error al eliminar el proveedor: ' . $e->getMessage();
+        }
+        header("Location: index.php");
+        exit();
+    }
+}
+
+
 // --- OBTENER TODOS LOS DATOS PARA EL DASHBOARD ---
 $stats = get_dashboard_stats($pdo);
 $best_selling_products = get_best_selling_products($pdo);
 $top_customer = get_top_customer($pdo);
 $frequent_pairs = get_frequently_bought_together($pdo);
-
-// ¡AQUÍ ESTÁ LA LÍNEA QUE FALTABA!
-// Llamamos a la nueva función para obtener las categorías más rentables.
 $top_earning_categories = get_top_earning_categories($pdo); 
-
+$low_stock_products = get_low_stock_products($pdo, 10);
+$suppliers = get_all_suppliers($pdo);
 ?>
 
 <div class="page-header">
     <h1>Bienvenido, <?php echo htmlspecialchars($_SESSION['admin_nombre'] ?? 'Admin'); ?>!</h1>
     <p>Este es el resumen de actividad de tu tienda.</p>
 </div>
+
+<?php if (isset($_SESSION['message'])): ?><div class="alert alert-success"><?php echo $_SESSION['message']; unset($_SESSION['message']); ?></div><?php endif; ?>
+<?php if (isset($_SESSION['error_message'])): ?><div class="alert alert-danger"><?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?></div><?php endif; ?>
+
 
 <div class="dashboard-grid">
     <div class="dashboard-card-col">
@@ -136,6 +178,58 @@ $top_earning_categories = get_top_earning_categories($pdo);
         </div>
     </div>
 
+    <div class="dashboard-list-card">
+        <div class="card-header">
+            <h4><i class="fas fa-exclamation-triangle text-warning"></i> Productos con Poco Stock</h4>
+        </div>
+        <div class="card-body">
+            <?php if (empty($low_stock_products)): ?>
+                <p class="text-muted">¡Genial! No hay productos con bajo stock.</p>
+            <?php else: ?>
+                <ul class="dashboard-list">
+                    <?php foreach ($low_stock_products as $product): ?>
+                        <li>
+                            <span><?php echo htmlspecialchars($product['nombre'] . ' (' . $product['sku'] . ')'); ?></span>
+                            <span class="badge bg-warning text-dark">Quedan: <?php echo $product['stock']; ?></span>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="dashboard-list-card">
+        <div class="card-header">
+            <h4><i class="fas fa-truck-loading"></i> Gestionar Proveedores</h4>
+        </div>
+        <div class="card-body">
+            <?php if (empty($suppliers)): ?>
+                <p class="text-muted">Aún no has añadido proveedores.</p>
+            <?php else: ?>
+                <ul class="dashboard-list supplier-list">
+                    <?php foreach ($suppliers as $supplier): ?>
+                        <li>
+                            <div class="supplier-info">
+                                <strong><?php echo htmlspecialchars($supplier['nombre']); ?></strong>
+                                <small><?php echo htmlspecialchars($supplier['telefono'] . ' | ' . $supplier['correo']); ?></small>
+                            </div>
+                            <form action="index.php" method="POST" onsubmit="return confirm('¿Seguro que quieres eliminar este proveedor?');">
+                                <input type="hidden" name="id_proveedor" value="<?php echo $supplier['id']; ?>">
+                                <button type="submit" name="delete_supplier" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                            </form>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </div>
+        <div class="card-footer">
+            <form action="index.php" method="POST" class="supplier-form">
+                <input type="text" name="nombre" class="form-control" placeholder="Nombre Proveedor" required>
+                <input type="text" name="telefono" class="form-control" placeholder="Teléfono">
+                <input type="email" name="correo" class="form-control" placeholder="Correo">
+                <button type="submit" name="add_supplier" class="btn btn-primary">Añadir</button>
+            </form>
+        </div>
+    </div>
 </div>
 
 <?php include 'footer.php'; ?>

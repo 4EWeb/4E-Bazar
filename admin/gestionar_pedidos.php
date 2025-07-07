@@ -1,25 +1,18 @@
 <?php
-// admin/gestionar_pedidos.php (Versión con Buscador)
+// admin/gestionar_pedidos.php (Versión Corregida)
 
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
+// Incluimos las funciones, incluida la que maneja los formularios de esta página
 require 'admin_functions.php';
 
-// Lógica para actualizar el estado del pedido
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar_estado'])) {
-    $pedido_id = $_POST['pedido_id'];
-    $nuevo_estado = $_POST['estado'];
-    try {
-        $stmt = $pdo->prepare("UPDATE pedidos SET estado = ? WHERE id_pedido = ?");
-        $stmt->execute([$nuevo_estado, $pedido_id]);
-        $_SESSION['message'] = "Estado del pedido #$pedido_id actualizado correctamente.";
-    } catch (Exception $e) {
-        $_SESSION['error_message'] = "Error al actualizar el estado: " . $e->getMessage();
-    }
-    header("Location: gestionar_pedidos.php");
-    exit();
-}
+// --- INICIO DE LA CORRECCIÓN ---
+// Ahora llamamos a la función centralizada que se encarga de procesar
+// la actualización de estado Y de descontar el stock.
+handle_pedidos_requests($pdo);
+// --- FIN DE LA CORRECCIÓN ---
 
-// Obtener todos los pedidos junto con la información del usuario
+
+// El resto del código para obtener y mostrar los pedidos permanece igual.
 $sql = "
     SELECT 
         p.id_pedido, p.monto_total, p.estado, p.fecha_pedido,

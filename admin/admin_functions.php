@@ -136,40 +136,54 @@ function handle_product_requests($pdo) {
  * Procesa los formularios de la página de gestión de pedidos.
  */
 function handle_pedidos_requests($pdo) {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
-        $pedido_id = $_POST['id_pedido'];
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar_estado'])) {
+        $pedido_id = $_POST['pedido_id'];
         $nuevo_estado = $_POST['estado'];
-        
-        $stmt_estado_actual = $pdo->prepare("SELECT estado FROM pedidos WHERE id_pedido = ?");
-        $stmt_estado_actual->execute([$pedido_id]);
-        $estado_actual = $stmt_estado_actual->fetchColumn();
+        $estados_descuento = ['En preparación', 'Enviado', 'Completado'];
 
         $pdo->beginTransaction();
         try {
-            if ($estado_actual != 'preparando' && $nuevo_estado == 'preparando') {
+            // Obtener el estado actual del pedido ANTES de actualizarlo
+            $stmt_estado_actual = $pdo->prepare("SELECT estado FROM pedidos WHERE id_pedido = ?");
+            $stmt_estado_actual->execute([$pedido_id]);
+            $estado_actual = $stmt_estado_actual->fetchColumn();
+
+            // Descontar stock solo si el estado NUEVO está en la lista de descuento
+            // Y el estado ANTIGUO NO lo estaba. Esto evita dobles descuentos.
+            if (in_array($nuevo_estado, $estados_descuento) && !in_array($estado_actual, $estados_descuento)) {
+                
+                // Obtener todos los items (productos) del pedido
                 $stmt_items = $pdo->prepare("SELECT variante_id, cantidad FROM pedidos_items WHERE pedido_id = ?");
                 $stmt_items->execute([$pedido_id]);
                 $items_del_pedido = $stmt_items->fetchAll(PDO::FETCH_ASSOC);
 
+                // Preparar la consulta para actualizar el stock
                 $sql_update_stock = "UPDATE variantes_producto SET stock = stock - ? WHERE id_variante = ?";
                 $stmt_update_stock = $pdo->prepare($sql_update_stock);
+
                 foreach ($items_del_pedido as $item) {
-                    if ($item['variante_id']) {
+                    // Asegurarse de que es un producto válido antes de descontar
+                    if ($item['variante_id'] && $item['cantidad'] > 0) {
                         $stmt_update_stock->execute([$item['cantidad'], $item['variante_id']]);
                     }
                 }
-                $_SESSION['message'] = "Estado actualizado y stock descontado.";
+                $_SESSION['message'] = "Estado actualizado y stock de los productos descontado.";
             } else {
-                 $_SESSION['message'] = "Estado del pedido actualizado.";
+                 $_SESSION['message'] = "Estado del pedido actualizado (el stock no se modificó).";
             }
             
+            // Actualizar el estado del pedido
             $stmt_update_pedido = $pdo->prepare("UPDATE pedidos SET estado = ? WHERE id_pedido = ?");
             $stmt_update_pedido->execute([$nuevo_estado, $pedido_id]);
+            
             $pdo->commit();
+
         } catch (Exception $e) {
             $pdo->rollBack();
             $_SESSION['error_message'] = "Error al actualizar el pedido: " . $e->getMessage();
         }
+        
+        // Redirigir de vuelta a la página de pedidos
         header("Location: gestionar_pedidos.php");
         exit();
     }
@@ -385,5 +399,32 @@ function get_top_earning_categories($pdo) {
         LIMIT 5
     ";
     return $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+}
+function get_low_stock_products($pdo, $threshold = 10) {
+    $sql = "
+        SELECT 
+            p.nombre,
+            v.sku,
+            v.stock
+        FROM variantes_producto v
+        JOIN productos p ON v.id_producto = p.id
+        WHERE v.stock <= ? AND v.stock > 0
+        ORDER BY v.stock ASC
+    ";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$threshold]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Obtiene todos los proveedores.
+ */
+function get_all_suppliers($pdo) {
+    // Usamos un try-catch por si la tabla aún no existe
+    try {
+        return $pdo->query("SELECT * FROM proveedores ORDER BY nombre ASC")->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        return []; // Devuelve un array vacío si la tabla no existe
+    }
 }
 ?>

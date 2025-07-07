@@ -459,3 +459,86 @@ h1, h4 { font-weight: 700; margin-bottom: 0.5rem; }
         max-width: 100%;
     }
 }
+
+/* ======================================================= */
+/* AÑADIDO: ESTILOS PARA GESTIONAR CATÁLOGOS               */
+/* ======================================================= */
+
+/* Sistema de columnas */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -1rem;
+    margin-left: -1rem;
+}
+.col-4 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+
+/* Tarjeta de catálogo */
+.catalog-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Asegura que todas las tarjetas tengan la misma altura */
+}
+.catalog-card .card-body {
+    flex-grow: 1; /* Permite que el cuerpo de la tarjeta crezca */
+    overflow-y: auto; /* Scroll si el contenido es muy largo */
+}
+.catalog-card .card-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid var(--border-color);
+    padding: 1rem;
+}
+
+/* Lista de etiquetas */
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.tag {
+    display: inline-block;
+    padding: 0.4em 0.8em;
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1;
+    border-radius: 0.25rem;
+}
+.tag-blue { background-color: #eaf2fa; color: #2c6fbb; }
+.tag-green { background-color: #e6f6e6; color: #3d8b3d; }
+.tag-gray { background-color: #f1f3f5; color: #495057; }
+
+/* Grupo de opciones */
+.option-group {
+    margin-bottom: 1.25rem;
+}
+.option-group:last-child {
+    margin-bottom: 0;
+}
+.option-group-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.3rem;
+}
+
+/* Formularios dentro de las tarjetas */
+.input-group {
+    display: flex;
+}
+.input-group .form-control {
+    flex: 1 1 auto;
+    width: 1%;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.input-group .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}

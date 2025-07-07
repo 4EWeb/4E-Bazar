@@ -946,3 +946,101 @@ h3 {
   object-fit: cover;
   border-radius: 5px;
 }
+/* ... (código existente) */
+
+/* ======================================================= */
+/* NUEVOS ESTILOS PARA RECUADROS DE LISTAS EN EL DASHBOARD */
+/* ======================================================= */
+
+.dashboard-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.dashboard-list-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px var(--shadow-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-list-card .card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dashboard-list-card .card-header h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.dashboard-list-card .card-header i {
+  color: var(--brand-color);
+}
+
+.dashboard-list-card .card-body {
+  padding: 1.25rem;
+  flex-grow: 1;
+}
+
+.dashboard-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dashboard-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem;
+}
+
+.dashboard-list li:last-child {
+  border-bottom: none;
+}
+
+.dashboard-list .badge {
+  background-color: #e9ecef;
+  color: var(--text-color);
+  font-weight: 700;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.25rem;
+}
+
+.top-item {
+  text-align: center;
+  padding: 1rem;
+}
+
+.top-item .fa-medal {
+  font-size: 3rem;
+  color: #ffc107;
+}
+
+.top-item-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+  color: var(--text-color);
+}
+
+.top-item-detail {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.text-muted {
+  color: #6c757d !important;
+  text-align: center;
+  padding: 1rem;
+}

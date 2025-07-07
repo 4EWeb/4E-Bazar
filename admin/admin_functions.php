@@ -314,5 +314,76 @@ function get_box_to_edit($pdo, $box_id) {
 function get_available_variants($pdo) {
      return $pdo->query("SELECT v.id_variante, v.precio, p.nombre, v.sku FROM variantes_producto v JOIN productos p ON v.id_producto = p.id WHERE v.stock > 0 ORDER BY p.nombre")->fetchAll(PDO::FETCH_ASSOC);
 }
+function get_best_selling_products($pdo) {
+    $sql = "
+        SELECT 
+            p.nombre,
+            SUM(pi.cantidad) as total_vendido
+        FROM pedidos_items pi
+        JOIN variantes_producto v ON pi.variante_id = v.id_variante
+        JOIN productos p ON v.id_producto = p.id
+        JOIN pedidos ped ON pi.pedido_id = ped.id_pedido
+        WHERE ped.estado IN ('En preparación', 'Enviado', 'Completado')
+        GROUP BY p.id, p.nombre
+        ORDER BY total_vendido DESC
+        LIMIT 5
+    ";
+    return $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+}
 
+/**
+ * Obtiene el cliente con más pedidos realizados.
+ */
+function get_top_customer($pdo) {
+    $sql = "
+        SELECT 
+            u.nombre_usuario,
+            COUNT(p.id_pedido) as total_pedidos
+        FROM pedidos p
+        JOIN usuarios u ON p.usuario_id = u.id
+        GROUP BY u.id, u.nombre_usuario
+        ORDER BY total_pedidos DESC
+        LIMIT 1
+    ";
+    return $pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Obtiene los pares de productos comprados juntos con más frecuencia.
+ */
+function get_frequently_bought_together($pdo) {
+    $sql = "
+        SELECT
+            p1.nombre AS producto1,
+            p2.nombre AS producto2,
+            COUNT(*) AS veces_juntos
+        FROM pedidos_items pi1
+        JOIN pedidos_items pi2 ON pi1.pedido_id = pi2.pedido_id AND pi1.variante_id < pi2.variante_id
+        JOIN variantes_producto v1 ON pi1.variante_id = v1.id_variante
+        JOIN productos p1 ON v1.id_producto = p1.id
+        JOIN variantes_producto v2 ON pi2.variante_id = v2.id_variante
+        JOIN productos p2 ON v2.id_producto = p2.id
+        GROUP BY producto1, producto2
+        ORDER BY veces_juntos DESC
+        LIMIT 5
+    ";
+    return $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+}
+function get_top_earning_categories($pdo) {
+    $sql = "
+        SELECT 
+            c.nombre_categoria,
+            SUM(pi.cantidad * pi.precio_unitario) as total_ingresos
+        FROM pedidos_items pi
+        JOIN variantes_producto v ON pi.variante_id = v.id_variante
+        JOIN productos p ON v.id_producto = p.id
+        JOIN categorias c ON p.categoriaID = c.id_categoria
+        JOIN pedidos ped ON pi.pedido_id = ped.id_pedido
+        WHERE ped.estado IN ('En preparación', 'Enviado', 'Completado')
+        GROUP BY c.id_categoria, c.nombre_categoria
+        ORDER BY total_ingresos DESC
+        LIMIT 5
+    ";
+    return $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>

@@ -1,58 +1,62 @@
 /* =================================
    ESTILOS PARA FORMULARIOS (servicios.php)
    ================================= */
-.form-group, .form-group-checkbox {
-    margin-bottom: 1.2rem;
+.form-group,
+.form-group-checkbox {
+  margin-bottom: 1.2rem;
 }
 
-.form-group label, .form-group-checkbox label {
-    display: block;
-    font-weight: 600;
-    color: #555;
-    margin-bottom: 0.5rem;
+.form-group label,
+.form-group-checkbox label {
+  display: block;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 0.5rem;
 }
 
-.form-control, .form-control-file {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    background-color: #f8f9fa;
-    transition: border-color 0.2s, box-shadow 0.2s;
+.form-control,
+.form-control-file {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #f8f9fa;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.form-control:focus, .form-control-file:focus {
-    outline: none;
-    border-color: #e75480;
-    box-shadow: 0 0 0 3px rgba(231, 84, 128, 0.2);
+.form-control:focus,
+.form-control-file:focus {
+  outline: none;
+  border-color: #e75480;
+  box-shadow: 0 0 0 3px rgba(231, 84, 128, 0.2);
 }
 
 textarea.form-control {
-    resize: vertical;
-    min-height: 80px;
+  resize: vertical;
+  min-height: 80px;
 }
 
 .form-group-checkbox {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    background-color: #fdf2f7;
-    border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background-color: #fdf2f7;
+  border-radius: 8px;
 }
 
 .form-group-checkbox input[type="checkbox"] {
-    width: 1.3em;
-    height: 1.3em;
-    accent-color: #e75480;
-    cursor: pointer;
+  width: 1.3em;
+  height: 1.3em;
+  accent-color: #e75480;
+  cursor: pointer;
 }
 
 .form-group-checkbox label {
-    margin-bottom: 0;
-    font-weight: 500;
-    cursor: pointer;
+  margin-bottom: 0;
+  font-weight: 500;
+  cursor: pointer;
 }
 /* --- Sección de Ofertas --- */
 .ofertas-box {
@@ -85,13 +89,18 @@ textarea.form-control {
 
 /* AÑADIDO: El pseudo-elemento que crea el efecto de brillo */
 .ofertas-title::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
   transition: left 0.6s;
 }
 
@@ -135,7 +144,8 @@ textarea.form-control {
 }
 
 /* --- Tarjetas de Producto --- */
-.productos-destacados, .productos-container {
+.productos-destacados,
+.productos-container {
   max-width: 1200px;
   margin: 40px auto;
   padding: 20px;
@@ -147,7 +157,7 @@ textarea.form-control {
   margin-bottom: 2rem;
   color: #fff;
   font-weight: bold;
-  text-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   text-align: center;
 }
 
@@ -162,9 +172,9 @@ textarea.form-control {
 
 /* El enlace que envuelve la tarjeta */
 .producto-box-wrapper {
-    display: block;
-    text-decoration: none;
-    color: inherit;
+  display: block;
+  text-decoration: none;
+  color: inherit;
 }
 
 /* La tarjeta del producto */
@@ -210,11 +220,11 @@ textarea.form-control {
 }
 
 .producto-box .producto-precio {
-    font-size: 1.4rem;
-    font-weight: bold;
-    color: #333;
-    margin: 10px 0 20px 0;
-    flex-grow: 1; /* Empuja el botón hacia abajo si las descripciones varían */
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333;
+  margin: 10px 0 20px 0;
+  flex-grow: 1; /* Empuja el botón hacia abajo si las descripciones varían */
 }
 
 /* Botón de la tarjeta */
@@ -284,13 +294,18 @@ textarea.form-control {
 }
 
 .btn-servicios-index::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
   transition: left 0.6s;
 }
 
@@ -303,7 +318,6 @@ textarea.form-control {
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 12px 35px rgba(231, 84, 128, 0.4);
 }
-
 
 /* --- Panel de Redes Sociales --- */
 .social-panel {
@@ -322,23 +336,35 @@ textarea.form-control {
 }
 
 .social-panel::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.2) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 50%);
+  background: radial-gradient(
+      circle at 20% 80%,
+      rgba(255, 255, 255, 0.2) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(255, 255, 255, 0.15) 0%,
+      transparent 50%
+    );
   pointer-events: none;
 }
 
 .social-panel::after {
-  content: '';
+  content: "";
   position: absolute;
   top: -100%;
   left: -100%;
   width: 300%;
   height: 300%;
-  background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.1), transparent);
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
   animation: rotate 20s linear infinite;
   pointer-events: none;
 }
@@ -348,7 +374,7 @@ textarea.form-control {
   font-weight: 800;
   margin-bottom: 2.5rem;
   color: #fff;
-  text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   position: relative;
   z-index: 2;
 }
@@ -396,7 +422,14 @@ textarea.form-control {
 }
 
 .social-panel .social-icon.instagram:hover {
-  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  background: linear-gradient(
+    45deg,
+    #f09433,
+    #e6683c,
+    #dc2743,
+    #cc2366,
+    #bc1888
+  );
   border-color: #e1306c;
   box-shadow: 0 25px 50px rgba(225, 48, 108, 0.4);
 }
@@ -414,7 +447,7 @@ textarea.form-control {
   position: relative;
   z-index: 3;
   transition: all 0.4s ease;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .social-panel .social-icon:hover svg {
@@ -425,230 +458,244 @@ textarea.form-control {
    ESTILOS PARA PÁGINA "SOBRE NOSOTROS"
    ================================= */
 .about-us-container {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 40px 50px;
-    border-radius: 20px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 40px 50px;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
 }
 
 .about-header {
-    text-align: center;
-    margin-bottom: 40px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 30px;
+  text-align: center;
+  margin-bottom: 40px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 30px;
 }
 
 .about-header h1 {
-    font-size: 2.8rem;
-    color: #e75480;
-    margin-bottom: 10px;
+  font-size: 2.8rem;
+  color: #e75480;
+  margin-bottom: 10px;
 }
 
 .about-header .subtitle {
-    font-size: 1.2rem;
-    color: #666;
-    font-style: italic;
+  font-size: 1.2rem;
+  color: #666;
+  font-style: italic;
 }
 
 .about-content {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 40px;
-    align-items: center;
-    margin-bottom: 50px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  align-items: center;
+  margin-bottom: 50px;
 }
 
 .about-text h2 {
-    font-size: 1.8rem;
-    color: #333;
-    margin-bottom: 15px;
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 15px;
 }
 
 .about-text p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: #555;
-    margin-bottom: 20px;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 20px;
 }
 
 .about-image img {
-    width: 100%;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  width: 100%;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
 
 .values-section {
-    text-align: center;
-    padding-top: 40px;
-    border-top: 1px solid #eee;
+  text-align: center;
+  padding-top: 40px;
+  border-top: 1px solid #eee;
 }
 
 .values-section h2 {
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 30px;
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 30px;
 }
 
 .values-grid {
-    display: flex;
-    justify-content: space-around;
-    gap: 30px;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: space-around;
+  gap: 30px;
+  flex-wrap: wrap;
 }
 
 .value-item {
-    flex-basis: 280px;
+  flex-basis: 280px;
 }
 
 .value-item i {
-    font-size: 2.5rem;
-    color: #e75480;
-    margin-bottom: 15px;
+  font-size: 2.5rem;
+  color: #e75480;
+  margin-bottom: 15px;
 }
 
 .value-item h3 {
-    font-size: 1.3rem;
-    color: #444;
-    margin-bottom: 10px;
+  font-size: 1.3rem;
+  color: #444;
+  margin-bottom: 10px;
 }
 
 .value-item p {
-    color: #666;
-    line-height: 1.6;
+  color: #666;
+  line-height: 1.6;
 }
 
 /* Hacerlo responsivo en móviles */
 @media (max-width: 768px) {
-    .about-content {
-        grid-template-columns: 1fr;
-    }
-    .about-image {
-        order: -1; /* Pone la imagen arriba del texto en móviles */
-        margin-bottom: 30px;
-    }
+  .about-content {
+    grid-template-columns: 1fr;
+  }
+  .about-image {
+    order: -1; /* Pone la imagen arriba del texto en móviles */
+    margin-bottom: 30px;
+  }
 }
 
 /* =================================
    ESTILOS PARA PÁGINA "MI CUENTA"
    ================================= */
 .account-container {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 30px 40px;
-    border-radius: 20px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-    max-width: 800px;
-    margin: 2rem auto;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 30px 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 2rem auto;
 }
 
 .account-container h1 {
-    color: #e75480;
-    margin-bottom: 5px;
+  color: #e75480;
+  margin-bottom: 5px;
 }
 
 .account-container .subtitle {
-    margin-bottom: 30px;
-    color: #666;
-    font-size: 1.1rem;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 20px;
+  margin-bottom: 30px;
+  color: #666;
+  font-size: 1.1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 20px;
 }
 
 .info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Dos columnas */
-    gap: 25px;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas */
+  gap: 25px;
 }
 
 .info-item {
-    background-color: #f8f9fa;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #eee;
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #eee;
 }
 
 .info-label {
-    display: block;
-    font-size: 0.9rem;
-    color: #888;
-    margin-bottom: 5px;
+  display: block;
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 5px;
 }
 
 .info-value {
-    display: block;
-    font-size: 1.1rem;
-    color: #333;
-    font-weight: 600;
+  display: block;
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 600;
 }
 
 .edit-btn {
-    display: inline-block;
-    margin-top: 30px;
-    padding: 12px 25px;
-    background-color: #e75480;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  display: inline-block;
+  margin-top: 30px;
+  padding: 12px 25px;
+  background-color: #e75480;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .edit-btn:hover {
-    background-color: #d14a6f;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(231, 84, 128, 0.3);
+  background-color: #d14a6f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(231, 84, 128, 0.3);
 }
 
 /* Hacerlo de una columna en móviles */
 @media (max-width: 600px) {
-    .info-grid {
-        grid-template-columns: 1fr;
-    }
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .orders-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    font-size: 1rem;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 1rem;
 }
 
-.orders-table th, .orders-table td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+.orders-table th,
+.orders-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
 }
 
 .orders-table thead th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    color: #333;
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #333;
 }
 
 .orders-table tbody tr:hover {
-    background-color: #fdf2f7; /* Rosado muy claro al pasar el mouse */
+  background-color: #fdf2f7; /* Rosado muy claro al pasar el mouse */
 }
 
 .status-badge {
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    color: #fff;
-    text-transform: capitalize;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #fff;
+  text-transform: capitalize;
 }
 
-.status-pendiente { background-color: #ffc107; color: #333; }
-.status-completado { background-color: #28a745; }
-.status-enviado { background-color: #17a2b8; }
-.status-cancelado { background-color: #dc3545; }
+.status-pendiente {
+  background-color: #ffc107;
+  color: #333;
+}
+.status-completado {
+  background-color: #28a745;
+}
+.status-enviado {
+  background-color: #17a2b8;
+}
+.status-cancelado {
+  background-color: #dc3545;
+}
 
 /* =================================
    NUEVO: ESTILOS PARA CARRUSEL DE OFERTAS
    ================================= */
 @keyframes scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); } /* Se mueve la mitad del ancho total */
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  } /* Se mueve la mitad del ancho total */
 }
 
 .slider-container {
@@ -663,7 +710,13 @@ textarea.form-control {
 .slider {
   width: 100%;
   overflow: hidden;
-  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 10%,
+    #000 90%,
+    transparent
+  );
 }
 
 .slider .slide-track {
@@ -684,54 +737,128 @@ textarea.form-control {
   height: 100%;
   object-fit: cover;
   border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* =================================
    NUEVO: ESTILOS PARA SECCIÓN "FEATURES"
    ================================= */
 .features-section {
-    max-width: 1100px;
-    margin: 4rem auto;
-    padding: 20px;
-    text-align: center;
+  max-width: 1100px;
+  margin: 4rem auto;
+  padding: 20px;
+  text-align: center;
 }
 
 .features-grid {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    flex-wrap: wrap;
-    margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
 }
 
 .feature-item {
-    flex-basis: 300px;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+  flex-basis: 300px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .feature-item:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(231, 84, 128, 0.2);
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(231, 84, 128, 0.2);
 }
 
 .feature-item i {
-    font-size: 3rem;
-    color: #e75480;
-    margin-bottom: 1rem;
+  font-size: 3rem;
+  color: #e75480;
+  margin-bottom: 1rem;
 }
 
 .feature-item h3 {
-    font-size: 1.3rem;
-    color: #333;
-    margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+  color: #333;
+  margin-bottom: 0.5rem;
 }
 
 .feature-item p {
-    color: #666;
-    line-height: 1.6;
+  color: #666;
+  line-height: 1.6;
+}
+/* ... (código existente) */
+
+/* Ajuste para subtítulos dentro de las cajas de ofertas/recomendaciones */
+.ofertas-box .productos-title {
+  color: #da5959;
+  font-size: 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  text-shadow: none;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  animation: none;
+  text-transform: none;
+  border-bottom: 2px solid #f0e4e8;
+  display: inline-block;
+}
+
+.ofertas-box .productos-title:hover {
+  transform: none;
+}
+/* ... (código existente) */
+
+/* ============================================== */
+/* NUEVOS ESTILOS PARA SECCIÓN DE RECOMENDACIONES */
+/* ============================================== */
+
+/* El contenedor principal de la sección de recomendaciones */
+.recommendation-section {
+  background: rgba(255, 255, 255, 0.5); /* Fondo semitransparente */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-top: 4rem;
+  text-align: center;
+}
+
+/* El título principal "Recomendados para ti" */
+.recommendation-main-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #e75480; /* Color principal de la marca */
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(231, 84, 128, 0.1);
+  display: inline-block;
+}
+
+/* Los subtítulos "Comprados Juntos Frecuentemente" etc. */
+.recommendation-subtitle {
+  font-size: 1.4rem;
+  color: #333;
+  font-weight: 600;
+  text-align: left;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* La cuadrícula flexible que contiene las tarjetas de productos */
+.recommendation-grid {
+  display: flex;
+  flex-wrap: wrap; /* ¡La clave! Permite que los elementos pasen a la siguiente línea */
+  justify-content: center; /* Centra los productos en la cuadrícula */
+  gap: 1.5rem; /* Espacio uniforme entre las tarjetas */
+}
+
+/* Para asegurar que las tarjetas dentro de la nueva cuadrícula se vean bien */
+.recommendation-grid .producto-box {
+  margin-top: 0; /* Eliminamos el margen superior que tenían antes */
+  width: 280px; /* Un ancho fijo para las tarjetas de recomendación */
+  flex-shrink: 0; /* Evita que las tarjetas se encojan */
 }

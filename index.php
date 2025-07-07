@@ -30,26 +30,20 @@ try {
 // --- LÓGICA PARA PRODUCTOS DESTACADOS (LOS QUE MARCAS COMO DESTACADO) ---
 $productos_destacados = [];
 try {
-    // Esta consulta se mantiene igual, para los productos que marques como destacados.
-    $stmt_destacados = $pdo->query("
+    $stmt = $pdo->query("
         SELECT
-            p.id AS id_producto_base,
-            p.nombre,
-            v.id_variante,
-            v.precio,
-            v.descuento,
+            p.id AS id_producto_base, p.nombre, v.id_variante, v.precio, v.descuento,
             COALESCE(v.imagen, p.imagen_principal) AS imagen_a_mostrar
         FROM variantes_producto v
         JOIN productos p ON v.id_producto = p.id
         WHERE v.destacado = 1
-        LIMIT 3
     ");
-    $productos_destacados = $stmt_destacados->fetchAll(PDO::FETCH_ASSOC);
+    $productos_destacados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (Exception $e) {
     echo "Error al cargar productos destacados: " . $e->getMessage();
 }
-
+$kits_procesados = [];
 require __DIR__ . '/kits.php'; // Incluimos la lógica de kits después de cargar los productos
 
 ?>
@@ -136,48 +130,37 @@ require __DIR__ . '/kits.php'; // Incluimos la lógica de kits después de carga
         </div>
       </section>
 
-      <section class="ofertas-box">
-        <h2 class="ofertas-title">Productos Favoritos</h2>
-        <div class="productos-container">
-            <?php if (count($productos_destacados) > 0): ?>
-                <?php foreach ($productos_destacados as $producto): ?>
-                    <div class="producto-box">
-                        <a href="productos.php?id=<?= $producto['id_producto_base'] ?>">
-                            <img src="<?= htmlspecialchars($producto['imagen_a_mostrar'] ?: 'Imagenes/placeholder.png') ?>" alt="<?= htmlspecialchars($producto['nombre']) ?>" />
-                        </a>
-                        
-                        <h3><?= htmlspecialchars($producto['nombre']) ?></h3>
-                        
-                        <?php
-                            $precio_final = $producto['precio'];
-                            if (!empty($producto['descuento']) && $producto['descuento'] > 0) {
-                                $precio_final = $producto['precio'] * (1 - $producto['descuento'] / 100);
-                            }
-                        ?>
-                        <div class="price-info">
-                            <p>$<?= number_format($precio_final, 0, ',', '.') ?>
-                                <?php if ($precio_final != $producto['precio']): ?>
-                                    <span class="price-old">$<?= number_format($producto['precio'], 0, ',', '.') ?></span>
-                                <?php endif; ?>
-                            </p>
-                        </div>
-                        
-                        <button class="btn-add-to-cart" 
-                                onclick="agregarAlCarrito({
-                                    id: <?= $producto['id_variante'] ?>, 
-                                    name: '<?= htmlspecialchars(addslashes($producto['nombre'])) ?>', 
-                                    price: <?= $precio_final ?>, 
-                                    image: '<?= htmlspecialchars($producto['imagen_a_mostrar'] ?: 'Imagenes/placeholder.png') ?>'
-                                })">
-                          Agregar al carrito
-                        </button>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>No hay productos destacados disponibles en este momento.</p>
-            <?php endif; ?>
+        <section class="ofertas-box">
+        <h2 class="ofertas-title">Productos Destacados</h2>
+        
+        <div class="carousel-container">
+            <button class="carousel-btn prev" aria-label="Anterior">&lt;</button>
+            <div class="carousel-viewport">
+                <div class="carousel-track">
+                    <?php if (count($productos_destacados) > 0): ?>
+                        <?php foreach ($productos_destacados as $producto): ?>
+                            <div class="producto-box">
+                                <a href="productos.php?id=<?= $producto['id_producto_base'] ?>">
+                                    <img src="<?= htmlspecialchars($producto['imagen_a_mostrar'] ?: 'Imagenes/placeholder.png') ?>" alt="<?= htmlspecialchars($producto['nombre']) ?>" />
+                                </a>
+                                <h3><?= htmlspecialchars($producto['nombre']) ?></h3>
+                                <?php
+                                    $precio_final = $producto['precio'] * (1 - ($producto['descuento'] ?? 0) / 100);
+                                ?>
+                                <p class="producto-precio">$<?= number_format($precio_final, 0, ',', '.') ?></p>
+                                <button class="btn-add-to-cart" onclick="agregarAlCarrito({id: <?= $producto['id_variante'] ?>, name: '<?= htmlspecialchars(addslashes($producto['nombre'])) ?>', price: <?= $precio_final ?>, image: '<?= htmlspecialchars($producto['imagen_a_mostrar'] ?: 'Imagenes/placeholder.png') ?>'})">
+                                  Agregar al carrito
+                                </button>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p>No hay productos destacados para mostrar.</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <button class="carousel-btn next" aria-label="Siguiente">&gt;</button>
         </div>
-      </section>
+    </section>
 
       <section class="kits-section">
             <h2 class="productos-title">Nuestros Kits Ahorro</h2>
@@ -280,5 +263,6 @@ require __DIR__ . '/kits.php'; // Incluimos la lógica de kits después de carga
     <script src="js/carrito.js"></script>
     <script src="js/transiciones.js"></script>
     <script src="js/nav-responsive.js"></script>
+    <script src="js/carousel.js"></script>
   </body>
 </html>

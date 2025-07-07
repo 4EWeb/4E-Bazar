@@ -1,5 +1,5 @@
 <?php
-// admin/gestionar_pedidos.php (Versión Final con nuevo diseño)
+// admin/gestionar_pedidos.php (Versión con Buscador)
 
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require 'admin_functions.php';
@@ -40,7 +40,12 @@ include 'header.php';
     <p>Revisa y actualiza el estado de los pedidos recibidos.</p>
 </div>
 
-
+<div class="search-bar-container card" style="padding: 1rem; margin-bottom: 1.5rem;">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+        <label for="search-input" class="form-label" style="margin-bottom: 0; font-weight: 600;">Buscar Pedido:</label>
+        <input type="text" id="search-input" class="form-control" onkeyup="filtrarPedidos()" placeholder="Escribe un N° de pedido, nombre o estado...">
+    </div>
+</div>
 <?php if (isset($_SESSION['message'])): ?><div class="alert alert-success"><?php echo $_SESSION['message']; unset($_SESSION['message']); ?></div><?php endif; ?>
 <?php if (isset($_SESSION['error_message'])): ?><div class="alert alert-danger"><?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?></div><?php endif; ?>
 
@@ -51,7 +56,11 @@ include 'header.php';
         <?php else: ?>
             <div class="accordion" id="pedidos-accordion">
                 <?php foreach ($pedidos as $pedido): ?>
-                    <div class="accordion-item">
+                    <div class="accordion-item" 
+                         data-id="<?php echo $pedido['id_pedido']; ?>" 
+                         data-nombre="<?php echo htmlspecialchars(strtolower($pedido['nombre_usuario'])); ?>" 
+                         data-estado="<?php echo htmlspecialchars(strtolower($pedido['estado'])); ?>">
+                        
                         <button class="accordion-button">
                             <div class="order-summary">
                                 <span class="order-id">#<?php echo $pedido['id_pedido']; ?></span>
@@ -137,8 +146,38 @@ include 'header.php';
                     </div>
                 <?php endforeach; ?>
             </div>
+            <div id="no-results-message" style="display: none; padding: 1.5rem; text-align: center; color: #6c757d;">
+                No se encontraron pedidos que coincidan con la búsqueda.
+            </div>
         <?php endif; ?>
     </div>
 </div>
+
+<script>
+function filtrarPedidos() {
+    const input = document.getElementById('search-input');
+    const filtro = input.value.toLowerCase().trim();
+    const acordeon = document.getElementById('pedidos-accordion');
+    const items = acordeon.getElementsByClassName('accordion-item');
+    const mensajeVacio = document.getElementById('no-results-message');
+    let resultadosVisibles = 0;
+
+    for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        const idPedido = item.dataset.id;
+        const nombreCliente = item.dataset.nombre;
+        const estadoPedido = item.dataset.estado;
+
+        if (idPedido.includes(filtro) || nombreCliente.includes(filtro) || estadoPedido.includes(filtro)) {
+            item.style.display = "";
+            resultadosVisibles++;
+        } else {
+            item.style.display = "none";
+        }
+    }
+
+    mensajeVacio.style.display = resultadosVisibles === 0 ? "block" : "none";
+}
+</script>
 
 <?php include 'footer.php'; ?>

@@ -1,5 +1,5 @@
 /* ======================================================= */
-/* ADMIN_STYLES.CSS - DISEÑO FINAL, LEGIBLE Y AMIGABLE     */
+/* ADMIN_STYLES.CSS - DISEÑO FINAL Y COMPLETO              */
 /* ======================================================= */
 :root {
   --sidebar-bg: #2c3e50; --sidebar-text: #ecf0f1; --sidebar-hover-bg: #34495e; --sidebar-active-bg: #46627f;
@@ -58,8 +58,9 @@ h1, h4 { font-weight: 700; margin-bottom: 0.5rem; }
 .btn-warning { color: #000; background-color: #ffc107; border-color: #ffc107; }
 .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.875rem; }
 
+
 /* ======================================================= */
-/* DISEÑO MEJORADO PARA LA LISTA DE PEDIDOS ("BONITO")     */
+/* ESTILOS PARA LOS ACORDEONES (Productos y Pedidos)       */
 /* ======================================================= */
 
 /* Contenedor de cada item del acordeón */
@@ -105,39 +106,6 @@ h1, h4 { font-weight: 700; margin-bottom: 0.5rem; }
   transform: rotate(-180deg);
 }
 
-/* Contenedor del resumen del pedido (dentro del botón) */
-.order-summary {
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.order-id, .order-total { font-weight: 700; }
-.order-date { color: #6c757d; }
-.order-customer {
-    flex-grow: 1;
-    min-width: 100px;
-}
-
-/* Todas las insignias de estado */
-.status-badge {
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #fff;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-
-/* Colores para cada estado */
-.status-pendiente { background-color: #ffc107; color: #000; }
-.status-en-preparacion, .status-en-camino { background-color: #0dcaf0; color: #000; }
-.status-enviado { background-color: #0d6efd; }
-.status-completado { background-color: #198754; }
-.status-cancelado { background-color: #dc3545; }
-
 /* Contenido que se despliega */
 .accordion-content {
   max-height: 0;
@@ -151,18 +119,35 @@ h1, h4 { font-weight: 700; margin-bottom: 0.5rem; }
   border-top: 1px solid var(--border-color);
 }
 
-/* Estilos para los títulos dentro del contenido desplegado */
-.accordion-content-inner h5,
-.accordion-content-inner h6 {
-    font-weight: 600;
-    color: var(--sidebar-bg);
-    margin-top: 0;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border-color);
-}
+/* === Estilos para Contenido Desplegado de PEDIDOS === */
 
-/* Grilla para los detalles del cliente */
+.order-summary {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.order-id, .order-total { font-weight: 700; }
+.order-date { color: #6c757d; }
+.order-customer {
+    flex-grow: 1;
+    min-width: 100px;
+}
+.status-badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.status-pendiente { background-color: #ffc107; color: #000; }
+.status-en-preparacion, .status-en-camino { background-color: #0dcaf0; color: #000; }
+.status-enviado { background-color: #0d6efd; }
+.status-completado { background-color: #198754; }
+.status-cancelado { background-color: #dc3545; }
+
 .order-details-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -178,63 +163,6 @@ h1, h4 { font-weight: 700; margin-bottom: 0.5rem; }
     border-left: 4px solid var(--brand-color);
     border-radius: 0.25rem;
 }
-
-.order-details-grid strong {
-    display: block;
-    font-size: 0.8rem;
-    color: #6c757d;
-    margin-bottom: 0.25rem;
-}
-
-/* === NUEVOS ESTILOS PARA LA LISTA DE PRODUCTOS === */
-.item-list {
-    background-color: #fff;
-    border: 1px solid var(--border-color);
-    border-radius: 0.25rem;
-    font-size: 0.9rem;
-    margin-top: 1rem;
-}
-
-.item-list-header, .item-list-row {
-    display: flex;
-    align-items: center;
-    padding: 0.75rem;
-}
-
-.item-list-header {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    color: #6c757d;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.item-list-row {
-    border-bottom: 1px solid #f1f1f1;
-}
-
-.item-list-row:last-child {
-    border-bottom: none;
-}
-
-.item-product {
-    flex: 3; /* Más espacio para el nombre */
-}
-
-.item-quantity, .item-price, .item-subtotal {
-    flex: 1;
-    text-align: right;
-}
-
-.item-details span {
-    display: block;
-    font-weight: 600;
-}
-
-.item-details small {
-    color: #6c757d;
-}
-
-/* Formulario para actualizar estado */
 .update-status-form {
     margin-top: 1.5rem;
     padding: 1rem;
@@ -244,4 +172,73 @@ h1, h4 { font-weight: 700; margin-bottom: 0.5rem; }
     display: flex;
     align-items: center;
     gap: 1rem;
+}
+
+/* === Estilos para Contenido Desplegado de PRODUCTOS === */
+
+.accordion-content-inner .text-muted {
+  font-size: 0.9rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.accordion-content-inner h6 {
+  font-weight: 600;
+  color: var(--sidebar-bg);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.accordion-content-inner .table-sm th {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #6c757d;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.accordion-content-inner .table-sm td {
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+.accordion-content-inner .table-hover tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.accordion-content-inner .btn {
+  margin-right: 0.5rem;
+  text-decoration: none;
+}
+
+/* ========================================================== */
+/* AÑADIDO: ESTILOS PARA EL BOTÓN ACTIVO/INACTIVO DE PRODUCTOS */
+/* ========================================================== */
+
+.accordion-button form {
+    margin-left: auto; /* Mantiene el formulario (y el botón) a la derecha */
+}
+
+.accordion-button .btn-sm {
+    border-radius: 20px; /* Forma de píldora */
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    color: #fff;
+    border: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    line-height: 1;
+}
+
+.accordion-button .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.accordion-button .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
 }

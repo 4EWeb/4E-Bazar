@@ -371,3 +371,91 @@ h1, h4 { font-weight: 700; margin-bottom: 0.5rem; }
     border-top: 1px solid var(--border-color);
     text-align: center;
 }
+
+/* ======================================================= */
+/* AÑADIDO: ESTILOS PARA EL DASHBOARD (INDEX.PHP)          */
+/* ======================================================= */
+
+.dashboard-grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -1rem;
+    margin-right: -1rem;
+}
+
+.dashboard-card-col {
+    flex: 0 0 25%;
+    max-width: 25%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.dashboard-card {
+    position: relative;
+    color: #fff;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.dashboard-card .card-content h3 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+    color: #fff;
+}
+
+.dashboard-card .card-content p {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.9;
+    color: #fff;
+}
+
+.dashboard-card .card-icon {
+    font-size: 4rem;
+    opacity: 0.2;
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+}
+
+.dashboard-card:hover .card-icon {
+    transform: translateY(-50%) scale(1.1);
+    opacity: 0.3;
+}
+
+/* Colores de fondo */
+.bg-success { background: linear-gradient(135deg, #28a745, #218838); }
+.bg-info { background: linear-gradient(135deg, #17a2b8, #138496); }
+.bg-warning { background: linear-gradient(135deg, #ffc107, #e0a800); color: #212529 !important; }
+.bg-warning h3, .bg-warning p { color: #212529 !important; }
+.bg-danger { background: linear-gradient(135deg, #dc3545, #c82333); }
+
+/* Responsividad para las tarjetas del dashboard */
+@media (max-width: 1200px) {
+    .dashboard-card-col {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-card-col {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}

@@ -2,7 +2,7 @@
 // admin/gestionar_pedidos.php (Versión Final con nuevo diseño)
 
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
-require '../db.php';
+require 'admin_functions.php';
 
 // Lógica para actualizar el estado del pedido
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar_estado'])) {
@@ -35,21 +35,21 @@ $estados_posibles = ['Pendiente', 'En preparación', 'Enviado', 'Completado', 'C
 include 'header.php';
 ?>
 
-<h1>Gestión de Pedidos</h1>
-<p>Revisa y actualiza el estado de los pedidos recibidos.</p>
+<div class="page-header">
+    <h1>Gestión de Pedidos</h1>
+    <p>Revisa y actualiza el estado de los pedidos recibidos.</p>
+</div>
+
 
 <?php if (isset($_SESSION['message'])): ?><div class="alert alert-success"><?php echo $_SESSION['message']; unset($_SESSION['message']); ?></div><?php endif; ?>
 <?php if (isset($_SESSION['error_message'])): ?><div class="alert alert-danger"><?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?></div><?php endif; ?>
 
 <div class="card">
-    <div class="card-header">
-        <h4>Lista de Pedidos</h4>
-    </div>
-    <div class="card-body" style="padding: 0;">
+    <div class="card-body" style="padding: 0.5rem;">
         <?php if (empty($pedidos)): ?>
-            <p class="p-3">No hay pedidos para mostrar.</p>
+            <p class="p-3 text-center text-muted">No hay pedidos para mostrar.</p>
         <?php else: ?>
-            <div class="accordion">
+            <div class="accordion" id="pedidos-accordion">
                 <?php foreach ($pedidos as $pedido): ?>
                     <div class="accordion-item">
                         <button class="accordion-button">
@@ -74,10 +74,7 @@ include 'header.php';
                                 <h6>Productos y Servicios del Pedido</h6>
                                 <?php
                                 $stmt_items = $pdo->prepare("
-                                    SELECT 
-                                        pi.*, 
-                                        vp.sku, 
-                                        p.nombre
+                                    SELECT pi.*, vp.sku, p.nombre
                                     FROM pedidos_items pi 
                                     JOIN variantes_producto vp ON pi.variante_id = vp.id_variante 
                                     JOIN productos p ON vp.id_producto = p.id 
@@ -90,45 +87,43 @@ include 'header.php';
                                 $stmt_servicios->execute([$pedido['id_pedido']]);
                                 $servicios = $stmt_servicios->fetchAll(PDO::FETCH_ASSOC);
                                 ?>
-                                <div class="item-list">
-                                    <div class="item-list-header">
-                                        <div class="item-product">Producto</div>
-                                        <div class="item-quantity">Cant.</div>
-                                        <div class="item-price">P. Unitario</div>
-                                        <div class="item-subtotal">Subtotal</div>
-                                    </div>
+                                
+                                <table class="table table-sm table-borderless item-list-table">
+                                   <thead>
+                                       <tr>
+                                           <th>Producto / Servicio</th>
+                                           <th class="text-center">Cant.</th>
+                                           <th class="text-end">Subtotal</th>
+                                       </tr>
+                                   </thead>
+                                   <tbody>
                                     <?php foreach ($items as $item): ?>
-                                        <div class="item-list-row">
-                                            <div class="item-product">
-                                                <div class="item-details">
-                                                    <span><?php echo htmlspecialchars($item['nombre']); ?></span>
-                                                    <small>SKU: <?php echo htmlspecialchars($item['sku']); ?></small>
-                                                </div>
-                                            </div>
-                                            <div class="item-quantity"><?php echo $item['cantidad']; ?></div>
-                                            <div class="item-price">$<?php echo number_format($item['precio_unitario'], 0, ',', '.'); ?></div>
-                                            <div class="item-subtotal">$<?php echo number_format($item['precio_unitario'] * $item['cantidad'], 0, ',', '.'); ?></div>
-                                        </div>
+                                        <tr>
+                                            <td>
+                                                <?php echo htmlspecialchars($item['nombre']); ?>
+                                                <small class="d-block text-muted">SKU: <?php echo htmlspecialchars($item['sku']); ?></small>
+                                            </td>
+                                            <td class="text-center"><?php echo $item['cantidad']; ?></td>
+                                            <td class="text-end fw-bold">$<?php echo number_format($item['precio_unitario'] * $item['cantidad'], 0, ',', '.'); ?></td>
+                                        </tr>
                                     <?php endforeach; ?>
                                     <?php foreach ($servicios as $servicio): ?>
-                                         <div class="item-list-row">
-                                            <div class="item-product">
-                                                <div class="item-details">
-                                                    <span><?php echo htmlspecialchars($servicio['nombre_servicio']); ?></span>
-                                                    <small>Servicio/Promo</small>
-                                                </div>
-                                            </div>
-                                            <div class="item-quantity"><?php echo $servicio['cantidad']; ?></div>
-                                            <div class="item-price">$<?php echo number_format($servicio['precio_unitario'], 0, ',', '.'); ?></div>
-                                            <div class="item-subtotal">$<?php echo number_format($servicio['precio_unitario'] * $servicio['cantidad'], 0, ',', '.'); ?></div>
-                                        </div>
+                                         <tr>
+                                            <td>
+                                                <?php echo htmlspecialchars($servicio['nombre_servicio']); ?>
+                                                <small class="d-block text-muted">Servicio / Promo</small>
+                                            </td>
+                                            <td class="text-center"><?php echo $servicio['cantidad']; ?></td>
+                                            <td class="text-end fw-bold">$<?php echo number_format($servicio['precio_unitario'] * $servicio['cantidad'], 0, ',', '.'); ?></td>
+                                        </tr>
                                     <?php endforeach; ?>
-                                </div>
+                                   </tbody>
+                                </table>
 
                                 <form action="gestionar_pedidos.php" method="POST" class="update-status-form">
                                     <input type="hidden" name="pedido_id" value="<?php echo $pedido['id_pedido']; ?>">
-                                    <label for="estado-<?php echo $pedido['id_pedido']; ?>"><strong>Actualizar Estado:</strong></label>
-                                    <select name="estado" id="estado-<?php echo $pedido['id_pedido']; ?>" class="form-select" style="width: auto; flex-grow: 1;">
+                                    <label for="estado-<?php echo $pedido['id_pedido']; ?>" class="form-label"><strong>Actualizar Estado:</strong></label>
+                                    <select name="estado" id="estado-<?php echo $pedido['id_pedido']; ?>" class="form-select">
                                         <?php foreach ($estados_posibles as $estado): ?>
                                             <option value="<?php echo $estado; ?>" <?php echo ($pedido['estado'] == $estado) ? 'selected' : ''; ?>>
                                                 <?php echo $estado; ?>

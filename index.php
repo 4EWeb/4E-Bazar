@@ -2,12 +2,36 @@
 session_start();
 require __DIR__ . '/db.php';
 
-// --- LÓGICA CORREGIDA PARA PRODUCTOS DESTACADOS ---
+// --- LÓGICA PARA OFERTAS DESTACADAS (PRODUCTOS CON DESCUENTO) ---
+$ofertas_destacadas = [];
+try {
+    // Esta consulta busca variantes con el mayor descuento que tengan stock.
+    $stmt_ofertas = $pdo->query("
+        SELECT
+            p.id AS id_producto_base,
+            p.nombre,
+            v.id_variante,
+            v.precio,
+            v.descuento,
+            COALESCE(v.imagen, p.imagen_principal) AS imagen_a_mostrar
+        FROM variantes_producto v
+        JOIN productos p ON v.id_producto = p.id
+        WHERE v.descuento > 0 AND v.stock > 0 AND p.activo = 1
+        ORDER BY v.descuento DESC
+        LIMIT 4
+    ");
+    $ofertas_destacadas = $stmt_ofertas->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (Exception $e) {
+    echo "Error al cargar ofertas destacadas: " . $e->getMessage();
+}
+
+
+// --- LÓGICA PARA PRODUCTOS DESTACADOS (LOS QUE MARCAS COMO DESTACADO) ---
 $productos_destacados = [];
 try {
-    // Esta consulta ahora une 'productos' y 'variantes_producto' para obtener toda la información correcta.
-    // Muestra las variantes que han sido marcadas como 'destacado = 1'.
-    $stmt = $pdo->query("
+    // Esta consulta se mantiene igual, para los productos que marques como destacados.
+    $stmt_destacados = $pdo->query("
         SELECT
             p.id AS id_producto_base,
             p.nombre,
@@ -20,13 +44,13 @@ try {
         WHERE v.destacado = 1
         LIMIT 3
     ");
-    $productos_destacados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $productos_destacados = $stmt_destacados->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (Exception $e) {
     echo "Error al cargar productos destacados: " . $e->getMessage();
 }
 
-require __DIR__ . '/kits.php'; // Incluimos la lógica de kits después de cargar los productos destacados
+require __DIR__ . '/kits.php'; // Incluimos la lógica de kits después de cargar los productos
 
 ?>
 <!DOCTYPE html>
@@ -69,17 +93,50 @@ require __DIR__ . '/kits.php'; // Incluimos la lógica de kits después de carga
     <?php include 'nav.php';?>
 
     <div class="contenido-scroll">
-       <section class="ofertas-box">
+      <section class="ofertas-box">
         <h1 class="ofertas-title">Ofertas Destacadas</h1>
-        <div class="galeria-fotos">
-          <div style="background-image: url('Imagenes/oferta1.png')"></div>
-          <div style="background-image: url('Imagenes/oferta2.png')"></div>
-          <div style="background-image: url('Imagenes/oferta3.png')"></div>
-          <div style="background-image: url('Imagenes/oferta4.png')"></div>
+        <div class="productos-container">
+            <?php if (count($ofertas_destacadas) > 0): ?>
+                <?php foreach ($ofertas_destacadas as $producto): ?>
+                    <div class="producto-box">
+                        <a href="productos.php?id=<?= $producto['id_producto_base'] ?>">
+                            <img src="<?= htmlspecialchars($producto['imagen_a_mostrar'] ?: 'Imagenes/placeholder.png') ?>" alt="<?= htmlspecialchars($producto['nombre']) ?>" />
+                        </a>
+                        
+                        <h3><?= htmlspecialchars($producto['nombre']) ?></h3>
+                        
+                        <?php
+                            $precio_final = $producto['precio'];
+                            if (!empty($producto['descuento']) && $producto['descuento'] > 0) {
+                                $precio_final = $producto['precio'] * (1 - $producto['descuento'] / 100);
+                            }
+                        ?>
+                        <div class="price-info">
+                            <p>$<?= number_format($precio_final, 0, ',', '.') ?>
+                                <?php if ($precio_final != $producto['precio']): ?>
+                                    <span class="price-old">$<?= number_format($producto['precio'], 0, ',', '.') ?></span>
+                                <?php endif; ?>
+                            </p>
+                        </div>
+                        
+                        <button class="btn-add-to-cart" 
+                                onclick="agregarAlCarrito({
+                                    id: <?= $producto['id_variante'] ?>, 
+                                    name: '<?= htmlspecialchars(addslashes($producto['nombre'])) ?>', 
+                                    price: <?= $precio_final ?>, 
+                                    image: '<?= htmlspecialchars($producto['imagen_a_mostrar'] ?: 'Imagenes/placeholder.png') ?>'
+                                })">
+                          Agregar al carrito
+                        </button>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>No hay ofertas destacadas disponibles en este momento.</p>
+            <?php endif; ?>
         </div>
-        
       </section>
-            <section class="ofertas-box">
+
+      <section class="ofertas-box">
         <h2 class="ofertas-title">Productos Destacados</h2>
         <div class="productos-container">
             <?php if (count($productos_destacados) > 0): ?>
@@ -92,7 +149,6 @@ require __DIR__ . '/kits.php'; // Incluimos la lógica de kits después de carga
                         <h3><?= htmlspecialchars($producto['nombre']) ?></h3>
                         
                         <?php
-                            // El precio y descuento ahora vienen de la consulta y no necesitan cálculo aquí
                             $precio_final = $producto['precio'];
                             if (!empty($producto['descuento']) && $producto['descuento'] > 0) {
                                 $precio_final = $producto['precio'] * (1 - $producto['descuento'] / 100);

@@ -4,7 +4,7 @@
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require '../db.php';
 
-// --- ACCIÓN: CAMBIAR ESTADO ACTIVO/INACTIVO ---
+// --- ACCIÓN: CAMBIAR ESTADO ACTIVO/INACTIVO DE PRODUCTO ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] == 'toggle_status') {
     $id_producto_toggle = $_POST['id_producto'];
     $estado_actual = $_POST['current_status'];
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
 // --- ACCIÓN: GUARDAR/ACTUALIZAR PRODUCTO PRINCIPAL ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] == 'save_product') {
-    $id_producto = $_POST['id_producto'];
+    $id_producto = $_POST['id_producto'] ?? null;
     $nombre = $_POST['nombre'];
     $descripcion = $_POST['descripcion'];
     $categoriaID = $_POST['categoriaID'];
@@ -42,23 +42,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
 // --- ACCIÓN: GUARDAR/ACTUALIZAR VARIANTE DE PRODUCTO ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] == 'save_variant') {
-    $id_variante = $_POST['id_variante'];
+    $id_variante = $_POST['id_variante'] ?? null;
     $id_producto_padre = $_POST['id_producto_padre'];
     $sku = $_POST['sku'];
     $precio = $_POST['precio'];
     $stock = $_POST['stock'];
-    
-    if (empty($id_variante)) { // Crear nueva variante
-        $sql = "INSERT INTO variantes_producto (id_producto, sku, precio, stock) VALUES (?, ?, ?, ?)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$id_producto_padre, $sku, $precio, $stock]);
-        $_SESSION['message'] = 'Variante creada exitosamente.';
-    } else { // Actualizar variante existente
-        $sql = "UPDATE variantes_producto SET sku = ?, precio = ?, stock = ? WHERE id_variante = ?";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$sku, $precio, $stock, $id_variante]);
-        $_SESSION['message'] = 'Variante actualizada exitosamente.';
+    $descuento = $_POST['descuento'] ?? 0;
+    $destacado = isset($_POST['destacado']) ? 1 : 0;
+    $opciones = $_POST['opciones'] ?? [];
+
+    $pdo->beginTransaction();
+    try {
+        if (empty($id_variante)) { // Crear nueva variante
+            $sql = "INSERT INTO variantes_producto (id_producto, sku, precio, stock, descuento, destacado) VALUES (?, ?, ?, ?, ?, ?)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$id_producto_padre, $sku, $precio, $stock, $descuento, $destacado]);
+            $id_variante = $pdo->lastInsertId();
+            $_SESSION['message'] = 'Variante creada exitosamente.';
+        } else { // Actualizar variante existente
+            $sql = "UPDATE variantes_producto SET sku = ?, precio = ?, stock = ?, descuento = ?, destacado = ? WHERE id_variante = ?";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$sku, $precio, $stock, $descuento, $destacado, $id_variante]);
+            $_SESSION['message'] = 'Variante actualizada exitosamente.';
+        }
+        
+        // Limpiar opciones viejas y agregar las nuevas
+        $pdo->prepare("DELETE FROM variante_opcion WHERE id_variante = ?")->execute([$id_variante]);
+        if (!empty($opciones)) {
+            $stmt_opcion = $pdo->prepare("INSERT INTO variante_opcion (id_variante, id_opcion) VALUES (?, ?)");
+            foreach ($opciones as $id_opcion) {
+                if (!empty($id_opcion)) {
+                    $stmt_opcion->execute([$id_variante, $id_opcion]);
+                }
+            }
+        }
+        
+        $pdo->commit();
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        $_SESSION['error_message'] = 'Error al guardar la variante: ' . $e->getMessage();
     }
+
     header("Location: gestionar_productos.php");
     exit();
 }
@@ -69,19 +93,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 $productos = $pdo->query("SELECT p.id, p.nombre, p.descripcion, p.activo, c.nombre_categoria FROM productos p LEFT JOIN categorias c ON p.categoriaID = c.id_categoria ORDER BY p.nombre")->fetchAll(PDO::FETCH_ASSOC);
 $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nombre_categoria")->fetchAll(PDO::FETCH_ASSOC);
 
-// Determinar qué formulario mostrar en el editor
+// Obtiene todos los atributos y sus opciones para el editor de variantes
+$atributos_query = $pdo->query("SELECT a.id_atributo, a.nombre, o.id_opcion, o.valor FROM atributos a JOIN opciones o ON a.id_atributo = o.id_atributo ORDER BY a.nombre, o.valor");
+$atributos_con_opciones = [];
+foreach ($atributos_query as $row) {
+    $atributos_con_opciones[$row['nombre']][] = ['id' => $row['id_opcion'], 'valor' => $row['valor']];
+}
+
 $producto_a_editar = null;
 $variante_a_editar = null;
 $producto_para_nueva_variante = null;
+$opciones_de_variante_a_editar = [];
 
 if (isset($_GET['edit_product_id'])) {
     $stmt = $pdo->prepare("SELECT * FROM productos WHERE id = ?");
     $stmt->execute([$_GET['edit_product_id']]);
     $producto_a_editar = $stmt->fetch(PDO::FETCH_ASSOC);
 } elseif (isset($_GET['edit_variant_id'])) {
-    $stmt = $pdo->prepare("SELECT * FROM variantes_producto WHERE id_variante = ?");
+    $stmt = $pdo->prepare("SELECT v.*, p.nombre as nombre_producto_padre FROM variantes_producto v JOIN productos p ON v.id_producto = p.id WHERE v.id_variante = ?");
     $stmt->execute([$_GET['edit_variant_id']]);
     $variante_a_editar = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($variante_a_editar) {
+        $stmt_opciones = $pdo->prepare("SELECT id_opcion FROM variante_opcion WHERE id_variante = ?");
+        $stmt_opciones->execute([$_GET['edit_variant_id']]);
+        $opciones_de_variante_a_editar = $stmt_opciones->fetchAll(PDO::FETCH_COLUMN);
+    }
 } elseif (isset($_GET['add_variant_for'])) {
      $stmt = $pdo->prepare("SELECT id, nombre FROM productos WHERE id = ?");
     $stmt->execute([$_GET['add_variant_for']]);
@@ -90,20 +126,24 @@ if (isset($_GET['edit_product_id'])) {
 
 include 'header.php';
 ?>
+<style>
+    .search-bar-container { margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: center; }
+    .search-input { flex-grow: 1; padding: 0.6rem 0.75rem; border: 1px solid #dee2e6; border-radius: 0.25rem; }
+    #no-results-message { display: none; padding: 1rem; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 0.25rem; text-align: center; }
+</style>
 
 <h1>Gestión Integral de Productos</h1>
-<p>Gestiona tus productos y todas sus variantes desde una única pantalla.</p>
+<p>Gestiona tus productos y sus variantes desde una única pantalla.</p>
 <hr>
 
 <div class="main-container">
-
     <div class="editor-column">
-        <div class="card">
+        <div class="card" id="editor-panel">
             <div class="card-header">
                 <h4>
                     <?php 
-                        if ($producto_a_editar) { echo 'Editando Producto Principal'; }
-                        elseif ($variante_a_editar) { echo 'Editando Variante'; }
+                        if ($producto_a_editar) { echo 'Editando Producto'; }
+                        elseif ($variante_a_editar) { echo 'Editando Variante de "' . htmlspecialchars($variante_a_editar['nombre_producto_padre']) . '"'; }
                         elseif ($producto_para_nueva_variante) { echo 'Añadiendo Variante a "' . htmlspecialchars($producto_para_nueva_variante['nombre']) . '"'; }
                         else { echo 'Agregar Nuevo Producto'; }
                     ?>
@@ -117,10 +157,31 @@ include 'header.php';
                     <input type="hidden" name="id_variante" value="<?php echo $variante_a_editar['id_variante'] ?? ''; ?>">
                     <input type="hidden" name="id_producto_padre" value="<?php echo $variante_a_editar['id_producto'] ?? $producto_para_nueva_variante['id']; ?>">
                     
+                    <h5>Atributos de la Variante</h5>
+                    <?php foreach ($atributos_con_opciones as $nombre_attr => $opciones_attr): ?>
+                        <div class="mb-3">
+                            <label class="form-label"><?php echo htmlspecialchars($nombre_attr); ?></label>
+                            <select name="opciones[]" class="form-select">
+                                <option value="">(Sin especificar)</option>
+                                <?php foreach ($opciones_attr as $opcion): ?>
+                                    <option value="<?php echo $opcion['id']; ?>" <?php if(in_array($opcion['id'], $opciones_de_variante_a_editar)) echo 'selected'; ?>>
+                                        <?php echo htmlspecialchars($opcion['valor']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    <?php endforeach; ?>
+                    <hr>
+                    <h5>Datos de la Variante</h5>
                     <div class="mb-3"><label class="form-label">SKU</label><input type="text" name="sku" class="form-control" value="<?php echo htmlspecialchars($variante_a_editar['sku'] ?? ''); ?>"></div>
                     <div class="mb-3"><label class="form-label">Precio</label><input type="number" name="precio" step="1" class="form-control" value="<?php echo (int)($variante_a_editar['precio'] ?? 0); ?>" required></div>
                     <div class="mb-3"><label class="form-label">Stock</label><input type="number" name="stock" class="form-control" value="<?php echo $variante_a_editar['stock'] ?? 0; ?>" required></div>
-                    
+                    <div class="mb-3"><label class="form-label">Descuento (%)</label><input type="number" name="descuento" class="form-control" value="<?php echo $variante_a_editar['descuento'] ?? 0; ?>"></div>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" name="destacado" id="destacado" value="1" <?php echo (isset($variante_a_editar) && $variante_a_editar['destacado'] == 1) ? 'checked' : ''; ?>>
+                        <label class="form-check-label" for="destacado">Variante Destacada</label>
+                    </div>
+
                     <div class="d-grid gap-2 mt-3">
                         <button type="submit" class="btn btn-primary"><?php echo $variante_a_editar ? 'Actualizar Variante' : 'Guardar Variante'; ?></button>
                         <a href="gestionar_productos.php" class="btn btn-secondary">Cancelar</a>
@@ -160,9 +221,14 @@ include 'header.php';
     </div>
 
     <div class="products-column">
-        <div class="accordion">
+        <div class="search-bar-container">
+            <label for="search-input" class="form-label mb-0 fw-bold">Buscar:</label>
+            <input type="text" id="search-input" class="search-input" onkeyup="filtrarProductos()" placeholder="Escribe el nombre de un producto...">
+        </div>
+        <div id="no-results-message">No se encontraron productos que coincidan con la búsqueda.</div>
+        <div class="accordion" id="product-accordion">
             <?php foreach ($productos as $producto): ?>
-                <div class="accordion-item">
+                <div class="accordion-item" data-nombre-producto="<?= htmlspecialchars(strtolower($producto['nombre'])) ?>">
                     <button class="accordion-button">
                         <span><?php echo htmlspecialchars($producto['nombre']); ?></span>
                         <form action="gestionar_productos.php" method="POST" class="ms-auto" onclick="event.stopPropagation()">
@@ -180,14 +246,24 @@ include 'header.php';
                                 <strong>Categoría:</strong> <?php echo htmlspecialchars($producto['nombre_categoria']); ?><br>
                                 <?php echo htmlspecialchars($producto['descripcion']); ?>
                             </p>
-                            <a href="?edit_product_id=<?php echo $producto['id']; ?>" class="btn btn-secondary btn-sm">Editar Datos Principales</a>
+                            <a href="?edit_product_id=<?php echo $producto['id']; ?>#editor-panel" class="btn btn-secondary btn-sm">Editar Datos Principales</a>
                             <hr>
                             <h6>Variantes:</h6>
                             <table class="table table-hover table-sm">
                                 <thead><tr><th>Atributos</th><th>SKU</th><th>Precio</th><th>Stock</th><th></th></tr></thead>
                                 <tbody>
                                     <?php
-                                    $stmt_variantes = $pdo->prepare("SELECT * FROM variantes_producto WHERE id_producto = ?");
+                                    $stmt_variantes = $pdo->prepare("
+                                        SELECT 
+                                            v.*, 
+                                            GROUP_CONCAT(o.valor ORDER BY a.nombre SEPARATOR ', ') as atributos_variante
+                                        FROM variantes_producto v
+                                        LEFT JOIN variante_opcion vo ON v.id_variante = vo.id_variante
+                                        LEFT JOIN opciones o ON vo.id_opcion = o.id_opcion
+                                        LEFT JOIN atributos a ON o.id_atributo = a.id_atributo
+                                        WHERE v.id_producto = ?
+                                        GROUP BY v.id_variante
+                                    ");
                                     $stmt_variantes->execute([$producto['id']]);
                                     $variantes = $stmt_variantes->fetchAll(PDO::FETCH_ASSOC);
                                     if (empty($variantes)) {
@@ -195,19 +271,19 @@ include 'header.php';
                                     } else {
                                         foreach ($variantes as $variante): ?>
                                         <tr>
-                                            <td>Base</td>
+                                            <td><?php echo htmlspecialchars($variante['atributos_variante'] ?? 'Base'); ?></td>
                                             <td><?php echo htmlspecialchars($variante['sku']); ?></td>
                                             <td>$<?php echo number_format($variante['precio'], 0); ?></td>
                                             <td><?php echo $variante['stock']; ?></td>
                                             <td class="text-end">
-                                                <a href="?edit_variant_id=<?php echo $variante['id_variante']; ?>" class="btn btn-warning btn-sm">Editar</a>
+                                                <a href="?edit_variant_id=<?php echo $variante['id_variante']; ?>#editor-panel" class="btn btn-warning btn-sm">Editar</a>
                                             </td>
                                         </tr>
                                         <?php endforeach; 
                                     } ?>
                                 </tbody>
                             </table>
-                            <a href="?add_variant_for=<?php echo $producto['id']; ?>" class="btn btn-success btn-sm mt-2">Añadir Nueva Variante</a>
+                            <a href="?add_variant_for=<?php echo $producto['id']; ?>#editor-panel" class="btn btn-success btn-sm mt-2">Añadir Nueva Variante</a>
                         </div>
                     </div>
                 </div>
@@ -215,5 +291,26 @@ include 'header.php';
         </div>
     </div>
 </div>
+
+<script>
+function filtrarProductos() {
+    const input = document.getElementById('search-input');
+    const filtro = input.value.toLowerCase();
+    const acordeon = document.getElementById('product-accordion');
+    const items = acordeon.getElementsByClassName('accordion-item');
+    const mensajeVacio = document.getElementById('no-results-message');
+    let resultadosVisibles = 0;
+    for (let i = 0; i < items.length; i++) {
+        const nombreProducto = items[i].dataset.nombreProducto;
+        if (nombreProducto.includes(filtro)) {
+            items[i].style.display = "";
+            resultadosVisibles++;
+        } else {
+            items[i].style.display = "none";
+        }
+    }
+    mensajeVacio.style.display = resultadosVisibles === 0 ? "block" : "none";
+}
+</script>
 
 <?php include 'footer.php'; ?>

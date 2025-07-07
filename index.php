@@ -137,7 +137,7 @@ require __DIR__ . '/kits.php'; // Incluimos la lógica de kits después de carga
       </section>
 
       <section class="ofertas-box">
-        <h2 class="ofertas-title">Productos Destacados</h2>
+        <h2 class="ofertas-title">Productos Favoritos</h2>
         <div class="productos-container">
             <?php if (count($productos_destacados) > 0): ?>
                 <?php foreach ($productos_destacados as $producto): ?>

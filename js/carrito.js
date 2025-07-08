@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cartTotalPriceEl = document.getElementById("cart-total-price");
   const emptyCartMsg = document.querySelector(".cart-empty-msg");
   const finalizePurchaseBtn = document.getElementById("btn-finalize-purchase");
+  const shippingOptionsContainer = document.getElementById('shipping-options');
 
   // === ESTADO DEL CARRITO ===
   // Carga el carrito desde la memoria local del navegador o lo inicia como un array vacío.
@@ -45,6 +46,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const updateCartUI = () => {
     renderCartItems();
     updateCartInfo();
+    // Vuelve a deshabilitar el botón si no hay una opción de envío seleccionada o el carrito está vacío.
+    const selectedShipping = document.querySelector('input[name="shipping"]:checked');
+    finalizePurchaseBtn.disabled = !selectedShipping || cart.length === 0;
     saveCart();
   };
 
@@ -71,7 +75,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!hasItems) {
       cartBody.appendChild(emptyCartMsg);
+      // Si el carrito está vacío, también deshabilita las opciones de envío.
+      if (shippingOptionsContainer) {
+          shippingOptionsContainer.style.display = 'none';
+      }
       return;
+    }
+    
+    // Muestra las opciones de envío si hay items.
+    if (shippingOptionsContainer) {
+        shippingOptionsContainer.style.display = 'block';
     }
 
     cart.forEach((item) => {
@@ -189,8 +202,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     message += `\n*Total Estimado: $${totalPrice.toLocaleString('es-CL')}*`;
 
-    // Añade la dirección del usuario si está logueado y la dirección existe
-    if (window.IS_LOGGED_IN && window.USER_ADDRESS) {
+    // Incluir la opción de envío seleccionada
+    const selectedShipping = document.querySelector('input[name="shipping"]:checked');
+    if (selectedShipping) {
+        message += `\n\n*Método de Entrega: ${selectedShipping.value}*`;
+    }
+
+    // Añade la dirección del usuario si está logueado y la dirección existe y eligió envío a domicilio
+    if (window.IS_LOGGED_IN && window.USER_ADDRESS && selectedShipping && selectedShipping.id === 'shipping-delivery') {
         message += `\n\n*Dirección de Envío Registrada:*\n${window.USER_ADDRESS}`;
     }
 
@@ -198,6 +217,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, '_blank');
+  }
+
+  // Event listener para las opciones de envío
+  if (shippingOptionsContainer) {
+      shippingOptionsContainer.addEventListener('change', () => {
+          const selectedShipping = document.querySelector('input[name="shipping"]:checked');
+          // Habilita el botón solo si se selecciona una opción Y el carrito no está vacío
+          finalizePurchaseBtn.disabled = !selectedShipping || cart.length === 0;
+      });
   }
 
   // Lógica para el botón final de "Pedir por WhatsApp"
@@ -212,6 +240,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!window.IS_LOGGED_IN) {
             alert("Por favor, inicia sesión para que tu pedido quede guardado en tu cuenta antes de continuar.");
             window.location.href = 'login.php'; // Opcional: Redirigir al login
+            return;
+        }
+        
+        // Ahora es redundante por el `disabled` pero es una buena doble verificación.
+        const selectedShipping = document.querySelector('input[name="shipping"]:checked');
+        if (!selectedShipping) {
+            alert("Por favor, selecciona un método de entrega.");
             return;
         }
 
@@ -236,6 +271,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 // Limpiar el carrito después de un pedido exitoso
                 cart = [];
+                // Desmarcar la opción de envío
+                const radioButtons = document.querySelectorAll('input[name="shipping"]');
+                radioButtons.forEach(radio => radio.checked = false);
                 updateCartUI();
                 closeCart();
             } else {
@@ -247,7 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
             alert('Hubo un error de conexión. No se pudo registrar el pedido.');
         } finally {
              // Restauramos el botón a su estado original
-            finalizePurchaseBtn.disabled = false;
+            finalizePurchaseBtn.disabled = true; // Lo dejamos deshabilitado por seguridad
             finalizePurchaseBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Pedir por WhatsApp';
         }
     });

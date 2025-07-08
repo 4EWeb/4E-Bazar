@@ -1,5 +1,5 @@
 <?php
-// admin/gestionar_productos.php (VERSIÓN FINAL Y COMPLETA CON ELIMINAR VARIANTE)
+// admin/gestionar_productos.php (VERSIÓN FINAL CON SOFT DELETE Y BOTONES ALINEADOS)
 
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require '../db.php';
@@ -153,49 +153,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     exit();
 }
 
-// --- ACCIÓN: ELIMINAR PRODUCTO ---
+// --- ACCIÓN: ELIMINAR PRODUCTO (AHORA ES SOFT DELETE) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] == 'delete_product') {
     $id_producto_a_eliminar = $_POST['id_producto'];
     try {
         $pdo->beginTransaction();
-        // Eliminar variantes asociadas primero
-        $stmt_delete_variantes = $pdo->prepare("DELETE FROM variantes_producto WHERE id_producto = ?");
-        $stmt_delete_variantes->execute([$id_producto_a_eliminar]);
         
-        // Eliminar el producto principal
-        $stmt_delete_producto = $pdo->prepare("DELETE FROM productos WHERE id = ?");
-        $stmt_delete_producto->execute([$id_producto_a_eliminar]);
+        // Marcar todas las variantes del producto como inactivas
+        $stmt_update_variantes_estado = $pdo->prepare("UPDATE variantes_producto SET activo = 0 WHERE id_producto = ?");
+        $stmt_update_variantes_estado->execute([$id_producto_a_eliminar]);
+
+        // Marcar el producto principal como inactivo
+        $stmt_update_producto_estado = $pdo->prepare("UPDATE productos SET activo = 0 WHERE id = ?");
+        $stmt_update_producto_estado->execute([$id_producto_a_eliminar]);
         
         $pdo->commit();
-        $_SESSION['message'] = 'Producto y todas sus variantes eliminados exitosamente.';
+        $_SESSION['message'] = 'Producto y sus variantes marcados como inactivos exitosamente.';
     } catch (Exception $e) {
         $pdo->rollBack();
-        $_SESSION['error_message'] = 'Error al eliminar el producto: ' . $e->getMessage();
+        $_SESSION['error_message'] = 'Error al marcar el producto como inactivo: ' . $e->getMessage();
     }
     header("Location: gestionar_productos.php");
     exit();
 }
 
-// --- ACCIÓN: ELIMINAR VARIANTE (NUEVA LÓGICA) ---
+// --- ACCIÓN: ELIMINAR VARIANTE (AHORA ES SOFT DELETE) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] == 'delete_variant') {
     $id_variante_a_eliminar = $_POST['id_variante'];
     $id_producto_padre = $_POST['id_producto_padre']; // Para redirigir correctamente al producto padre
 
     try {
-        $pdo->beginTransaction();
-        // Eliminar las asociaciones de opciones con esta variante
-        $stmt_delete_opciones = $pdo->prepare("DELETE FROM variante_opcion WHERE id_variante = ?");
-        $stmt_delete_opciones->execute([$id_variante_a_eliminar]);
-
-        // Eliminar la variante
-        $stmt_delete_variante = $pdo->prepare("DELETE FROM variantes_producto WHERE id_variante = ?");
-        $stmt_delete_variante->execute([$id_variante_a_eliminar]);
-
-        $pdo->commit();
+        // Marcar la variante como inactiva
+        $stmt = $pdo->prepare("UPDATE variantes_producto SET activo = 0 WHERE id_variante = ?");
+        $stmt->execute([$id_variante_a_eliminar]);
+        
         $_SESSION['message'] = 'Variante eliminada exitosamente.';
     } catch (Exception $e) {
-        $pdo->rollBack();
-        $_SESSION['error_message'] = 'Error al eliminar la variante: ' . $e->getMessage();
+        $_SESSION['error_message'] = 'Error al marcar la variante como inactiva: ' . $e->getMessage();
     }
     // Redirigir de nuevo a la página del producto padre y abrir su editor
     header("Location: gestionar_productos.php?edit_product_id=" . $id_producto_padre . "#editor-panel");
@@ -206,7 +200,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 // =======================================================
 // BLOQUE DE DATOS: OBTIENE LA INFORMACIÓN PARA MOSTRAR
 // =======================================================
-$productos = $pdo->query("SELECT p.id, p.nombre, p.descripcion, p.activo, p.imagen_principal, c.nombre_categoria FROM productos p LEFT JOIN categorias c ON p.categoriaID = c.id_categoria ORDER BY p.nombre")->fetchAll(PDO::FETCH_ASSOC);
+// Se agrega `WHERE p.activo = 1` para solo mostrar productos activos
+$productos = $pdo->query("SELECT p.id, p.nombre, p.descripcion, p.activo, p.imagen_principal, c.nombre_categoria FROM productos p LEFT JOIN categorias c ON p.categoriaID = c.id_categoria WHERE p.activo = 1 ORDER BY p.nombre")->fetchAll(PDO::FETCH_ASSOC);
 $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nombre_categoria")->fetchAll(PDO::FETCH_ASSOC);
 
 $atributos_query = $pdo->query("SELECT a.id_atributo, a.nombre, o.id_opcion, o.valor FROM atributos a JOIN opciones o ON a.id_atributo = o.id_atributo ORDER BY a.nombre, o.valor");
@@ -312,21 +307,25 @@ include 'header.php';
                         <label class="form-check-label" for="destacado">Variante Destacada</label>
                     </div>
 
-                    <div class="d-grid gap-2 mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg"><?php echo $variante_a_editar ? 'Actualizar Variante' : 'Guardar Variante'; ?></button>
-                        <a href="gestionar_productos.php" class="btn btn-secondary">Cancelar</a>
-                        <?php if ($variante_a_editar): // MOSTRAR BOTÓN DE ELIMINAR SOLO SI SE ESTÁ EDITANDO UNA VARIANTE EXISTENTE ?>
-                            </form> <form action="gestionar_productos.php" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas ELIMINAR esta variante? Esta acción es irreversible.');">
-                                <input type="hidden" name="action" value="delete_variant">
-                                <input type="hidden" name="id_variante" value="<?php echo $variante_a_editar['id_variante']; ?>">
-                                <input type="hidden" name="id_producto_padre" value="<?php echo $variante_a_editar['id_producto']; ?>">
-                                <button type="submit" class="btn btn-danger btn-lg mt-2">Eliminar Variante</button>
-                            </form>
-                            <form action="gestionar_productos.php" method="POST" enctype="multipart/form-data"> <input type="hidden" name="action" value="save_variant">
-                                <input type="hidden" name="id_variante" value="<?php echo $variante_a_editar['id_variante'] ?? ''; ?>">
-                                <input type="hidden" name="id_producto_padre" value="<?php echo $variante_a_editar['id_producto'] ?? $producto_para_nueva_variante['id']; ?>">
-                                <input type="hidden" name="nombre_producto_padre" value="<?php echo htmlspecialchars($variante_a_editar['nombre_producto_padre'] ?? $producto_para_nueva_variante['nombre']); ?>">
-                                <?php endif; ?>
+                    <div class="d-flex justify-content-between mt-4 align-items-center"> <button type="submit" class="btn btn-primary btn-lg">
+                            <?php echo $variante_a_editar ? 'Actualizar Variante' : 'Guardar Variante'; ?>
+                        </button>
+                        <div class="d-flex gap-2"> <a href="gestionar_productos.php?edit_product_id=<?php echo $variante_a_editar['id_producto'] ?? $producto_para_nueva_variante['id']; ?>#editor-panel" class="btn btn-secondary btn-lg">Cancelar</a>
+                            <?php if ($variante_a_editar): // MOSTRAR BOTÓN DE ELIMINAR SOLO SI SE ESTÁ EDITANDO UNA VARIANTE EXISTENTE ?>
+                                </form> 
+                                <form action="gestionar_productos.php" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas ELIMINAR esta variante? Esta acción es irreversible.');" style="display: inline-block;">
+                                    <input type="hidden" name="action" value="delete_variant">
+                                    <input type="hidden" name="id_variante" value="<?php echo $variante_a_editar['id_variante']; ?>">
+                                    <input type="hidden" name="id_producto_padre" value="<?php echo $variante_a_editar['id_producto']; ?>">
+                                    <button type="submit" class="btn btn-danger btn-lg">Eliminar Variante</button>
+                                </form>
+                                <form action="gestionar_productos.php" method="POST" enctype="multipart/form-data">
+                                    <input type="hidden" name="action" value="save_variant">
+                                    <input type="hidden" name="id_variante" value="<?php echo $variante_a_editar['id_variante'] ?? ''; ?>">
+                                    <input type="hidden" name="id_producto_padre" value="<?php echo $variante_a_editar['id_producto'] ?? $producto_para_nueva_variante['id']; ?>">
+                                    <input type="hidden" name="nombre_producto_padre" value="<?php echo htmlspecialchars($variante_a_editar['nombre_producto_padre'] ?? $producto_para_nueva_variante['nombre']); ?>">
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </form>
 
@@ -413,6 +412,7 @@ include 'header.php';
                                 <thead><tr><th>Imagen</th><th>Atributos</th><th>SKU</th><th>Precio</th><th>Stock</th><th></th></tr></thead>
                                 <tbody>
                                     <?php
+                                    // Se agrega `WHERE v.activo = 1` para solo mostrar variantes activas
                                     $stmt_variantes = $pdo->prepare("
                                         SELECT 
                                             v.*, 
@@ -421,7 +421,7 @@ include 'header.php';
                                         LEFT JOIN variante_opcion vo ON v.id_variante = vo.id_variante
                                         LEFT JOIN opciones o ON vo.id_opcion = o.id_opcion
                                         LEFT JOIN atributos a ON o.id_atributo = a.id_atributo
-                                        WHERE v.id_producto = ?
+                                        WHERE v.id_producto = ? AND v.activo = 1
                                         GROUP BY v.id_variante
                                     ");
                                     $stmt_variantes->execute([$producto['id']]);

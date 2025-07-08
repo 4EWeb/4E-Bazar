@@ -1,5 +1,5 @@
 <?php
-// admin/gestionar_productos.php (VERSIÓN FINAL Y COMPLETA)
+// admin/gestionar_productos.php (VERSIÓN FINAL Y COMPLETA CON ELIMINAR VARIANTE)
 
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require '../db.php';
@@ -176,6 +176,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     exit();
 }
 
+// --- ACCIÓN: ELIMINAR VARIANTE (NUEVA LÓGICA) ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] == 'delete_variant') {
+    $id_variante_a_eliminar = $_POST['id_variante'];
+    $id_producto_padre = $_POST['id_producto_padre']; // Para redirigir correctamente al producto padre
+
+    try {
+        $pdo->beginTransaction();
+        // Eliminar las asociaciones de opciones con esta variante
+        $stmt_delete_opciones = $pdo->prepare("DELETE FROM variante_opcion WHERE id_variante = ?");
+        $stmt_delete_opciones->execute([$id_variante_a_eliminar]);
+
+        // Eliminar la variante
+        $stmt_delete_variante = $pdo->prepare("DELETE FROM variantes_producto WHERE id_variante = ?");
+        $stmt_delete_variante->execute([$id_variante_a_eliminar]);
+
+        $pdo->commit();
+        $_SESSION['message'] = 'Variante eliminada exitosamente.';
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        $_SESSION['error_message'] = 'Error al eliminar la variante: ' . $e->getMessage();
+    }
+    // Redirigir de nuevo a la página del producto padre y abrir su editor
+    header("Location: gestionar_productos.php?edit_product_id=" . $id_producto_padre . "#editor-panel");
+    exit();
+}
+
 
 // =======================================================
 // BLOQUE DE DATOS: OBTIENE LA INFORMACIÓN PARA MOSTRAR
@@ -289,6 +315,18 @@ include 'header.php';
                     <div class="d-grid gap-2 mt-4">
                         <button type="submit" class="btn btn-primary btn-lg"><?php echo $variante_a_editar ? 'Actualizar Variante' : 'Guardar Variante'; ?></button>
                         <a href="gestionar_productos.php" class="btn btn-secondary">Cancelar</a>
+                        <?php if ($variante_a_editar): // MOSTRAR BOTÓN DE ELIMINAR SOLO SI SE ESTÁ EDITANDO UNA VARIANTE EXISTENTE ?>
+                            </form> <form action="gestionar_productos.php" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas ELIMINAR esta variante? Esta acción es irreversible.');">
+                                <input type="hidden" name="action" value="delete_variant">
+                                <input type="hidden" name="id_variante" value="<?php echo $variante_a_editar['id_variante']; ?>">
+                                <input type="hidden" name="id_producto_padre" value="<?php echo $variante_a_editar['id_producto']; ?>">
+                                <button type="submit" class="btn btn-danger btn-lg mt-2">Eliminar Variante</button>
+                            </form>
+                            <form action="gestionar_productos.php" method="POST" enctype="multipart/form-data"> <input type="hidden" name="action" value="save_variant">
+                                <input type="hidden" name="id_variante" value="<?php echo $variante_a_editar['id_variante'] ?? ''; ?>">
+                                <input type="hidden" name="id_producto_padre" value="<?php echo $variante_a_editar['id_producto'] ?? $producto_para_nueva_variante['id']; ?>">
+                                <input type="hidden" name="nombre_producto_padre" value="<?php echo htmlspecialchars($variante_a_editar['nombre_producto_padre'] ?? $producto_para_nueva_variante['nombre']); ?>">
+                                <?php endif; ?>
                     </div>
                 </form>
 

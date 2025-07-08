@@ -148,7 +148,27 @@ $edit_mode = isset($_GET['action']) && $_GET['action'] === 'edit';
         </div>
     </main>
 
-    <aside class="cart-sidebar"></aside>
+        <aside class="cart-sidebar">
+      <div class="cart-header"><h3>Tu Carrito</h3><button class="cart-close-btn" aria-label="Cerrar carrito">&times;</button></div>
+      <div class="cart-body"><p class="cart-empty-msg">Tu carrito está vacío.</p></div>
+      <div class="cart-footer">
+        <div class="cart-total"><strong>Total:</strong><span id="cart-total-price">$0</span></div>
+        
+        <div class="shipping-options" id="shipping-options" style="display: none;">
+            <h4>Selecciona un método de entrega</h4>
+            <div class="shipping-option">
+                <input type="radio" id="shipping-pickup" name="shipping" value="Retiro en tienda física">
+                <label for="shipping-pickup">Retiro en tienda física</label>
+            </div>
+            <div class="shipping-option">
+                <input type="radio" id="shipping-delivery" name="shipping" value="Envío a domicilio">
+                <label for="shipping-delivery">Envío a domicilio</label>
+            </div>
+        </div>
+        
+        <button class="btn-checkout" id="btn-finalize-purchase" disabled><i class="fab fa-whatsapp"></i> Pedir por WhatsApp</button>
+        </div>
+    </aside>
     <div class="cart-overlay"></div>
     <script src="js/carrito.js"></script>
     <script src="js/nav-responsive.js"></script>

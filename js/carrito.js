@@ -1,100 +1,99 @@
 // ===================================================================================
-// CARRITO.JS - GESTIÓN COMPLETA DEL CARRITO DE COMPRAS
+// CARRITO.JS - GESTIÓN COMPLETA DEL CARRITO DE COMPRAS (CON COSTO DE ENVÍO)
 // ===================================================================================
 
 // Variable global para que las funciones onclick de los productos puedan acceder a ella.
 let agregarAlCarrito;
 
-// Se ejecuta cuando todo el documento HTML ha sido cargado.
 document.addEventListener("DOMContentLoaded", () => {
-  // === SELECCIÓN DE ELEMENTOS DEL DOM ===
+  // === CONSTANTES Y ELEMENTOS DEL DOM ===
+  const SHIPPING_COST = 2990; // Costo de envío fijo
   const cartIconBtn = document.getElementById("cart-icon-btn");
   const cartSidebar = document.querySelector(".cart-sidebar");
   const cartCloseBtn = document.querySelector(".cart-close-btn");
   const cartOverlay = document.querySelector(".cart-overlay");
   const cartCounterSpan = document.getElementById("contador-carrito");
   const cartBody = document.querySelector(".cart-body");
-  const cartTotalPriceEl = document.getElementById("cart-total-price");
+  const cartSubtotalEl = document.getElementById("cart-subtotal-price");
+  const cartShippingEl = document.getElementById("cart-shipping-price");
+  const cartTotalEl = document.getElementById("cart-total-price");
+  const shippingRow = document.getElementById("shipping-cost-row");
   const emptyCartMsg = document.querySelector(".cart-empty-msg");
   const finalizePurchaseBtn = document.getElementById("btn-finalize-purchase");
   const shippingOptionsContainer = document.getElementById('shipping-options');
 
   // === ESTADO DEL CARRITO ===
-  // Carga el carrito desde la memoria local del navegador o lo inicia como un array vacío.
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  // === FUNCIONES PRINCIPALES ===
+  // === FUNCIONES ===
 
-  /** Guarda el estado actual del carrito en la memoria local del navegador. */
-  const saveCart = () => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  };
-
-  /** Abre el panel lateral del carrito. */
+  const saveCart = () => localStorage.setItem("cart", JSON.stringify(cart));
   const openCart = () => {
     if(cartSidebar) cartSidebar.classList.add("active");
     if(cartOverlay) cartOverlay.classList.add("active");
   };
-
-  /** Cierra el panel lateral del carrito. */
   const closeCart = () => {
     if(cartSidebar) cartSidebar.classList.remove("active");
     if(cartOverlay) cartOverlay.classList.remove("active");
   };
 
-  /** Función central para actualizar toda la interfaz del carrito. */
   const updateCartUI = () => {
     renderCartItems();
-    updateCartInfo();
-    // Vuelve a deshabilitar el botón si no hay una opción de envío seleccionada o el carrito está vacío.
-    const selectedShipping = document.querySelector('input[name="shipping"]:checked');
-    finalizePurchaseBtn.disabled = !selectedShipping || cart.length === 0;
+    updateCartTotals();
     saveCart();
   };
 
-  /** Actualiza el contador de ítems y el precio total. */
-  const updateCartInfo = () => {
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    
-    if (cartCounterSpan) cartCounterSpan.textContent = totalItems;
-    if (cartTotalPriceEl) {
-      cartTotalPriceEl.textContent = `$${totalPrice.toLocaleString("es-CL")}`;
-    }
+  /**
+   * Actualiza los totales (subtotal, envío y total) en la interfaz.
+   */
+  const updateCartTotals = () => {
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      const selectedShipping = document.querySelector('input[name="shipping"]:checked');
+      let shippingCost = 0;
+      let finalTotal = subtotal;
+
+      if (selectedShipping && selectedShipping.id === 'shipping-delivery') {
+          shippingCost = SHIPPING_COST;
+          finalTotal += shippingCost;
+          if (shippingRow) shippingRow.style.display = 'flex';
+      } else {
+          if (shippingRow) shippingRow.style.display = 'none';
+      }
+
+      if (cartSubtotalEl) cartSubtotalEl.textContent = `$${subtotal.toLocaleString("es-CL")}`;
+      if (cartShippingEl) cartShippingEl.textContent = `$${shippingCost.toLocaleString("es-CL")}`;
+      if (cartTotalEl) cartTotalEl.textContent = `$${finalTotal.toLocaleString("es-CL")}`;
+      
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      if (cartCounterSpan) cartCounterSpan.textContent = totalItems;
+
+      if (finalizePurchaseBtn) {
+          finalizePurchaseBtn.disabled = !selectedShipping || cart.length === 0;
+      }
   };
 
-  /** Dibuja los ítems (productos y servicios) dentro del panel del carrito. */
   const renderCartItems = () => {
     if (!cartBody) return;
-
     cartBody.innerHTML = "";
     const hasItems = cart.length > 0;
 
-    emptyCartMsg.style.display = hasItems ? "none" : "block";
-    if(finalizePurchaseBtn) finalizePurchaseBtn.disabled = !hasItems;
+    if (emptyCartMsg) emptyCartMsg.style.display = hasItems ? "none" : "block";
+    if (shippingOptionsContainer) shippingOptionsContainer.style.display = hasItems ? 'block' : 'none';
 
     if (!hasItems) {
-      cartBody.appendChild(emptyCartMsg);
-      // Si el carrito está vacío, también deshabilita las opciones de envío.
-      if (shippingOptionsContainer) {
-          shippingOptionsContainer.style.display = 'none';
-      }
+      if(emptyCartMsg) cartBody.appendChild(emptyCartMsg);
+      if (shippingRow) shippingRow.style.display = 'none'; // Oculta costo de envío si el carrito está vacío
       return;
     }
-    
-    // Muestra las opciones de envío si hay items.
-    if (shippingOptionsContainer) {
-        shippingOptionsContainer.style.display = 'block';
-    }
 
-    cart.forEach((item) => {
+    cart.forEach(item => {
       const cartItemDiv = document.createElement("div");
-      cartItemDiv.dataset.id = item.id;
       cartItemDiv.className = "cart-item";
+      cartItemDiv.dataset.id = item.id;
+      
+      const itemTotalPrice = (item.price * item.quantity).toLocaleString("es-CL");
 
-      // Si es un producto normal (no un servicio)
-      if (!item.name.includes('Impresión')) { // Una forma simple de diferenciar
-        const itemTotalPrice = (item.price * item.quantity).toLocaleString("es-CL");
+      if (!item.name.includes('Impresión')) { // Producto normal
         cartItemDiv.innerHTML = `
           <img src="${item.image}" alt="${item.name}" class="cart-item-img">
           <div class="cart-item-info">
@@ -106,192 +105,141 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span class="item-quantity">${item.quantity}</span>
                 <button class="quantity-btn" data-action="increase">+</button>
               </div>
-              <button class="remove-item-btn" title="Eliminar producto">
-                <i class="fas fa-trash-alt"></i>
-              </button>
+              <button class="remove-item-btn" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
             </div>
-          </div>
-        `;
-      } else {
-        // Si es un servicio personalizado
+          </div>`;
+      } else { // Servicio
         cartItemDiv.innerHTML = `
           <div class="cart-item-info">
-              <p class="cart-item-title">${item.name}</p>
-              <p class="cart-item-price">$${item.price.toLocaleString("es-CL")}</p>
+            <p class="cart-item-title">${item.name}</p>
+            <p class="cart-item-price">$${item.price.toLocaleString("es-CL")}</p>
           </div>
-          <button class="remove-item-btn" title="Eliminar servicio">
-            <i class="fas fa-trash-alt"></i>
-          </button>
-        `;
+          <button class="remove-item-btn" title="Eliminar"><i class="fas fa-trash-alt"></i></button>`;
       }
       cartBody.appendChild(cartItemDiv);
     });
   };
 
-  /** Función global para agregar cualquier item al carrito. */
   agregarAlCarrito = (item) => {
-    // Si el item ya tiene 'quantity', es un producto normal.
-    // Si no, es un servicio y se le asigna quantity = 1.
-    if (!item.quantity) {
-        item.quantity = 1;
-    }
-    
-    const existingItem = cart.find((i) => i.id === item.id);
-    
-    if (existingItem && !item.name.includes('Impresión')) { // Solo agrupa si es un producto
-        existingItem.quantity += item.quantity;
+    item.quantity = item.quantity || 1;
+    const existingItem = cart.find(i => i.id === item.id);
+    if (existingItem && !item.name.includes('Impresión')) {
+      existingItem.quantity += item.quantity;
     } else {
-        // Si es un servicio o un producto nuevo, lo añade.
-        cart.push(item);
+      cart.push(item);
     }
-    
     updateCartUI();
     openCart();
   };
 
-  // === EVENT LISTENERS (MANEJO DE INTERACCIONES) ===
+  // === MANEJO DE EVENTOS ===
 
   if (cartIconBtn) {
     cartIconBtn.addEventListener("click", openCart);
-    cartCloseBtn.addEventListener("click", closeCart);
-    cartOverlay.addEventListener("click", closeCart);
+    if(cartCloseBtn) cartCloseBtn.addEventListener("click", closeCart);
+    if(cartOverlay) cartOverlay.addEventListener("click", closeCart);
   }
 
   if (cartBody) {
-    cartBody.addEventListener("click", (e) => {
-      const removeButton = e.target.closest(".remove-item-btn");
-      const quantityButton = e.target.closest(".quantity-btn");
-
-      if (!removeButton && !quantityButton) return;
-
+    cartBody.addEventListener("click", e => {
       const cartItemElement = e.target.closest(".cart-item");
+      if (!cartItemElement) return;
       const id = cartItemElement.dataset.id;
       
-      if (removeButton) {
-        cart = cart.filter((item) => item.id != id);
+      if (e.target.closest(".remove-item-btn")) {
+        cart = cart.filter(item => item.id != id);
       }
-
-      if (quantityButton) {
-        const itemInCart = cart.find((item) => item.id == id);
+      if (e.target.closest(".quantity-btn")) {
+        const itemInCart = cart.find(item => item.id == id);
         if (!itemInCart) return;
-
-        const action = quantityButton.dataset.action;
-        if (action === "increase") {
-          itemInCart.quantity++;
-        } else if (action === "decrease") {
-          if (itemInCart.quantity > 1) {
-            itemInCart.quantity--;
-          } else {
-            cart = cart.filter((item) => item.id != id);
-          }
+        const action = e.target.closest(".quantity-btn").dataset.action;
+        if (action === "increase") itemInCart.quantity++;
+        else if (action === "decrease") {
+          itemInCart.quantity > 1 ? itemInCart.quantity-- : (cart = cart.filter(item => item.id != id));
         }
       }
       updateCartUI();
     });
   }
   
-  /** Función auxiliar para generar y abrir el enlace de WhatsApp */
-  function generarUrlWhatsAppYRedirigir() {
+  const generarUrlWhatsAppYRedirigir = () => {
     const phoneNumber = '56976509490';
     let message = '¡Hola! Me gustaría hacer el siguiente pedido:\n\n';
 
     cart.forEach(item => {
         message += `*${item.quantity}x* - ${item.name}\n`;
     });
-    
-    const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    message += `\n*Total Estimado: $${totalPrice.toLocaleString('es-CL')}*`;
 
-    // Incluir la opción de envío seleccionada
+    const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const selectedShipping = document.querySelector('input[name="shipping"]:checked');
-    if (selectedShipping) {
-        message += `\n\n*Método de Entrega: ${selectedShipping.value}*`;
+    let finalTotal = subtotal;
+
+    message += `\n*Subtotal: $${subtotal.toLocaleString('es-CL')}*`;
+
+    if (selectedShipping && selectedShipping.id === 'shipping-delivery') {
+        finalTotal += SHIPPING_COST;
+        message += `\n*Costo de Envío: $${SHIPPING_COST.toLocaleString('es-CL')}*`;
     }
 
-    // Añade la dirección del usuario si está logueado y la dirección existe y eligió envío a domicilio
+    message += `\n*Total a Pagar: $${finalTotal.toLocaleString('es-CL')}*`;
+    message += `\n\n*Método de Entrega: ${selectedShipping.value}*`;
+    
     if (window.IS_LOGGED_IN && window.USER_ADDRESS && selectedShipping && selectedShipping.id === 'shipping-delivery') {
-        message += `\n\n*Dirección de Envío Registrada:*\n${window.USER_ADDRESS}`;
+      message += `\n\n*Dirección de Envío Registrada:*\n${window.USER_ADDRESS}`;
     }
 
-    message += `\n\nPor favor, confírmame la disponibilidad y el valor final. ¡Gracias!`;
+    message += `\n\nPor favor, confírmame la disponibilidad. ¡Gracias!`;
 
     const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, '_blank');
-  }
+  };
 
-  // Event listener para las opciones de envío
   if (shippingOptionsContainer) {
-      shippingOptionsContainer.addEventListener('change', () => {
-          const selectedShipping = document.querySelector('input[name="shipping"]:checked');
-          // Habilita el botón solo si se selecciona una opción Y el carrito no está vacío
-          finalizePurchaseBtn.disabled = !selectedShipping || cart.length === 0;
-      });
+    shippingOptionsContainer.addEventListener('change', updateCartTotals);
   }
 
-  // Lógica para el botón final de "Pedir por WhatsApp"
   if (finalizePurchaseBtn) {
     finalizePurchaseBtn.addEventListener('click', async () => {
-        if (cart.length === 0) {
-            alert('Tu carrito está vacío.');
-            return;
-        }
-
-        // Si el usuario no ha iniciado sesión, le pedimos que lo haga para poder guardar su pedido.
+        if (cart.length === 0 || !document.querySelector('input[name="shipping"]:checked')) return;
         if (!window.IS_LOGGED_IN) {
-            alert("Por favor, inicia sesión para que tu pedido quede guardado en tu cuenta antes de continuar.");
-            window.location.href = 'login.php'; // Opcional: Redirigir al login
-            return;
-        }
-        
-        // Ahora es redundante por el `disabled` pero es una buena doble verificación.
-        const selectedShipping = document.querySelector('input[name="shipping"]:checked');
-        if (!selectedShipping) {
-            alert("Por favor, selecciona un método de entrega.");
+            alert("Por favor, inicia sesión para guardar tu pedido antes de continuar.");
+            window.location.href = 'login.php';
             return;
         }
 
-        // Si el usuario SÍ ha iniciado sesión, intentamos guardar el pedido.
-        const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        finalizePurchaseBtn.disabled = true;
+        finalizePurchaseBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
 
         try {
-            finalizePurchaseBtn.disabled = true;
-            finalizePurchaseBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
-
+            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
             const response = await fetch('registrar-pedido.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ cart: cart, total: total }),
+                body: JSON.stringify({ cart, total }),
             });
-
             const result = await response.json();
 
             if (result.success) {
-                // Si se guardó con éxito, AHORA abrimos WhatsApp
                 generarUrlWhatsAppYRedirigir();
-                
-                // Limpiar el carrito después de un pedido exitoso
                 cart = [];
-                // Desmarcar la opción de envío
-                const radioButtons = document.querySelectorAll('input[name="shipping"]');
-                radioButtons.forEach(radio => radio.checked = false);
+                document.querySelectorAll('input[name="shipping"]').forEach(r => r.checked = false);
                 updateCartUI();
                 closeCart();
             } else {
-                alert('Hubo un error al registrar tu pedido: ' + (result.message || 'Error desconocido.'));
+                alert(`Hubo un error al registrar tu pedido: ${result.message || 'Error desconocido.'}`);
             }
-
         } catch (error) {
             console.error('Error de conexión:', error);
             alert('Hubo un error de conexión. No se pudo registrar el pedido.');
         } finally {
-             // Restauramos el botón a su estado original
-            finalizePurchaseBtn.disabled = true; // Lo dejamos deshabilitado por seguridad
-            finalizePurchaseBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Pedir por WhatsApp';
+            if(finalizePurchaseBtn) {
+                finalizePurchaseBtn.disabled = true;
+                finalizePurchaseBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Pedir por WhatsApp';
+            }
         }
     });
   }
 
   // === INICIALIZACIÓN ===
-  // Cargar el estado del carrito al iniciar la página.
   updateCartUI();
 });

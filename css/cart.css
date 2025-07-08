@@ -238,3 +238,107 @@
 .btn-checkout:disabled:hover {
   background-color: #ccc; /* Evita que cambie de color al pasar el mouse */
 }
+
+/* --- Estilos para la Selección de Envío --- */
+.shipping-options {
+  margin-bottom: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.shipping-options h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 0.75rem;
+}
+
+.shipping-option {
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fa;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.shipping-option:hover {
+    background-color: #f1f3f5;
+}
+
+.shipping-option input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    margin-right: 12px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.shipping-option input[type="radio"]:checked {
+  border-color: var(--cart-primary-color);
+  background-color: var(--cart-primary-color);
+  box-shadow: 0 0 0 2px white inset;
+}
+
+.shipping-option label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--cart-dark-color);
+  cursor: pointer;
+  flex-grow: 1;
+}
+
+/* --- NUEVO: Estilos para el desglose del total --- */
+.cart-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.cart-summary-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+#shipping-cost-row {
+    display: none; /* Se mostrará con JS */
+}
+
+.cart-summary-row span:first-child {
+    color: #555;
+}
+
+.cart-summary-row span:last-child {
+    font-weight: 600;
+}
+
+.cart-final-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 2px solid #ddd;
+}
+
+/* Estilo para el botón de checkout cuando está deshabilitado */
+.btn-checkout:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.btn-checkout:disabled:hover {
+  background-color: #ccc; /* Evita que cambie de color al pasar el mouse */
+}

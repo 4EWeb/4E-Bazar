@@ -1,4 +1,12 @@
 <?php
+// admin/header.php
+
+// --- AÑADIDO: Verificación de autenticación ---
+// Esta línea es la clave de la seguridad.
+// Redirige a la página de login si no se ha iniciado sesión.
+require_once 'check_auth.php';
+// --- FIN DEL AÑADIDO ---
+
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 $currentPage = basename($_SERVER['PHP_SELF']);
 ?>
@@ -28,7 +36,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             </ul>
         </nav>
         <div class="sidebar-footer">
-            <a href="../logout.php"><i class="fas fa-sign-out-alt fa-fw"></i> Cerrar Sesión</a>
+            <a href="logout.php"><i class="fas fa-sign-out-alt fa-fw"></i> Cerrar Sesión</a>
         </div>
     </aside>
     <main class="main-content">

@@ -153,6 +153,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     exit();
 }
 
+// --- ACCIÓN: ELIMINAR PRODUCTO ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] == 'delete_product') {
+    $id_producto_a_eliminar = $_POST['id_producto'];
+    try {
+        $pdo->beginTransaction();
+        // Eliminar variantes asociadas primero
+        $stmt_delete_variantes = $pdo->prepare("DELETE FROM variantes_producto WHERE id_producto = ?");
+        $stmt_delete_variantes->execute([$id_producto_a_eliminar]);
+        
+        // Eliminar el producto principal
+        $stmt_delete_producto = $pdo->prepare("DELETE FROM productos WHERE id = ?");
+        $stmt_delete_producto->execute([$id_producto_a_eliminar]);
+        
+        $pdo->commit();
+        $_SESSION['message'] = 'Producto y todas sus variantes eliminados exitosamente.';
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        $_SESSION['error_message'] = 'Error al eliminar el producto: ' . $e->getMessage();
+    }
+    header("Location: gestionar_productos.php");
+    exit();
+}
+
+
 // =======================================================
 // BLOQUE DE DATOS: OBTIENE LA INFORMACIÓN PARA MOSTRAR
 // =======================================================
@@ -302,7 +326,14 @@ include 'header.php';
                     
                     <div class="d-grid gap-2 mt-4">
                         <button type="submit" class="btn btn-primary btn-lg"><?php echo $producto_a_editar ? 'Actualizar Producto' : 'Guardar Nuevo Producto'; ?></button>
-                        <?php if ($producto_a_editar): ?><a href="gestionar_productos.php" class="btn btn-secondary">Cancelar</a><?php endif; ?>
+                        <?php if ($producto_a_editar): ?>
+                            <a href="gestionar_productos.php" class="btn btn-secondary">Cancelar</a>
+                            <form action="gestionar_productos.php" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas ELIMINAR este producto y TODAS sus variantes? Esta acción es irreversible.');">
+                                <input type="hidden" name="action" value="delete_product">
+                                <input type="hidden" name="id_producto" value="<?php echo $producto_a_editar['id']; ?>">
+                                <button type="submit" class="btn btn-danger btn-lg mt-2">Eliminar Producto</button>
+                            </form>
+                        <?php endif; ?>
                     </div>
                 </form>
                 <?php endif; ?>

@@ -430,6 +430,7 @@ function get_low_stock_products($pdo, $threshold = 5) {
         JOIN productos p ON v.id_producto = p.id
         WHERE v.stock <= ? AND v.stock > 0
         ORDER BY v.stock ASC
+        LIMIT 7
     ";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$threshold]);

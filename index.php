@@ -168,37 +168,36 @@ require __DIR__ . '/kits.php'; // Incluimos la lógica de kits después de carga
                 <?php if (count($kits_procesados) > 0): ?>
                     <?php foreach ($kits_procesados as $kit): ?>
                         <div class="kit-box">
-                            <h3><?= htmlspecialchars($kit['nombre']) ?></h3>
-                            <ul class="product-list">
-                                <?php foreach ($kit['nombres_productos'] as $item): ?>
-                                    <li>
-                                        <?= htmlspecialchars($item['nombre_producto']) ?> (x<?= htmlspecialchars($item['cantidad']) ?>)
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                            <div class="kit-footer">
-                                <div class="kit-price">
-                                    <span class="kit-price-label">Precio Total del Kit</span>
-                                    $<?= number_format($kit['precio_total'], 0, ',', '.') ?>
+                            <img src="<?= htmlspecialchars($kit['imagen_promo'] ?: 'Imagenes/4e logo actualizado.png') ?>" alt="Kit: <?= htmlspecialchars($kit['nombre']) ?>" class="kit-image">
+                            <div class="kit-box-content">
+                                <h3><?= htmlspecialchars($kit['nombre']) ?></h3>
+                                <ul class="product-list">
+                                    <?php foreach ($kit['nombres_productos'] as $item): ?>
+                                        <li>
+                                            <?= htmlspecialchars($item['nombre_producto']) ?> (x<?= htmlspecialchars($item['cantidad']) ?>)
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                                <div class="kit-footer">
+                                    <div class="kit-price">
+                                        <span class="price-old" style="font-size: 1rem; color: #888;">
+                                            Valor real: $<?= number_format($kit['valor_real'], 0, ',', '.') ?>
+                                        </span>
+                                        $<?= number_format($kit['precio_total'], 0, ',', '.') ?>
+                                    </div>
+                                    <button class="btn-add-kit-to-cart" 
+                                            onclick="agregarAlCarrito({
+                                                id: 'promo-<?= $kit['id_promo'] ?>',
+                                                name: '<?= htmlspecialchars(addslashes($kit['nombre'])) ?>',
+                                                price: <?= $kit['precio_total'] ?>,
+                                                image: '<?= htmlspecialchars(addslashes($kit['imagen_promo'] ?: 'Imagenes/4e logo actualizado.png')) ?>',
+                                                tipo: 'promo'
+                                            })">
+                                        Agregar Kit al Carrito
+                                    </button>
                                 </div>
-                                <div class="kit-price">
-                                    <span class="price-old" style="font-size: 1rem; color: #888;">
-                                        Valor real: $<?= number_format($kit['valor_real'], 0, ',', '.') ?>
-                                    </span>
-                                    $<?= number_format($kit['precio_total'], 0, ',', '.') ?>
-                                </div>
-                                <button class="btn-add-kit-to-cart" 
-                                        onclick="agregarAlCarrito({
-                                            id: 'promo-<?= $kit['id_promo'] ?>',
-                                            name: '<?= htmlspecialchars(addslashes($kit['nombre'])) ?>',
-                                            price: <?= $kit['precio_total'] ?>,
-                                            image: 'Imagenes/4e logo actualizado.png',
-                                            tipo: 'promo'
-                                        })">
-                                    Agregar Kit al Carrito
-                                </button>
                             </div>
-                        </div>
+                            </div>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <p>No hay kits disponibles en este momento.</p>
@@ -253,39 +252,39 @@ require __DIR__ . '/kits.php'; // Incluimos la lógica de kits después de carga
     <aside class="cart-sidebar">
       <div class="cart-header"><h3>Tu Carrito</h3><button class="cart-close-btn" aria-label="Cerrar carrito">&times;</button></div>
       <div class="cart-body"><p class="cart-empty-msg">Tu carrito está vacío.</p></div>
-    <div class="cart-footer">
-    <div class="cart-summary">
-        <div class="cart-summary-row">
-            <span>Subtotal</span>
-            <span id="cart-subtotal-price">$0</span>
+      <div class="cart-footer">
+        <div class="cart-summary">
+            <div class="cart-summary-row">
+                <span>Subtotal</span>
+                <span id="cart-subtotal-price">$0</span>
+            </div>
+            <div class="cart-summary-row" id="shipping-cost-row">
+                <span>Envío</span>
+                <span id="cart-shipping-price">$0</span>
+            </div>
         </div>
-        <div class="cart-summary-row" id="shipping-cost-row">
-            <span>Envío</span>
-            <span id="cart-shipping-price">$0</span>
+        
+        <div class="cart-final-total">
+            <span>Total</span>
+            <span id="cart-total-price">$0</span>
         </div>
-    </div>
     
-    <div class="cart-final-total">
-        <span>Total</span>
-        <span id="cart-total-price">$0</span>
-    </div>
-
-    <div class="shipping-options" id="shipping-options" style="display: none;">
-        <h4>Selecciona un método de entrega</h4>
-        <div class="shipping-option">
-            <input type="radio" id="shipping-pickup" name="shipping" value="Retiro en tienda física">
-            <label for="shipping-pickup">Retiro en tienda física</label>
+        <div class="shipping-options" id="shipping-options" style="display: none;">
+            <h4>Selecciona un método de entrega</h4>
+            <div class="shipping-option">
+                <input type="radio" id="shipping-pickup" name="shipping" value="Retiro en tienda física">
+                <label for="shipping-pickup">Retiro en tienda física</label>
+            </div>
+            <div class="shipping-option">
+                <input type="radio" id="shipping-delivery" name="shipping" value="Envío a domicilio">
+                <label for="shipping-delivery">Envío a domicilio</label>
+            </div>
         </div>
-        <div class="shipping-option">
-            <input type="radio" id="shipping-delivery" name="shipping" value="Envío a domicilio">
-            <label for="shipping-delivery">Envío a domicilio</label>
-        </div>
-    </div>
-    
-    <button class="btn-checkout" id="btn-finalize-purchase" disabled>
-        <i class="fab fa-whatsapp"></i> Pedir por WhatsApp
-    </button>
-    </div>
+        
+        <button class="btn-checkout" id="btn-finalize-purchase" disabled>
+            <i class="fab fa-whatsapp"></i> Pedir por WhatsApp
+        </button>
+      </div>
     </aside>
     <div class="cart-overlay"></div>
 

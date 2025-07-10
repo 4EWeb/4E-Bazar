@@ -32,6 +32,7 @@ try {
         $kits_procesados[] = [
             'id_promo' => $promo['id_promo'],
             'nombre' => $promo['nombre_promo'],
+            'imagen_promo' => $promo['imagen_promo'], // <--- CAMBIO AQUÍ
             'precio_total' => $promo['precio_promo'],
             'valor_real' => $promo['valor_total_items'],
             'nombres_productos' => $items_del_kit

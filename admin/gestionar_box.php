@@ -22,13 +22,14 @@ include 'header.php';
 
 <div class="main-container">
     <div class="editor-column">
-        <form id="box-form" action="gestionar_box.php" method="POST" class="sticky-form">
+        <form id="box-form" action="gestionar_box.php" method="POST" class="sticky-form" enctype="multipart/form-data">
             <div class="card">
                 <div class="card-header">
                     <h4><?php echo $box_a_editar ? 'Editando Box #' . $box_a_editar['id_promo'] : 'Crear Nuevo Box'; ?></h4>
                 </div>
                 <div class="card-body">
                     <input type="hidden" name="id_promo" value="<?php echo $box_a_editar['id_promo'] ?? ''; ?>">
+                    <input type="hidden" name="imagen_actual" value="<?php echo $box_a_editar['imagen_promo'] ?? ''; ?>">
 
                     <div class="form-group mb-3">
                         <label class="form-label">Nombre del Box</label>
@@ -38,6 +39,17 @@ include 'header.php';
                     <div class="form-group mb-3">
                         <label class="form-label">Descripción</label>
                         <textarea name="descripcion_promo" class="form-control" rows="2"><?php echo htmlspecialchars($box_a_editar['descripcion_promo'] ?? ''); ?></textarea>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="imagen_promo" class="form-label">Imagen del Box</label>
+                        <input class="form-control" type="file" id="imagen_promo" name="imagen_promo">
+                        <?php if (!empty($box_a_editar['imagen_promo'])): ?>
+                            <div class="mt-2">
+                                <small>Imagen actual:</small><br>
+                                <img src="../<?php echo htmlspecialchars($box_a_editar['imagen_promo']); ?>" alt="Imagen actual" style="max-width: 80px; border-radius: 5px; border: 1px solid #ddd; padding: 2px;">
+                            </div>
+                        <?php endif; ?>
                     </div>
 
                     <div class="row g-3 mb-3">
@@ -110,6 +122,9 @@ include 'header.php';
                     </span>
                 </div>
                 <div class="card-body">
+                    <?php if (!empty($box['imagen_promo'])): ?>
+                        <img src="../<?php echo htmlspecialchars($box['imagen_promo']); ?>" alt="Imagen del box" style="width: 100%; height: 150px; object-fit: contain; border-radius: 8px; margin-bottom: 1rem; background-color: #f8f9fa;">
+                    <?php endif; ?>
                     <?php if(!empty($box['descripcion_promo'])): ?>
                         <p class="box-description"><?php echo htmlspecialchars($box['descripcion_promo']); ?></p>
                     <?php endif; ?>
@@ -206,10 +221,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Cargar items si estamos editando un box
     if (Object.keys(itemsParaEditar).length > 0) {
         for (const variantId in itemsParaEditar) {
-            // La clave es el id_variante, el valor es la cantidad
             const quantity = itemsParaEditar[variantId];
             addItemToList(variantId, quantity);
         }

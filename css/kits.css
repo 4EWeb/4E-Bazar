@@ -1,35 +1,55 @@
-/* === ESTILOS PARA LA SECCIÓN DE KITS (Versión integrada) === */
+/* === ESTILOS PARA LA SECCIÓN DE KITS (Versión con tamaño y visualización de imagen corregidos) === */
 
-/* El fondo de la sección se elimina para que coincida con el resto de la página */
 .kits-section {
     padding: 50px 20px;
 }
 
 .kits-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    /* Las columnas ahora son un poco más anchas que las de los productos */
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); 
     gap: 30px;
     margin-top: 30px;
+    max-width: 1200px; 
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/*
- * La caja del kit ahora imita el estilo de una caja de producto normal:
- * fondo blanco, borde sutil y una sombra ligera.
-*/
 .kit-box {
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 25px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
-    transition: box-shadow 0.3s ease;
+    transition: all 0.3s ease;
+    overflow: hidden; 
 }
 
 .kit-box:hover {
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    transform: translateY(-5px);
 }
+
+/* --- INICIO: CAMBIOS EN LA IMAGEN --- */
+.kit-image {
+    width: 100%;
+    height: 220px; /* Un poco más de altura para la imagen */
+    /* 'contain' asegura que la imagen completa se vea, sin recortarla */
+    object-fit: contain; 
+    /* Un fondo suave por si la imagen no ocupa todo el espacio */
+    background-color: #f8f9fa; 
+    padding: 5px; /* Pequeño padding alrededor de la imagen */
+}
+
+.kit-box-content {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; 
+}
+/* --- FIN: CAMBIOS EN LA IMAGEN --- */
+
 
 .kit-box h3 {
     font-size: 1.6rem;
@@ -43,11 +63,10 @@
     list-style: none;
     padding-left: 0;
     margin: 10px 0;
-    flex-grow: 1;
+    flex-grow: 1; 
 }
 
 .kit-box .product-list li {
-    /* El ícono de check se mantiene por ser informativo */
     background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2328a745"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>') no-repeat left center;
     background-size: 20px;
     padding: 8px 0 8px 30px;
@@ -67,7 +86,6 @@
     padding-top: 20px;
 }
 
-/* El precio del kit ahora usa el color principal de la marca (#e75480) */
 .kit-footer .kit-price {
     font-size: 2rem;
     font-weight: bold;
@@ -75,17 +93,14 @@
     margin-bottom: 15px;
 }
 
-.kit-footer .kit-price-label {
+.kit-footer .price-old {
     display: block;
-    font-size: 0.9rem;
-    font-weight: normal;
+    font-size: 1rem;
     color: #888;
-    margin-bottom: 5px;
+    text-decoration: line-through;
+    font-weight: normal;
 }
 
-/* * El botón del kit ahora usa el mismo estilo y color rosado
- * que el botón "Agregar al carrito" del resto del sitio.
-*/
 .kit-footer .btn-add-kit-to-cart {
     background-color: #e75480;
     color: white;
@@ -96,13 +111,9 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    width: 100%;
 }
 
 .kit-footer .btn-add-kit-to-cart:hover {
     background-color: rgb(238, 128, 161);
-}
-
-.kit-footer .btn-add-kit-to-cart:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
 }

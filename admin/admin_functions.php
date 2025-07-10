@@ -200,6 +200,26 @@ function handle_box_requests($pdo) {
         $id_promo = $_POST['id_promo'] ?? null;
         $items = isset($_POST['items']) ? $_POST['items'] : [];
         $valor_total_items = 0.00;
+        
+        // --- INICIO: LÓGICA PARA SUBIR IMAGEN DEL KIT ---
+        $imagen_path = $_POST['imagen_actual'] ?? '';
+        if (isset($_FILES['imagen_promo']) && $_FILES['imagen_promo']['error'] == UPLOAD_ERR_OK) {
+            $directorio_destino = '../imagenes/promos/';
+            if (!file_exists($directorio_destino)) {
+                mkdir($directorio_destino, 0777, true);
+            }
+            // Crear un nombre de archivo único para evitar sobreescribir
+            $nombre_archivo = uniqid('promo_') . '_' . basename($_FILES['imagen_promo']['name']);
+            $ruta_completa = $directorio_destino . $nombre_archivo;
+            
+            if (move_uploaded_file($_FILES['imagen_promo']['tmp_name'], $ruta_completa)) {
+                // Guardar la ruta relativa en la BD
+                $imagen_path = 'imagenes/promos/' . $nombre_archivo;
+            } else {
+                $_SESSION['error_message'] = "Hubo un error al subir la imagen de la promoción.";
+            }
+        }
+        // --- FIN: LÓGICA PARA SUBIR IMAGEN DEL KIT ---
 
         if (!empty($items)) {
             $placeholders = implode(',', array_fill(0, count(array_keys($items)), '?'));
@@ -215,14 +235,14 @@ function handle_box_requests($pdo) {
         $pdo->beginTransaction();
         try {
             if (empty($id_promo)) {
-                $sql = "INSERT INTO promociones (nombre_promo, descripcion_promo, precio_promo, valor_total_items, fecha_termino, activa) VALUES (?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO promociones (nombre_promo, descripcion_promo, imagen_promo, precio_promo, valor_total_items, fecha_termino, activa) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 $stmt = $pdo->prepare($sql);
-                $stmt->execute([$_POST['nombre_promo'], $_POST['descripcion_promo'], $_POST['precio_promo'], $valor_total_items, !empty($_POST['fecha_termino']) ? $_POST['fecha_termino'] : null, $_POST['activa']]);
+                $stmt->execute([$_POST['nombre_promo'], $_POST['descripcion_promo'], $imagen_path, $_POST['precio_promo'], $valor_total_items, !empty($_POST['fecha_termino']) ? $_POST['fecha_termino'] : null, $_POST['activa']]);
                 $id_promo = $pdo->lastInsertId();
             } else {
-                $sql = "UPDATE promociones SET nombre_promo = ?, descripcion_promo = ?, precio_promo = ?, valor_total_items = ?, fecha_termino = ?, activa = ? WHERE id_promo = ?";
+                $sql = "UPDATE promociones SET nombre_promo = ?, descripcion_promo = ?, imagen_promo = ?, precio_promo = ?, valor_total_items = ?, fecha_termino = ?, activa = ? WHERE id_promo = ?";
                 $stmt = $pdo->prepare($sql);
-                $stmt->execute([$_POST['nombre_promo'], $_POST['descripcion_promo'], $_POST['precio_promo'], $valor_total_items, !empty($_POST['fecha_termino']) ? $_POST['fecha_termino'] : null, $_POST['activa'], $id_promo]);
+                $stmt->execute([$_POST['nombre_promo'], $_POST['descripcion_promo'], $imagen_path, $_POST['precio_promo'], $valor_total_items, !empty($_POST['fecha_termino']) ? $_POST['fecha_termino'] : null, $_POST['activa'], $id_promo]);
                 $pdo->prepare("DELETE FROM promocion_items WHERE id_promo = ?")->execute([$id_promo]);
             }
 

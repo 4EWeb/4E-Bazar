@@ -360,7 +360,6 @@ function get_best_selling_products($pdo) {
         WHERE ped.estado IN ('En preparación', 'Enviado', 'Completado')
         GROUP BY p.id, p.nombre
         ORDER BY total_vendido DESC
-        LIMIT 5
     ";
     return $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -399,7 +398,6 @@ function get_frequently_bought_together($pdo) {
         JOIN productos p2 ON v2.id_producto = p2.id
         GROUP BY producto1, producto2
         ORDER BY veces_juntos DESC
-        LIMIT 5
     ";
     return $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -416,11 +414,10 @@ function get_top_earning_categories($pdo) {
         WHERE ped.estado IN ('En preparación', 'Enviado', 'Completado')
         GROUP BY c.id_categoria, c.nombre_categoria
         ORDER BY total_ingresos DESC
-        LIMIT 5
     ";
     return $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 }
-function get_low_stock_products($pdo, $threshold = 5) {
+function get_low_stock_products($pdo, $threshold = 10) {
     $sql = "
         SELECT 
             p.nombre,
@@ -430,7 +427,7 @@ function get_low_stock_products($pdo, $threshold = 5) {
         JOIN productos p ON v.id_producto = p.id
         WHERE v.stock <= ? AND v.stock > 0
         ORDER BY v.stock ASC
-        LIMIT 7
+        
     ";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$threshold]);

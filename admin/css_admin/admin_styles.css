@@ -1154,3 +1154,8 @@ h3 {
   background-color: #d4edda;
   border-color: #c3e6cb;
 }
+
+.scrollable-card-body {
+  max-height: 400px; /* O la altura que desees */
+  overflow-y: auto;
+}

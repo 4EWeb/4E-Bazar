@@ -105,7 +105,7 @@ $suppliers = get_all_suppliers($pdo);
         <div class="card-header">
             <h4><i class="fas fa-trophy"></i> Productos Más Vendidos</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body scrollable-card-body">
             <?php if (empty($best_selling_products)): ?>
                 <p class="text-muted">No hay datos suficientes.</p>
             <?php else: ?>
@@ -142,7 +142,7 @@ $suppliers = get_all_suppliers($pdo);
         <div class="card-header">
             <h4><i class="fas fa-people-arrows"></i> Comprados Juntos Frecuentemente</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body scrollable-card-body">
             <?php if (empty($frequent_pairs)): ?>
                 <p class="text-muted">No hay datos suficientes.</p>
             <?php else: ?>
@@ -162,7 +162,7 @@ $suppliers = get_all_suppliers($pdo);
         <div class="card-header">
             <h4><i class="fas fa-chart-pie"></i> Top Categorías por Ingresos</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body scrollable-card-body">
             <?php if (empty($top_earning_categories)): ?>
                 <p class="text-muted">No hay datos suficientes.</p>
             <?php else: ?>
@@ -182,7 +182,7 @@ $suppliers = get_all_suppliers($pdo);
         <div class="card-header">
             <h4><i class="fas fa-exclamation-triangle text-warning"></i> Productos con Poco Stock</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body scrollable-card-body">
             <?php if (empty($low_stock_products)): ?>
                 <p class="text-muted">¡Genial! No hay productos con bajo stock.</p>
             <?php else: ?>
@@ -201,7 +201,7 @@ $suppliers = get_all_suppliers($pdo);
         <div class="card-header">
             <h4><i class="fas fa-truck-loading"></i> Gestionar Proveedores</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body scrollable-card-body">
             <?php if (empty($suppliers)): ?>
                 <p class="text-muted">Aún no has añadido proveedores.</p>
             <?php else: ?>

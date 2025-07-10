@@ -13,8 +13,17 @@ require __DIR__ . '/db.php';
 $usuario_id = $_SESSION['usuario_id'];
 $pedidos = [];
 
+// --- INICIO: FUNCIÓN PARA LIMPIAR EL TEXTO DEL ESTADO ---
+// Esta función convierte "En preparación" a "en-preparacion"
+function slugify_status($text) {
+    $text = strtolower($text);
+    $text = str_replace(' ', '-', $text);
+    $text = str_replace('ó', 'o', $text); // Reemplaza la 'ó' por 'o'
+    return preg_replace('/[^a-z0-9-]/', '', $text); // Elimina cualquier otro caracter no válido
+}
+// --- FIN: FUNCIÓN PARA LIMPIAR EL TEXTO DEL ESTADO ---
+
 try {
-    // Usamos el nombre de columna correcto 'usuario_id' que tienes en tu tabla
     $stmt = $pdo->prepare("SELECT * FROM pedidos WHERE usuario_id = ? ORDER BY fecha_pedido DESC");
     $stmt->execute([$usuario_id]);
     $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -64,8 +73,12 @@ try {
                                     <td data-label="ID Pedido">#<?= htmlspecialchars($pedido['id_pedido']) ?></td>
                                     <td data-label="Fecha"><?= date("d/m/Y", strtotime($pedido['fecha_pedido'])) ?></td>
                                     <td data-label="Monto Total">$<?= number_format($pedido['monto_total'], 0, ',', '.') ?></td>
-                                    <td data-label="Estado"><span class="status-badge status-<?= strtolower(htmlspecialchars($pedido['estado'])) ?>"><?= htmlspecialchars($pedido['estado']) ?></span></td>
-                                </tr>
+                                    <td data-label="Estado">
+                                        <span class="status-badge status-<?= slugify_status($pedido['estado']) ?>">
+                                            <?= htmlspecialchars($pedido['estado']) ?>
+                                        </span>
+                                    </td>
+                                    </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -79,38 +92,38 @@ try {
       <div class="cart-header"><h3>Tu Carrito</h3><button class="cart-close-btn" aria-label="Cerrar carrito">&times;</button></div>
       <div class="cart-body"><p class="cart-empty-msg">Tu carrito está vacío.</p></div>
       <div class="cart-footer">
-    <div class="cart-summary">
-        <div class="cart-summary-row">
-            <span>Subtotal</span>
-            <span id="cart-subtotal-price">$0</span>
+        <div class="cart-summary">
+            <div class="cart-summary-row">
+                <span>Subtotal</span>
+                <span id="cart-subtotal-price">$0</span>
+            </div>
+            <div class="cart-summary-row" id="shipping-cost-row">
+                <span>Envío</span>
+                <span id="cart-shipping-price">$0</span>
+            </div>
         </div>
-        <div class="cart-summary-row" id="shipping-cost-row">
-            <span>Envío</span>
-            <span id="cart-shipping-price">$0</span>
+        
+        <div class="cart-final-total">
+            <span>Total</span>
+            <span id="cart-total-price">$0</span>
         </div>
-    </div>
     
-    <div class="cart-final-total">
-        <span>Total</span>
-        <span id="cart-total-price">$0</span>
-    </div>
-
-    <div class="shipping-options" id="shipping-options" style="display: none;">
-        <h4>Selecciona un método de entrega</h4>
-        <div class="shipping-option">
-            <input type="radio" id="shipping-pickup" name="shipping" value="Retiro en tienda física">
-            <label for="shipping-pickup">Retiro en tienda física</label>
+        <div class="shipping-options" id="shipping-options" style="display: none;">
+            <h4>Selecciona un método de entrega</h4>
+            <div class="shipping-option">
+                <input type="radio" id="shipping-pickup" name="shipping" value="Retiro en tienda física">
+                <label for="shipping-pickup">Retiro en tienda física</label>
+            </div>
+            <div class="shipping-option">
+                <input type="radio" id="shipping-delivery" name="shipping" value="Envío a domicilio">
+                <label for="shipping-delivery">Envío a domicilio</label>
+            </div>
         </div>
-        <div class="shipping-option">
-            <input type="radio" id="shipping-delivery" name="shipping" value="Envío a domicilio">
-            <label for="shipping-delivery">Envío a domicilio</label>
-        </div>
-    </div>
-    
-    <button class="btn-checkout" id="btn-finalize-purchase" disabled>
-        <i class="fab fa-whatsapp"></i> Pedir por WhatsApp
-    </button>
-</div>
+        
+        <button class="btn-checkout" id="btn-finalize-purchase" disabled>
+            <i class="fab fa-whatsapp"></i> Pedir por WhatsApp
+        </button>
+      </div>
     </aside>
     <div class="cart-overlay"></div>
     <script src="js/carrito.js"></script>

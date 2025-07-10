@@ -679,9 +679,12 @@ textarea.form-control {
 .status-completado {
   background-color: #28a745;
 }
+/* INICIO: CORRECCIÓN REALIZADA */
+.status-en-preparacion,
 .status-enviado {
   background-color: #17a2b8;
 }
+/* FIN: CORRECCIÓN REALIZADA */
 .status-cancelado {
   background-color: #dc3545;
 }

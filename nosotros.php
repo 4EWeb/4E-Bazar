@@ -73,7 +73,10 @@ session_start();
                         4E Bazar nació en el corazón de <strong>Peñalolén</strong> como un pequeño emprendimiento familiar, con el sueño de ofrecer en un solo lugar todo lo que las familias y estudiantes necesitan para su día a día. Desde el principio, nuestro objetivo ha sido claro: combinar la variedad de un gran bazar con la atención cercana y amable de una tienda de barrio.
                     </p>
                     <p>
-                        Con el tiempo y gracias a la confianza de nuestros increíbles clientes, hemos crecido, ampliando nuestro catálogo para incluir no solo los mejores útiles de papelería, sino también productos para el hogar, juguetes, artículos de fiesta y mucho más. Cada producto que seleccionamos es elegido con cariño, pensando siempre en la calidad y en ofrecer precios justos.
+                        Con el tiempo y gracias a la confianza de nuestros increíbles clientes, hemos crecido, ampliando nuestro catálogo para incluir no solo los mejores útiles de papelería, sino también productos para el hogar, juguetes, artículos de fiesta y mucho más. Cada producto que seleccionamos es elegido con cariño, en ofrecer precios justos.
+                    </p>
+                    <p>
+                        4E viene de las iniciales de mis hijos <strong>Emmanuel, Ezequiel, Estefania y Eleonor</strong> que son la razón para seguir adelante cada día. Cada rincón de nuestra tienda refleja el amor y dedicación que ponemos en todo lo que hacemos, porque creemos que cada cliente es parte de nuestra familia.
                     </p>
                 </div>
                 <div class="about-image">

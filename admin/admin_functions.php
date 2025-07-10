@@ -420,7 +420,7 @@ function get_top_earning_categories($pdo) {
     ";
     return $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 }
-function get_low_stock_products($pdo, $threshold = 10) {
+function get_low_stock_products($pdo, $threshold = 5) {
     $sql = "
         SELECT 
             p.nombre,
